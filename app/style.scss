@@ -71,7 +71,6 @@ body {
             border-top: none;
             background: #fff;
             margin-bottom: 20px;
-            padding-bottom: 10px;
             #date {
                 font-size: 1.2em;
                 height: 30px;
@@ -84,6 +83,7 @@ body {
                         font-size: 15px;
                         color: #fff;
                         width: 165px;
+                        margin-right: 20px;
                         position: relative;
                         text-align: center;
                         background: #6C7A89;
@@ -136,10 +136,12 @@ body {
                 width: 165px;
                 text-align: center;
                 background: #6C7A89;
+                margin-right: 20px;
                 border: 0;
                 cursor: pointer;
             }
             #origin {
+                float: left;
                 .multiselect {
                     a {
                         color: #ffffff;
@@ -160,6 +162,7 @@ body {
                     width: 165px;
                     text-align: center;
                     float: left;
+                    margin-right: 20px;
                     background: #6C7A89;
                     display: inline-block;
                     padding: 6px 12px;
@@ -181,7 +184,7 @@ body {
                     padding: 0px;
                     li {
                         font-family: $primary-font-stack;
-                        margin: 0px 10px 0px 0px;
+                        margin: 0px 10px 10px 0px;
                         padding: 8px 7px 7px 15px;
                         float: left;
                         background: #fff;
@@ -217,7 +220,7 @@ body {
                     padding: 0px;
                     li {
                         font-size: 1.1em;
-                        margin: 0px 10px 0px 0px;
+                        margin: 0px 10px 10px 0px;
                         padding: 7px;
                         float: left;
                         min-height: 40px;
@@ -244,6 +247,9 @@ body {
                     padding: 5px;
                     border: none !important;
                 }
+            }
+            #metric {
+                margin-bottom: 10px;
             }
             #filters {
                 &.in, &.collapsing {
