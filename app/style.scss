@@ -17,7 +17,6 @@ $navBarAndButtonColour: #e7e7e7;
         margin-bottom: 0px;
         position: relative;
         background-color: #6C7A89;
-        
         a {
            color: #fff; 
         }
@@ -157,43 +156,6 @@ $navBarAndButtonColour: #e7e7e7;
                     }
                 }
             }
-            #total {
-                color: $primary-color;
-                position: relative;
-                border-radius: 10px;
-                .chosen-metrics {
-                    list-style-type: none;
-                    margin: 0px;
-                    padding: 0px;
-                    li {
-                        font-size: 15px;
-                        padding: 7px;
-                        float: left;
-                        min-height: 40px;
-                        min-width: 150px;
-                        border-radius: 4px;
-                        cursor: pointer;
-                        &.ui-selected {
-                            background: $navBarAndButtonColour;
-                        }
-                    }
-                    .name, .value {
-                        text-align: center;
-                    }
-                    .name {
-                        font-family: $primary-font-stack;
-                    }
-                    .value {
-                        font-size: 18px;
-                    }
-                }
-                table {
-                    text-align: center;
-                    border-radius: 5px;
-                    padding: 5px;
-                    border: none !important;
-                }
-            }
             #metric {
                 margin-bottom: 10px;
             }
@@ -209,8 +171,6 @@ $navBarAndButtonColour: #e7e7e7;
             }
         }
         .main-container {
-            background: #fff;
-            border-top: none;
             .nav-tabs {
                 li {
                     background: $navBarAndButtonColour;
@@ -229,42 +189,23 @@ $navBarAndButtonColour: #e7e7e7;
             .tab-content {
                 position: relative;
                 padding: 20px 0px 0px 0px;
-                // Only preview tab to have a max height
                 .active {
+                    // Only preview tab to have a max height
                     &#preview-tab {
                         min-height: 600px;
                     }
-                    #tableView {
+                    .squid-api-data-widgets-data-table {
                         .filtered-by {
                             background: $navBarAndButtonColour;
                         }
                     }
-                    #timeView {
-                        width: 100%;
-                        #chart_container {
-                            .ui-slider-range {
-                                background: $navBarAndButtonColour;
-                            }
+                    .squid-api-data-widgets-timeseries-widget {
+                        .ui-slider-range {
+                            background: $navBarAndButtonColour;
                         }
                     }
-                    #display-selector {
-                        ul {
-                            &.widget-selector {
-                                color: $primary-color;
-                                padding: 0px;
-                                li {
-                                    display: inline-block;
-                                    padding: 0px 20px 0px 10px;
-                                    opacity: 0.3;
-                                    &.active, &:hover {
-                                        opacity: 1;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    #orderby {
-                        padding: 0px 20px;
+                    .squid-api-data-widgets-displaytype-selector {
+                        color: $primary-color;
                     }
                     .sq-loading {
                         position:absolute;
