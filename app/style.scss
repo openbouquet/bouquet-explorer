@@ -119,41 +119,12 @@ $navBarAndButtonColour: #e7e7e7;
                 -webkit-box-shadow: none;
                 box-shadow: none;
             }
-            #dimension {
+            .squid-api-data-widgets-dimension-widget {
                 .information {
                     padding-top: 5px;
                     font-size: 18px;
                     color: #b9b9b9;
                     font-family: $primary-font-stack;
-                }
-                .sortable {
-                    list-style-type: none;
-                    margin: 0px;
-                    padding: 0px;
-                    li {
-                        font-family: $primary-font-stack;
-                        margin: 0px 20px 0px 0px;
-                        padding: 8px 7px 7px 15px;
-                        float: left;
-                        background: #fff;
-                        font-size: 15px;
-                        min-height: 40px;
-                        min-width: 150px;
-                        border: 1px solid #e7e7e7;
-                        border-radius: 4px;
-                        cursor: move;
-                        position: relative;
-                        text-align: center;
-                        .fa {
-                            position: absolute;
-                            left: 9px;
-                            font-size: 13px;
-                            top: 11px;
-                        }
-                        &.ui-selected {
-                            background: $navBarAndButtonColour;
-                        }
-                    }
                 }
             }
             #metric {
