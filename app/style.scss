@@ -12,6 +12,9 @@ $navBarAndButtonColour: #e7e7e7;
     color: $primary-color;
 
     // Reduce spacing between each Horizontal Rule
+    hr {
+        margin-top: 0px;
+    }
 
     .navbar {
         margin-bottom: 0px;
@@ -55,9 +58,7 @@ $navBarAndButtonColour: #e7e7e7;
                 right: 10px;
                 top: 15px;
             }
-            padding-top: 16px;
             background: #fff;
-            margin-bottom: 20px;
             #date, #selection, #origin, #metric {
                 button, .multiselect {
                     font-size: 15px;
@@ -75,11 +76,14 @@ $navBarAndButtonColour: #e7e7e7;
                 }
             }
             #date {
+                .col-md-6 {
+                    margin-top: 20px;
+                }
                 height: 30px;
                 #date-picker {
                     display: inline-block;
                     float: left;
-                    height: 30px;
+                    margin-top: 20px;
                 }
                 .date-wrap {
                     font-size: 18px;
@@ -92,6 +96,7 @@ $navBarAndButtonColour: #e7e7e7;
                 .information {
                     padding-top: 5px;
                     font-size: 18px;
+                    margin-bottom: 20px;
                     color: #b9b9b9;
                     font-family: $primary-font-stack;
                 }
@@ -99,7 +104,7 @@ $navBarAndButtonColour: #e7e7e7;
                     background: $navBarAndButtonColour;
                     min-width: 150px;
                     border-radius: 4px;
-                    margin: 0px 20px 0px 0px;
+                    margin: 0px 20px 20px 0px;
                     padding: 5px !important;
                 }
                 table {
@@ -124,6 +129,7 @@ $navBarAndButtonColour: #e7e7e7;
                     padding-top: 5px;
                     font-size: 18px;
                     color: #b9b9b9;
+                    margin-bottom: 20px;
                     font-family: $primary-font-stack;
                 }
             }
