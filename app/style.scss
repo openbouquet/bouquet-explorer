@@ -1,51 +1,43 @@
 /* Dashboard App Sass File */
 
 // Variables
-$primary-font-stack: Avenir,'Open Sans',sans-serif;
-$primary-color: #666666;
+$primary-font-stack: 'Avenir Regular', 'Montserrat', Arial, sans-serif;
+$primary-color: #777;
+$navBarAndButtonColour: #e7e7e7;
 
 /* Application */
 
-body {
+#app {
     font-family: $primary-font-stack;
     color: $primary-color;
-    background: #ecf0f1;
 
-    // Top level items
-    .ui-datepicker .ui-datepicker-title select {
-        color: #000000;
-    }
-
+    // Reduce spacing between each Horizontal Rule
     hr {
-        margin: 15px 0px 15px 0px;
+        margin-top: 0px;
     }
 
     .navbar {
         margin-bottom: 0px;
         position: relative;
-        z-index: 2;
-        border-radius: 0px;
         background-color: #6C7A89;
+        a {
+           color: #fff; 
+        }
         .navbar-nav {
             .project, .domain {
                 padding-right: 20px;
                 margin-top: 10px;
             }
-            li {
-                a, a:hover, a:focus {
-                    color: #fff;
-                }
-            }
         }
         #status {
             margin-top: 12px;
-            font-size: 20px;
+            font-size: 18px;
         }
         #login {
             position: relative;
             top: 7px;
-            padding-top: 10px;
             color: #fff;
+            padding-top: 10px;
             a {
                 text-decoration: underline;
                 color: #fff;
@@ -66,36 +58,35 @@ body {
                 right: 10px;
                 top: 15px;
             }
-            padding-top: 16px;
-            border: 1px solid #ddd;
-            border-top: none;
             background: #fff;
-            margin-bottom: 20px;
+            #date, #selection, #origin, #metric {
+                button, .multiselect {
+                    font-size: 15px;
+                    color: $primary-color;
+                    width: 165px;
+                    margin-right: 20px;
+                    position: relative;
+                    text-align: center;
+                    background: $navBarAndButtonColour;
+                    display: inline-block;
+                    padding: 6px 12px;
+                    border-radius: 4px;
+                    border: 0;
+                    cursor: pointer;
+                }
+            }
             #date {
-                font-size: 1.2em;
+                .col-md-6 {
+                    margin-top: 20px;
+                }
                 height: 30px;
                 #date-picker {
                     display: inline-block;
                     float: left;
-                    height: 30px;
-                    font-size: 1.3em;
-                    button {
-                        font-size: 15px;
-                        color: #fff;
-                        width: 165px;
-                        margin-right: 20px;
-                        position: relative;
-                        text-align: center;
-                        background: #6C7A89;
-                        display: inline-block;
-                        padding: 6px 12px;
-                        border-radius: 4px;
-                        border: 0;
-                        cursor: pointer;
-                    }
+                    margin-top: 20px;
                 }
                 .date-wrap {
-                    font-size: 1.1em;
+                    font-size: 18px;
                     #sq-startDate, #sq-endDate {
                         font-family: $primary-font-stack;
                     }
@@ -104,16 +95,16 @@ body {
             #selection {
                 .information {
                     padding-top: 5px;
-                    font-size: 1.2em;
+                    font-size: 18px;
+                    margin-bottom: 20px;
                     color: #b9b9b9;
                     font-family: $primary-font-stack;
                 }
                 .item {
-                    background: #2c3e50;
-                    color: #fff;
+                    background: $navBarAndButtonColour;
                     min-width: 150px;
                     border-radius: 4px;
-                    margin: 0px 20px 0px 0px;
+                    margin: 0px 20px 20px 0px;
                     padding: 5px !important;
                 }
                 table {
@@ -123,28 +114,7 @@ body {
                         font-size: 1.1em;
                     }
                     .value, a {
-                        color: #ffffff !important;
-                    }
-                }
-            }
-            #origin .multiselect, #metric .multiselect {
-                &:hover {
-                    text-decoration: underline;
-                }
-                font-size: 15px;
-                color: #fff;
-                width: 165px;
-                text-align: center;
-                background: #6C7A89;
-                margin-right: 20px;
-                border: 0;
-                cursor: pointer;
-            }
-            #origin {
-                float: left;
-                .multiselect {
-                    a {
-                        color: #ffffff;
+                        color: $primary-color !important;
                     }
                 }
             }
@@ -154,98 +124,13 @@ body {
                 -webkit-box-shadow: none;
                 box-shadow: none;
             }
-            #selection {
-                button {
-                    font-size: 15px;
-                    color: #fff;
-                    position: relative;
-                    width: 165px;
-                    text-align: center;
-                    float: left;
-                    margin-right: 20px;
-                    background: #6C7A89;
-                    display: inline-block;
-                    padding: 6px 12px;
-                    border-radius: 4px;
-                    border: 0;
-                    cursor: pointer;
-                }
-            }
-            #dimension {
+            .squid-api-data-widgets-dimension-widget {
                 .information {
                     padding-top: 5px;
-                    font-size: 1.2em;
+                    font-size: 18px;
                     color: #b9b9b9;
+                    margin-bottom: 20px;
                     font-family: $primary-font-stack;
-                }
-                .sortable {
-                    list-style-type: none;
-                    margin: 0px;
-                    padding: 0px;
-                    li {
-                        font-family: $primary-font-stack;
-                        margin: 0px 10px 0px 0px;
-                        padding: 8px 7px 7px 15px;
-                        float: left;
-                        background: #fff;
-                        min-height: 40px;
-                        min-width: 150px;
-                        border: 1px solid #e7e7e7;
-                        border-radius: 4px;
-                        cursor: move;
-                        position: relative;
-                        text-align: center;
-                        .fa {
-                            position: absolute;
-                            left: 9px;
-                            font-size: 13px;
-                            top: 11px;
-                            color: #ecf0f1;
-                        }
-                        &.ui-selected {
-                            background: #2c3e50;
-                            color: #fff;
-                            font-size: 1.1em;
-                        }
-                    }
-                }
-            }
-            #total {
-                color: $primary-color;
-                position: relative;
-                border-radius: 10px;
-                .chosen-metrics {
-                    list-style-type: none;
-                    margin: 0px;
-                    padding: 0px;
-                    li {
-                        font-size: 1.1em;
-                        margin: 0px 10px 10px 0px;
-                        padding: 7px;
-                        float: left;
-                        min-height: 40px;
-                        min-width: 150px;
-                        border: 1px solid #e7e7e7;
-                        border-radius: 4px;
-                        cursor: pointer;
-                        text-align: center;
-                        &.ui-selected {
-                            background: #2c3e50;
-                            color: #fff;
-                        }
-                    }
-                    .name {
-                        font-family: $primary-font-stack;
-                        font-size: 1.1em;
-                    }
-                    .value {
-                    }
-                }
-                table {
-                    text-align: center;
-                    border-radius: 5px;
-                    padding: 5px;
-                    border: none !important;
                 }
             }
             #metric {
@@ -263,13 +148,9 @@ body {
             }
         }
         .main-container {
-            background: #fff;
-            border-top: none;
-            padding: 0px;
             .nav-tabs {
-                background: #ecf0f1;
                 li {
-                    background: #ddd;
+                    background: $navBarAndButtonColour;
                     a {
                         border-radius: 0px;
                         text-align: center;
@@ -284,70 +165,29 @@ body {
             }
             .tab-content {
                 position: relative;
-                border-left: 1px solid #ddd;
                 padding: 20px 0px 0px 0px;
-                // Only preview tab to have a max height
                 .active {
+                    // Only preview tab to have a max height
                     &#preview-tab {
                         min-height: 600px;
                     }
-                    #tableView {
+                    .squid-api-data-widgets-data-table {
                         .filtered-by {
-                            background: #ddd;
-                        }
-                        .NUMBER {
-                            text-align: right;
+                            background: $navBarAndButtonColour;
                         }
                     }
-                    #export {
-                        margin: 10px 20px 20px 20px;
-                    }
-                    #timeView {
-                        width: 100%;
-                        #chart_container {
-                            padding-bottom: 20px;
-                            .rickshaw_graph {
-                                .x_ticks_d3 {
-                                    text {
-                                        text-anchor: inherit !important; 
-                                    }
-                                }
-                            }
-                            .rickshaw_legend {
-                                background: none;
-                                color: #404040;
-                                .action {
-                                    color: #1aadcf;
-                                    opacity: 1;
-                                }
-                            }
-                            .ui-slider-range {
-                                background: #3b698a;
-                            }
-                            #slider {
-                                width: 95% !important;
-                                margin-left: 20px;
-                            }
+                    .squid-api-data-widgets-timeseries-widget {
+                        .ui-slider-range {
+                            background: $navBarAndButtonColour;
                         }
                     }
-                    #display-selector {
-                        ul {
-                            &.widget-selector {
-                                color: $primary-color;
-                                padding: 0px;
-                                li {
-                                    display: inline-block;
-                                    padding: 0px 20px;
-                                    opacity: 0.3;
-                                    &.active, &:hover {
-                                        opacity: 1;
-                                    }
-                                }
-                            }
-                        }
+                    .squid-api-data-widgets-displaytype-selector {
+                        color: $primary-color;
                     }
-                    #orderby {
-                        padding: 0px 20px;
+                    .squid-api-data-widgets-export-widget {
+                        hr {
+                            margin-top: 20px;
+                        }
                     }
                     .sq-loading {
                         position:absolute;
