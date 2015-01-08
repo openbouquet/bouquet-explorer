@@ -15,11 +15,11 @@
     "tests"
   ],
   "dependencies": {
-    "squid_api": "https://github.com/squidsolutions/jssdk2.git#1.2.0",
+    "squid_api": "https://github.com/squidsolutions/jssdk2.git#1.3.0",
     "squid_api_core_widgets": "https://github.com/squidsolutions/jssdk-core-widgets.git#1.1.0",
     "bootstrap": "3",
     "font-awesome": "https://github.com/components/font-awesome.git",
-    "squid_api_data_widgets": "https://github.com/squidsolutions/jssdk-data-widgets.git#2.3.4",
-    "squid_api_filters_widget": "https://github.com/squidsolutions/jssdk-filters-widget.git#1.6.0"
+    "squid_api_data_widgets": "https://github.com/squidsolutions/jssdk-data-widgets.git#2.3.5",
+    "squid_api_filters_widget": "https://github.com/squidsolutions/jssdk-filters-widget.git#1.7.0"
   }
 }
