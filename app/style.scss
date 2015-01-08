@@ -184,6 +184,11 @@ $navBarAndButtonColour: #e7e7e7;
                     .squid-api-data-widgets-displaytype-selector {
                         color: $primary-color;
                     }
+                    .squid-api-data-widgets-export-widget {
+                        hr {
+                            margin-top: 20px;
+                        }
+                    }
                     .sq-loading {
                         position:absolute;
                         width:100%;
