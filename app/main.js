@@ -161,18 +161,9 @@ var compute = function(analysis) {
 };
 
 api.model.filters.on('change:selection', function() {
-    var sel = api.model.filters.get("selection");
-    var analysis = mainModel.get("currentAnalysis");
-    // recompute the analyses
-    if (analysis) {
-        analysis.setSelection(sel);
-        if (analysis != exportAnalysis) {
-            compute(analysis);
-        }
-    } else {
-        mainModel.set("currentAnalysis", exportAnalysis);
-    }
+    refreshCurrentAnalysis();
     if (totalAnalysis.get("metrics")) {
+        var sel = api.model.filters.get("selection");
         totalAnalysis.setSelection(sel);
         api.compute(totalAnalysis);
     }
@@ -308,7 +299,7 @@ mainModel.on("change:selectedMetric", function() {
 
 mainModel.on("change:chosenDimensions", function(chosen) {
     if (mainModel.get("chosenDimensions").length === 0) {
-        mainModel.set("selectedDimension", null);
+        mainModel.set({"selectedDimension": null}, {"silent" : true});
     }
     refreshCurrentAnalysis();
 });
@@ -360,14 +351,14 @@ api.model.status.on('change:domain', function(model) {
                 }
                 totalAnalysis.setMetricIds(totalMetricIds);
                 // selections
-                mainModel.set("chosenMetrics", totalMetricIds);
-                mainModel.set("selectedMetric", totalMetricIds[0]);
+                mainModel.set({"chosenMetrics": totalMetricIds}, {"silent" : true});
+                mainModel.set({"selectedMetric": totalMetricIds[0]}, {"silent" : true});
             }
         }
         
         // update the dimensions
-        mainModel.set("chosenDimensions", []);
-        mainModel.set("selectedDimension", null);
+        mainModel.set({"chosenDimensions": []}, {"silent" : true});
+        mainModel.set({"selectedDimension": null}, {"silent" : true});
         
         // launch the default filters computation
         var filters = new api.controller.facetjob.FiltersModel();
