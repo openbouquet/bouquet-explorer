@@ -299,7 +299,7 @@ mainModel.on("change:selectedMetric", function() {
 
 mainModel.on("change:chosenDimensions", function(chosen) {
     if (mainModel.get("chosenDimensions").length === 0) {
-        mainModel.set({"selectedDimension": null}, {"silent" : true});
+        mainModel.set("selectedDimension", null);
     }
     refreshCurrentAnalysis();
 });
@@ -329,36 +329,7 @@ api.model.status.on('change:domain', function(model) {
         $("#main").removeClass("hidden");
         $("#selectDomain").addClass("hidden");
         var domainId = model.get("domain").domainId;
-        
-        // update the analyses
-        tableAnalysis.setDomainIds([domainId]);
-        barAnalysis.setDomainIds([domainId]);
-        timeAnalysis.setDomainIds([domainId]);
-        exportAnalysis.setDomainIds([domainId]);
-        
-        // update the total Analysis
-        totalAnalysis.setDomainIds([domainId]);
-        
-        // update the metrics
-        var domain = squid_api.utils.find(squid_api.model.project.get("domains"), "oid", domainId);
-        if (domain) {
-            var domainMetrics = domain.metrics;
-            if (domainMetrics && (domainMetrics.length>0)) {
-                // total metrics
-                var totalMetricIds = [];
-                for (var i=0; (i<domainMetrics.length && (i<5)); i++) {
-                    totalMetricIds.push(domainMetrics[i].oid);
-                }
-                totalAnalysis.setMetricIds(totalMetricIds);
-                // selections
-                mainModel.set({"chosenMetrics": totalMetricIds}, {"silent" : true});
-                mainModel.set({"selectedMetric": totalMetricIds[0]}, {"silent" : true});
-            }
-        }
-        
-        // update the dimensions
-        mainModel.set({"chosenDimensions": []}, {"silent" : true});
-        mainModel.set({"selectedDimension": null}, {"silent" : true});
+       
         
         // launch the default filters computation
         var filters = new api.controller.facetjob.FiltersModel();
@@ -401,6 +372,36 @@ api.model.status.on('change:domain', function(model) {
                     });
                 api.model.filters.setDomainIds([domainId]);
                 api.model.filters.set("userSelection", defaultSelection);
+                
+                // update the analyses
+                tableAnalysis.setDomainIds([domainId]);
+                barAnalysis.setDomainIds([domainId]);
+                timeAnalysis.setDomainIds([domainId]);
+                exportAnalysis.setDomainIds([domainId]);
+                
+                // update the total Analysis
+                totalAnalysis.setDomainIds([domainId]);
+                
+                // update the metrics
+                var domain = squid_api.utils.find(squid_api.model.project.get("domains"), "oid", domainId);
+                if (domain) {
+                    var domainMetrics = domain.metrics;
+                    if (domainMetrics && (domainMetrics.length>0)) {
+                        // total metrics
+                        var totalMetricIds = [];
+                        for (var dmIdx=0; (dmIdx<domainMetrics.length && (dmIdx<5)); dmIdx++) {
+                            totalMetricIds.push(domainMetrics[dmIdx].oid);
+                        }
+                        totalAnalysis.setMetricIds(totalMetricIds);
+                        // selections
+                        mainModel.set({"chosenMetrics": totalMetricIds});
+                        mainModel.set({"selectedMetric": totalMetricIds[0]});
+                    }
+                }
+                
+                // update the dimensions
+                mainModel.set({"chosenDimensions": []});
+                mainModel.set({"selectedDimension": null});
             }
         });
         api.controller.facetjob.compute(filters);
