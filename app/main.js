@@ -345,27 +345,36 @@ api.model.status.on('change:domain', function(model) {
                 var timeFacet;
                 for (var i = 0; i < facets.length; i++) {
                     var facet = facets[i];
-                    if (facet.dimension.type == "CONTINUOUS") {
+                    if (facet.dimension.type == "CONTINUOUS" && facet.items.length>0) {
                         // set the time dimension
                         mainModel.set("timeDimension",facet.dimension.oid);
                         timeFacet = facet;
+                        console.log("found time dimension = "+facet.dimension.name);
                     }
                 }
-                // set date range to -30 days
-                var endDate = moment.utc(timeFacet.items[0].upperBound);
-                var startDate = moment.utc(timeFacet.items[0].upperBound);
-                startDate = moment(startDate).subtract(30, 'days');
-                var defaultSelection = {
-                    "facets" : [ {
-                        "dimension" : timeFacet.dimension,
-                        "id" : timeFacet.id,
-                        "selectedItems" : [ {
-                            "type" : "i",
-                            "lowerBound" : startDate.format("YYYY-MM-DDTHH:mm:ss.SSSZZ"),
-                            "upperBound" : timeFacet.items[0].upperBound
-                        } ]
-                    } ]
-                };
+                if (timeFacet && timeFacet.items.length>0) {
+                	console.log("selected time dimension = "+timeFacet.dimension.name);
+                    // set date range to -30 days
+                	var endDate = moment.utc(timeFacet.items[0].upperBound);
+                	var startDate = moment.utc(timeFacet.items[0].upperBound);
+                	startDate = moment(startDate).subtract(30, 'days');
+	                var defaultSelection = {
+	                    "facets" : [ {
+	                        "dimension" : timeFacet.dimension,
+	                        "id" : timeFacet.id,
+	                        "selectedItems" : [ {
+	                            "type" : "i",
+	                            "lowerBound" : startDate.format("YYYY-MM-DDTHH:mm:ss.SSSZZ"),
+	                            "upperBound" : timeFacet.items[0].upperBound
+	                        } ]
+	                    } ]
+	                };
+                } else {
+                	console.log("WARN: cannot use any time dimension to use for datepicker");
+                	var defaultSelection = {
+    	                    "facets" : [ ]
+                	};
+                }
                 // apply to main filters
                 api.model.filters.set("id", {
                         "projectId": model.get("domain").projectId
