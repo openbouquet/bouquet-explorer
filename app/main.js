@@ -333,9 +333,9 @@ api.model.status.on('change:domain', function(model) {
     if (model.get("domain")) {
         $("#main").removeClass("hidden");
         $("#selectDomain").addClass("hidden");
+        $(".admin-switcher").show();
         var domainId = model.get("domain").domainId;
        
-        
         // launch the default filters computation
         var filters = new api.controller.facetjob.FiltersModel();
         filters.set("id", {
