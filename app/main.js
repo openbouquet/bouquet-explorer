@@ -7,6 +7,11 @@ api.setup({
     "filtersDefaultEvents" : false
 });
 
+contentView = new api.view.UsersAdminView({
+    el : '#adminDisplay',
+    status : api.model.status
+});
+
 new api.view.LoginView({
     el : '#login',
     autoShow : true
@@ -352,13 +357,14 @@ api.model.status.on('change:domain', function(model) {
                         console.log("found time dimension = "+facet.dimension.name);
                     }
                 }
+                var defaultSelection;
                 if (timeFacet && timeFacet.items.length>0) {
                 	console.log("selected time dimension = "+timeFacet.dimension.name);
                     // set date range to -30 days
                 	var endDate = moment.utc(timeFacet.items[0].upperBound);
                 	var startDate = moment.utc(timeFacet.items[0].upperBound);
                 	startDate = moment(startDate).subtract(30, 'days');
-	                var defaultSelection = {
+	                defaultSelection = {
 	                    "facets" : [ {
 	                        "dimension" : timeFacet.dimension,
 	                        "id" : timeFacet.id,
@@ -371,7 +377,7 @@ api.model.status.on('change:domain', function(model) {
 	                };
                 } else {
                 	console.log("WARN: cannot use any time dimension to use for datepicker");
-                	var defaultSelection = {
+                	defaultSelection = {
     	                    "facets" : [ ]
                 	};
                 }
@@ -440,8 +446,6 @@ mainModel.on("change:currentPage", function() {
     }
 });
 
-// Custom JS
-
 // Make sure all panels are closed on launch
 $(document).mouseup(function (e) {
     var container = $(".collapse");
@@ -455,11 +459,30 @@ $(document).mouseup(function (e) {
     }
 });
 
+//Admin panel switcher
+
+$("#admin").hide();
+
+$("#app .admin-switcher").click(function() {
+    if ($(this).attr('attr-value') === "dashboard") {
+        $(this).attr('attr-value', 'admin');
+        $(this).find('.dashboard').show();
+        $(this).find('.user').hide();
+        $('#admin').show();
+        $('#main').hide();
+    } else {
+        $(this).attr('attr-value', 'dashboard');
+        $(this).find('.user').show();
+        $(this).find('.dashboard').hide();
+        $('#admin').hide();
+        $('#main').show();
+    }
+});
+
 $(".nav-tabs li").click(function() {
     var pageActivated = $(this).find("a").attr("data-content");
     mainModel.set("currentPage", pageActivated);
 });
-
 
 /*
 * Start the App
