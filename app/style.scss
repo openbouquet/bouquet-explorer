@@ -16,12 +16,29 @@ $navBarAndButtonColour: #e7e7e7;
         margin-top: 0px;
     }
 
+    #admin {
+        #adminDisplay {
+            margin-top: 20px;
+        }
+    }
+
     .navbar {
         margin-bottom: 0px;
         position: relative;
         background-color: #6C7A89;
         a {
            color: #fff; 
+        }
+        .admin-switcher {
+            color: #fff;
+            display: none;
+            font-size: 20px;
+            position: relative;
+            right: 10px;
+            top: 13px;
+            .dashboard {
+                display: none;
+            }
         }
         .navbar-nav {
             .project, .domain {

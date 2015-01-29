@@ -7,6 +7,11 @@ api.setup({
     "filtersDefaultEvents" : false
 });
 
+contentView = new api.view.UsersAdminView({
+    el : '#adminDisplay',
+    status : api.model.status
+});
+
 new api.view.LoginView({
     el : '#login',
     autoShow : true
@@ -63,7 +68,7 @@ var totalAnalysis = new api.model.AnalysisJob();
 // note model objects references contain oids
 var mainModel = new Backbone.Model({
     "timeDimension": null,
-    "currentAnalysis" : null,
+    "currentAnalysis" : exportAnalysis,
     "totalAnalysis" : totalAnalysis,
     "chosenDimensions" : [],
     "selectedDimension" :  null,
@@ -328,9 +333,9 @@ api.model.status.on('change:domain', function(model) {
     if (model.get("domain")) {
         $("#main").removeClass("hidden");
         $("#selectDomain").addClass("hidden");
+        $(".admin-switcher").show();
         var domainId = model.get("domain").domainId;
        
-        
         // launch the default filters computation
         var filters = new api.controller.facetjob.FiltersModel();
         filters.set("id", {
@@ -345,27 +350,37 @@ api.model.status.on('change:domain', function(model) {
                 var timeFacet;
                 for (var i = 0; i < facets.length; i++) {
                     var facet = facets[i];
-                    if (facet.dimension.type == "CONTINUOUS") {
+                    if (facet.dimension.type == "CONTINUOUS" && facet.items.length>0) {
                         // set the time dimension
                         mainModel.set("timeDimension",facet.dimension.oid);
                         timeFacet = facet;
+                        console.log("found time dimension = "+facet.dimension.name);
                     }
                 }
-                // set date range to -30 days
-                var endDate = moment.utc(timeFacet.items[0].upperBound);
-                var startDate = moment.utc(timeFacet.items[0].upperBound);
-                startDate = moment(startDate).subtract(30, 'days');
-                var defaultSelection = {
-                    "facets" : [ {
-                        "dimension" : timeFacet.dimension,
-                        "id" : timeFacet.id,
-                        "selectedItems" : [ {
-                            "type" : "i",
-                            "lowerBound" : startDate.format("YYYY-MM-DDTHH:mm:ss.SSSZZ"),
-                            "upperBound" : timeFacet.items[0].upperBound
-                        } ]
-                    } ]
-                };
+                var defaultSelection;
+                if (timeFacet && timeFacet.items.length>0) {
+                	console.log("selected time dimension = "+timeFacet.dimension.name);
+                    // set date range to -30 days
+                	var endDate = moment.utc(timeFacet.items[0].upperBound);
+                	var startDate = moment.utc(timeFacet.items[0].upperBound);
+                	startDate = moment(startDate).subtract(30, 'days');
+	                defaultSelection = {
+	                    "facets" : [ {
+	                        "dimension" : timeFacet.dimension,
+	                        "id" : timeFacet.id,
+	                        "selectedItems" : [ {
+	                            "type" : "i",
+	                            "lowerBound" : startDate.format("YYYY-MM-DDTHH:mm:ss.SSSZZ"),
+	                            "upperBound" : timeFacet.items[0].upperBound
+	                        } ]
+	                    } ]
+	                };
+                } else {
+                	console.log("WARN: cannot use any time dimension to use for datepicker");
+                	defaultSelection = {
+    	                    "facets" : [ ]
+                	};
+                }
                 // apply to main filters
                 api.model.filters.set("id", {
                         "projectId": model.get("domain").projectId
@@ -431,8 +446,6 @@ mainModel.on("change:currentPage", function() {
     }
 });
 
-// Custom JS
-
 // Make sure all panels are closed on launch
 $(document).mouseup(function (e) {
     var container = $(".collapse");
@@ -446,11 +459,30 @@ $(document).mouseup(function (e) {
     }
 });
 
+//Admin panel switcher
+
+$("#admin").hide();
+
+$("#app .admin-switcher").click(function() {
+    if ($(this).attr('attr-value') === "dashboard") {
+        $(this).attr('attr-value', 'admin');
+        $(this).find('.dashboard').show();
+        $(this).find('.user').hide();
+        $('#admin').show();
+        $('#main').hide();
+    } else {
+        $(this).attr('attr-value', 'dashboard');
+        $(this).find('.user').show();
+        $(this).find('.dashboard').hide();
+        $('#admin').hide();
+        $('#main').show();
+    }
+});
+
 $(".nav-tabs li").click(function() {
     var pageActivated = $(this).find("a").attr("data-content");
     mainModel.set("currentPage", pageActivated);
 });
-
 
 /*
 * Start the App
