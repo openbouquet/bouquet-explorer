@@ -7,11 +7,6 @@ api.setup({
     "filtersDefaultEvents" : false
 });
 
-contentView = new api.view.UsersAdminView({
-    el : '#adminDisplay',
-    status : api.model.status
-});
-
 new api.view.LoginView({
     el : '#login',
     autoShow : true
@@ -459,23 +454,29 @@ $(document).mouseup(function (e) {
     }
 });
 
-//Admin panel switcher
-
-$("#admin").hide();
+/* Trigger Admin Section */
+$('#admin').hide();
+var userAdminView;
 
 $("#app .admin-switcher").click(function() {
     if ($(this).attr('attr-value') === "dashboard") {
+        // Change Attribute Value
         $(this).attr('attr-value', 'admin');
-        $(this).find('.dashboard').show();
-        $(this).find('.user').hide();
-        $('#admin').show();
-        $('#main').hide();
+        // Change Icons
+        $(this).find('.dashboard').show(); $(this).find('.user').hide();
+        // Hide and Show Sections
+        $('#admin').show(); $('#main').hide();
+        // Instantiate User Admin View
+        userAdminView = new api.view.UsersAdminView({el : '#adminDisplay', status : api.model.status, fetchRecordsLater : true });
     } else {
+        // Change Attribute Value
         $(this).attr('attr-value', 'dashboard');
-        $(this).find('.user').show();
-        $(this).find('.dashboard').hide();
-        $('#admin').hide();
-        $('#main').show();
+        // Change Icons
+        $(this).find('.user').show(); $(this).find('.dashboard').hide();
+        // Hide and Show Sections
+        $('#admin').hide(); $('#main').show();
+        // Remove User Admin View
+        userAdminView.remove();
     }
 });
 
