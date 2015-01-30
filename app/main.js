@@ -328,7 +328,6 @@ api.model.status.on('change:domain', function(model) {
     if (model.get("domain")) {
         $("#main").removeClass("hidden");
         $("#selectDomain").addClass("hidden");
-        $(".admin-switcher").show();
         var domainId = model.get("domain").domainId;
        
         // launch the default filters computation
@@ -458,8 +457,19 @@ $(document).mouseup(function (e) {
 $('#admin').hide();
 var userAdminView;
 
+var selectProjectVisible = false;
+var selectDomainVisible = false;
+
 $("#app .admin-switcher").click(function() {
     if ($(this).attr('attr-value') === "dashboard") {
+        if ($("#selectProject").is(':visible')) {
+            selectProjectVisible = true;
+            $("#selectProject").hide();
+        }
+        if ($("#selectDomain").is(':visible')) {
+            selectDomainVisible = true;
+            $("#selectDomain").hide();
+        }
         // Change Attribute Value
         $(this).attr('attr-value', 'admin');
         // Change Icons
@@ -469,6 +479,12 @@ $("#app .admin-switcher").click(function() {
         // Instantiate User Admin View
         userAdminView = new api.view.UsersAdminView({el : '#adminDisplay', status : api.model.status, fetchRecordsLater : true });
     } else {
+        if (selectProjectVisible) {
+            $("#selectProject").show();
+        }
+        if (selectDomainVisible) {
+            $("#selectDomain").show();
+        }
         // Change Attribute Value
         $(this).attr('attr-value', 'dashboard');
         // Change Icons
