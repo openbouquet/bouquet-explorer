@@ -24,6 +24,7 @@
     "squid_api_admin_widgets": "https://github.com/squidsolutions/jssdk-admin-widgets.git#1.1.0"
   },
   "resolutions": {
-    "squid_api": "master"
+    "squid_api": "master",
+    "squid_api_filters_widget": "master"
   }
 }
