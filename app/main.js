@@ -16,7 +16,7 @@ new api.view.StatusView({
     el : '#status'
 });
 
-var projects = new api.model.ProjectCollection({"id" : {"customerId" : squid_api.customerId}});
+var projects = new api.model.ProjectCollection();
 
 new api.view.ProjectSelector({
     el : '#project',
