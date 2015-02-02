@@ -76,6 +76,8 @@ var mainModel = new Backbone.Model({
 
 // Views
 
+userAdminView = new api.view.UsersAdminView({el : '#adminDisplay', status : api.model.status});
+
 new api.view.DimensionSelector({
     el : '#origin',
     model : mainModel,
@@ -474,10 +476,13 @@ $("#app .admin-switcher").click(function() {
         $(this).attr('attr-value', 'admin');
         // Change Icons
         $(this).find('.dashboard').show(); $(this).find('.user').hide();
+        
+        userAdminView.fetchModels();
+
         // Hide and Show Sections
         $('#admin').show(); $('#main').hide();
         // Instantiate User Admin View
-        userAdminView = new api.view.UsersAdminView({el : '#adminDisplay', status : api.model.status, fetchRecordsLater : true });
+        
     } else {
         if (selectProjectVisible) {
             $("#selectProject").show();
