@@ -21,7 +21,7 @@ new api.view.StatusView({
     el : '#status'
 });
 
-var projects = new api.model.ProjectCollection({"id" : {"customerId" : squid_api.customerId}});
+var projects = new api.model.ProjectCollection();
 
 new api.view.ProjectSelector({
     el : '#project',
@@ -80,6 +80,8 @@ var mainModel = new Backbone.Model({
 });
 
 // Views
+
+userAdminView = new api.view.UsersAdminView({el : '#adminDisplay', status : api.model.status});
 
 new api.view.DimensionSelector({
     el : '#origin',
@@ -459,23 +461,49 @@ $(document).mouseup(function (e) {
     }
 });
 
-//Admin panel switcher
+/* Trigger Admin Section */
+$('#admin').hide();
+var userAdminView;
 
-$("#admin").hide();
+var selectProjectVisible = false;
+var selectDomainVisible = false;
 
 $("#app .admin-switcher").click(function() {
     if ($(this).attr('attr-value') === "dashboard") {
+        if ($("#selectProject").is(':visible')) {
+            selectProjectVisible = true;
+            $("#selectProject").hide();
+        }
+        if ($("#selectDomain").is(':visible')) {
+            selectDomainVisible = true;
+            $("#selectDomain").hide();
+        }
+        // Change Attribute Value
         $(this).attr('attr-value', 'admin');
-        $(this).find('.dashboard').show();
-        $(this).find('.user').hide();
-        $('#admin').show();
-        $('#main').hide();
+        // Change Icons
+        $(this).find('.dashboard').show(); $(this).find('.user').hide();
+        
+        userAdminView.fetchModels();
+
+        // Hide and Show Sections
+        $('#admin').show(); $('#main').hide();
+        // Instantiate User Admin View
+        
     } else {
+        if (selectProjectVisible) {
+            $("#selectProject").show();
+        }
+        if (selectDomainVisible) {
+            $("#selectDomain").show();
+        }
+        // Change Attribute Value
         $(this).attr('attr-value', 'dashboard');
-        $(this).find('.user').show();
-        $(this).find('.dashboard').hide();
-        $('#admin').hide();
-        $('#main').show();
+        // Change Icons
+        $(this).find('.user').show(); $(this).find('.dashboard').hide();
+        // Hide and Show Sections
+        $('#admin').hide(); $('#main').show();
+        // Remove User Admin View
+        userAdminView.remove();
     }
 });
 
