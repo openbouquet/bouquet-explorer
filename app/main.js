@@ -308,8 +308,10 @@ mainModel.on("change:chosenDimensions", function(chosen) {
 
 api.model.status.on('change:project', function(model) {
     if (model.get("project")) {
-        $("#selectProject").addClass("hidden");
-        $("#selectDomain").removeClass("hidden");
+        setTimeout(function() {
+            $("#selectProject").addClass("hidden");
+            $("#selectDomain").removeClass("hidden");
+        }, 100);
         var projectId = model.get("project").projectId;
         tableAnalysis.setProjectId(projectId);
         barAnalysis.setProjectId(projectId);
@@ -317,7 +319,9 @@ api.model.status.on('change:project', function(model) {
         totalAnalysis.setProjectId(projectId);
         exportAnalysis.setProjectId(projectId);
     } else {
-        $("#selectProject").removeClass("hidden");
+        setTimeout(function() {
+            $("#selectProject").removeClass("hidden");
+        }, 100);
         tableAnalysis.setProjectId(null);
         barAnalysis.setProjectId(null);
         timeAnalysis.setProjectId(null);
@@ -328,8 +332,10 @@ api.model.status.on('change:project', function(model) {
 
 api.model.status.on('change:domain', function(model) {
     if (model.get("domain")) {
-        $("#main").removeClass("hidden");
-        $("#selectDomain").addClass("hidden");
+        setTimeout(function() {
+            $("#main").removeClass("hidden");
+            $("#selectDomain").addClass("hidden");
+        }, 100);
         var domainId = model.get("domain").domainId;
        
         // launch the default filters computation
