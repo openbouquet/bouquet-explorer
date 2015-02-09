@@ -1,4 +1,4 @@
-var api = squid_api, loginView, statusView, contentView, config;
+var api = squid_api, loginView, statusView, config;
 
 var me = this;
 
@@ -63,7 +63,7 @@ var totalAnalysis = new api.model.AnalysisJob();
 // note model objects references contain oids
 var mainModel = new Backbone.Model({
     "timeDimension": null,
-    "currentAnalysis" : exportAnalysis,
+    "currentAnalysis" : tableAnalysis,
     "totalAnalysis" : totalAnalysis,
     "chosenDimensions" : [],
     "selectedDimension" :  null,
@@ -86,13 +86,17 @@ new api.view.DimensionSelector({
 
 new api.view.DimensionView({
     el : '#dimension',
-    model : mainModel
+    model : mainModel,
+    selectDimension : false,
 });
 
 var tableView = new squid_api.view.DataTableView ({
     el : '#tableView',
     model : tableAnalysis,
-    mainModel : mainModel
+    mainModel : mainModel,
+    selectMetricHeader : false,
+    searching : false,
+    paging : true,
 });
 
 var timeView = new squid_api.view.TimeSeriesView ({
@@ -137,13 +141,16 @@ new api.view.MetricSelectorView({
 
 new api.view.MetricView({
     el : '#total',
-    model : mainModel
+    model : mainModel,
+    displayMetricValue : false,
+    selectMetric : false,
 });
 
 var exportView = new api.view.DataExport({
     el : '#export',
     renderTo : '#export-content',
-    model : exportAnalysis
+    model : exportAnalysis,
+    displayInAccordion : true,
 });
 
 new api.view.OrderByView({
@@ -267,22 +274,6 @@ mainModel.on("change:currentAnalysis", function() {
     }
 });
 
-mainModel.on("change:selectedDimension", function() {
-    refreshCurrentAnalysis();
-});
-
-mainModel.on("change:orderByDirection", function() {
-    refreshCurrentAnalysis();
-});
-
-mainModel.on("change:limit", function() {
-    refreshCurrentAnalysis();
-});
-
-mainModel.on("change:chosenMetrics", function() {
-    refreshCurrentAnalysis();
-});
-
 var getOrderByIndex = function() {
     var index = mainModel.get("chosenDimensions").length;
     var selectedMetric = mainModel.get("selectedMetric");
@@ -295,15 +286,10 @@ var getOrderByIndex = function() {
     return index;
 };
 
-mainModel.on("change:selectedMetric", function() {
-    refreshCurrentAnalysis();
-});
-
 mainModel.on("change:chosenDimensions", function(chosen) {
     if (mainModel.get("chosenDimensions").length === 0) {
         mainModel.set("selectedDimension", null);
     }
-    refreshCurrentAnalysis();
 });
 
 api.model.status.on('change:project', function(model) {
@@ -448,69 +434,36 @@ mainModel.on("change:currentPage", function() {
     }
 });
 
-// Make sure all panels are closed on launch
-$(document).mouseup(function (e) {
-    var container = $(".collapse");
-    // Check to see if the target of the click is not container / descendant of container
-    if (!container.is(e.target) && container.has(e.target).length === 0) {
-        $('.collapse').each(function() {
-            if ($(this).hasClass("in")) {
-                $(this).collapse('hide');
-            }
-        });
-    }
-});
-
 /* Trigger Admin Section */
 $('#admin').hide();
-var userAdminView;
 
-var selectProjectVisible = false;
-var selectDomainVisible = false;
-
-$("#app .admin-switcher").click(function() {
-    if ($(this).attr('attr-value') === "dashboard") {
-        if ($("#selectProject").is(':visible')) {
-            selectProjectVisible = true;
-            $("#selectProject").hide();
-        }
-        if ($("#selectDomain").is(':visible')) {
-            selectDomainVisible = true;
-            $("#selectDomain").hide();
-        }
-        // Change Attribute Value
-        $(this).attr('attr-value', 'admin');
-        // Change Icons
-        $(this).find('.dashboard').show(); $(this).find('.user').hide();
-        
-        userAdminView.fetchModels();
-
-        // Hide and Show Sections
-        $('#admin').show(); $('#main').hide();
-        // Instantiate User Admin View
-        
-    } else {
-        if (selectProjectVisible) {
-            $("#selectProject").show();
-        }
-        if (selectDomainVisible) {
-            $("#selectDomain").show();
-        }
-        // Change Attribute Value
-        $(this).attr('attr-value', 'dashboard');
-        // Change Icons
-        $(this).find('.user').show(); $(this).find('.dashboard').hide();
-        // Hide and Show Sections
-        $('#admin').hide(); $('#main').show();
-        // Remove User Admin View
-        userAdminView.remove();
-    }
+$("#app #menu #export-app").click(function() {
+    $('#admin').hide(); 
+    $('#main').show();
+    userAdminView.remove();
 });
 
-$(".nav-tabs li").click(function() {
-    var pageActivated = $(this).find("a").attr("data-content");
-    mainModel.set("currentPage", pageActivated);
+$("#app #menu #user-management").click(function() {
+    $('#admin').show(); 
+    $('#main').hide();
+    userAdminView.fetchModels();
 });
+
+// refreshCurrentAnalysis();
+
+$("button.refresh-analysis").click(function() {
+    mainModel.set("currentAnalysis", tableAnalysis);
+    refreshCurrentAnalysis();
+});
+
+setTimeout(function() {
+    $("#export .btn-open-export-panel").click(function() {
+        mainModel.set("currentAnalysis", exportAnalysis);
+    });
+}, 1000);
+
+// Trigger Sliding Nav
+$('.menu-link').bigSlide();
 
 /*
 * Start the App

@@ -24,6 +24,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <ul class="nav navbar-nav navbar-left">
+                    <li><a href="#menu" class="menu-link">&#9776;</a></li>
                     <li><a class="navbar-brand" href="#">Export App</a></li>
                 </ul>
             </div>
@@ -40,9 +41,6 @@
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                	<li>
-                       <div attr-value="dashboard" class="admin-switcher"><i class="user fa fa-users"></i><i class="dashboard fa fa-pie-chart"></i></div>
-                    </li>
                     <li>
                         <div id="login"></div>
                     </li>
@@ -50,6 +48,13 @@
             </div>
         </div>
     </div>
+    <nav id="menu" class="panel" role="navigation">
+        <ul>
+            <li><a id="export-app"><i class="user fa fa-download"></i><span class="nav-item">export app</span></a></li>
+            <li><a id="user-management"><i class="user fa fa-users"></i><span class="nav-item">users</span></a></li>
+        </ul>
+    </nav>
+    <!-- <a href="#"><div attr-value="dashboard" class="admin-switcher"><i class="user fa fa-users"></i><i class="dashboard fa fa-pie-chart"></i></div></a> -->
     <div id="loading">
     	<div class="col-md-12 splash-container">
     		<span class="splash-message">Application is loading ...</span>
@@ -65,12 +70,12 @@
     		<div class="splash-message">Please select your domain</div>
     	</div>
     </div>
-    <div id="admin">
+    <div id="admin" class="push">
     	<div class="container">
     		<div id="adminDisplay"></div>
     	</div>
     </div>
-    <div class="hidden" id="main">
+    <div class="hidden push" id="main">
 	    <div class="container configuration">
 	    	<div class="row">
 	    		<div id="date"></div>
@@ -98,33 +103,23 @@
 	    			<div id="total"></div>
 	    		</div>
 	    	</div>
-	        <div class="collapse" id="export-content"></div>
 	    </div>
-	   <div class="container main-container">
-	   		<ul class="nav nav-tabs">
-	   			<li class="active"><a href="#export-all" data-toggle="tab" data-content="export">Export</a></li>
-    			<li><a href="#preview-tab" data-toggle="tab" data-content="preview">Preview</a></li>
-			</ul>
-			<div class="tab-content">
-				<div class="tab-pane active" id="export-all">
-					<div id="export"></div>
-				</div>
-				<div class="tab-pane" id="preview-tab">
-					<div class="row">
-						<div class="col-md-8 display-selector-container">
-	                		<div id="display-selector"></div>
-	         			</div>
-	         			<div class="col-md-4 additional-options">
-							<div id="orderby"></div>
-						</div>
-					</div>
-					<div class="container">
-						<div id="tableView"></div>
-	               		<div id="barView"></div>
-	              		<div id="timeView"></div>
-					</div>
-				</div>
-			</div>
+	   <div class="push container main-container">
+            <div class="col-md-7">
+                <div id="orderby"></div>
+            </div>
+            <div class="col-md-3">
+                <button type="button" class="btn refresh-analysis">Refresh Preview</button>
+            </div>
+            <div class="col-md-2">
+                <div id="export"></div>
+            </div>
+            <div class="col-md-12">
+                <div class="collapse" id="export-content"></div>
+            </div>
+			<div class="col-md-12">
+                <div id="tableView"></div>
+            </div>		
 	   </div>
 	</div>
 
