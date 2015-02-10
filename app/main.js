@@ -425,15 +425,6 @@ api.model.filters.on('change:userSelection', function(filters) {
     squid_api.controller.facetjob.compute(filters, filters.get("userSelection"));
 });
 
-// handle preview/export switch
-mainModel.on("change:currentPage", function() {
-    if (mainModel.get("currentPage") == "preview") {
-        mainModel.set("currentAnalysis", tableAnalysis);
-    } else {
-        mainModel.set("currentAnalysis", exportAnalysis);
-    }
-});
-
 /* Trigger Admin Section */
 $('#admin').hide();
 
