@@ -449,8 +449,6 @@ $("#app #menu #user-management").click(function() {
     userAdminView.fetchModels();
 });
 
-// refreshCurrentAnalysis();
-
 $("button.refresh-analysis").click(function() {
     mainModel.set("currentAnalysis", tableAnalysis);
     refreshCurrentAnalysis();

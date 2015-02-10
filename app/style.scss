@@ -13,7 +13,8 @@ $navBarAndButtonColour: #e7e7e7;
 
     // Reduce spacing between each Horizontal Rule
     hr {
-        margin-top: 0px;
+        margin-top: 5px;
+        margin-bottom: 15px
     }
 
     #admin {
@@ -126,6 +127,12 @@ $navBarAndButtonColour: #e7e7e7;
                 right: 10px;
                 top: 15px;
             }
+            .squid-api-data-widgets-dimension-widget li, .squid-api-data-widgets-metric-widget li {
+                border: 1px solid #D2D7D3;
+            }
+            .squid-api-data-widgets-dimension-widget li {
+                margin: 0px 20px 10px 0px;
+            }
             background: #fff;
             #date, #selection, #origin, #metric {
                 .btn-group {
@@ -179,7 +186,7 @@ $navBarAndButtonColour: #e7e7e7;
                     background: $navBarAndButtonColour;
                     min-width: 150px;
                     border-radius: 4px;
-                    margin: 0px 20px 20px 0px;
+                    margin: 0px 20px 10px 0px;
                     padding: 5px !important;
                 }
                 table {
@@ -223,8 +230,13 @@ $navBarAndButtonColour: #e7e7e7;
             }
         }
         .main-container {
+            margin-top: 10px;
+            padding-right: 0px;
             #tableView {
                 position: relative;
+                .col-xs-12 {
+                    padding-right: 0px;
+                }
             }
             button.refresh-analysis {
                 position: relative;
