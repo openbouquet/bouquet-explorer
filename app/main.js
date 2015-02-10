@@ -288,6 +288,9 @@ api.model.status.on('change:domain', function(model) {
             $("#main").removeClass("hidden");
             $("#selectDomain").addClass("hidden");
         }, 100);
+        setTimeout(function() {
+            refreshTableAnalysis();
+        }, 1000);
         var domainId = model.get("domain").domainId;
        
         // launch the default filters computation
@@ -409,10 +412,6 @@ $("#app #menu #user-management").click(function() {
 $("button.refresh-analysis").click(function() {
     refreshTableAnalysis();
 });
-
-setTimeout(function() {
-    refreshTableAnalysis();
-}, 1000);
 
 // Trigger Sliding Nav
 $('.menu-link').bigSlide();
