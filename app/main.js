@@ -63,7 +63,8 @@ var totalAnalysis = new api.model.AnalysisJob();
 // note model objects references contain oids
 var mainModel = new Backbone.Model({
     "timeDimension": null,
-    "currentAnalysis" : tableAnalysis,
+    "tableAnalysis" : tableAnalysis,
+    "exportAnalysis" : exportAnalysis,
     "totalAnalysis" : totalAnalysis,
     "chosenDimensions" : [],
     "selectedDimension" :  null,
@@ -72,6 +73,30 @@ var mainModel = new Backbone.Model({
     "limit" : null,
     "orderByDirection" : "DESC",
     "currentPage" : null
+});
+
+mainModel.on("change:selectedDimension", function() {
+    refreshExportAnalysis();
+});
+
+mainModel.on("change:chosenDimensions", function() {
+    refreshExportAnalysis();
+});
+
+mainModel.on("change:orderByDirection", function() {
+    refreshExportAnalysis();
+});
+
+mainModel.on("change:limit", function() {
+    refreshExportAnalysis();
+});
+
+mainModel.on("change:chosenMetrics", function() {
+    refreshExportAnalysis();
+});
+
+mainModel.on("change:selectedMetrics", function() {
+    refreshExportAnalysis();
 });
 
 // Views
@@ -107,14 +132,6 @@ var timeView = new squid_api.view.TimeSeriesView ({
 var barView = new squid_api.view.BarChartView ({
     el : '#barView',
     model : barAnalysis
-});
-
-new api.view.DisplayTypeSelectorView({
-    el : '#display-selector',
-    model : mainModel,
-    tableView : tableView,
-    barView : barView,
-    timeView : timeView
 });
 
 new api.view.FiltersSelectionView({
@@ -177,69 +194,18 @@ api.model.filters.on('change:selection', function() {
     }
 });
 
-var refreshCurrentAnalysis = function() {
-    var a = mainModel.get("currentAnalysis");
+var refreshExportAnalysis = function() {
+    var a = mainModel.get("exportAnalysis");
     if (a) {
-        // apply the settings depending on the type of analysis
         var silent = true;
         var changed = false;
-        if (a == tableAnalysis) {
-            a.setDimensionIds(mainModel.get("chosenDimensions"), silent);
-            changed = changed || a.hasChanged();
-            a.setMetricIds(mainModel.get("chosenMetrics"), silent);
-            changed = changed || a.hasChanged();
-            a.set({"orderBy" : [{"col" : getOrderByIndex() , "direction" : mainModel.get("orderByDirection")}]}, {"silent" : silent});
-            changed = changed || a.hasChanged();
-            a.set({"limit": 1000}, {"silent" : silent});
-            changed = changed || a.hasChanged();
-        }
-        if (a == exportAnalysis) {
-            a.setDimensionIds(mainModel.get("chosenDimensions"), silent);
-            changed = changed || a.hasChanged();
-            a.setMetricIds(mainModel.get("chosenMetrics"), silent);
-            changed = changed || a.hasChanged();
-            a.set({"orderBy" : null}, {"silent" : silent});
-            changed = changed || a.hasChanged();
-            a.set({"limit": null}, {"silent" : silent});
-            changed = changed || a.hasChanged();
-        }
-        if (a == barAnalysis) {
-            a.setDimensionIds([mainModel.get("selectedDimension")], silent);
-            changed = changed || a.hasChanged();
-            a.setMetricIds([mainModel.get("selectedMetric")], silent);
-            changed = changed || a.hasChanged();
-            a.set({"orderBy" : [{"col" : 1 , "direction" : mainModel.get("orderByDirection")}]}, {"silent" : silent});
-            changed = changed || a.hasChanged();
-            a.set({"limit": 10}, {"silent" : silent});
-            changed = changed || a.hasChanged();
-        }
-        if (a == timeAnalysis) {
-            var univariate = true;
-            var selectedDimension = mainModel.get("selectedDimension");
-            if (selectedDimension) {
-                var dim = squid_api.utils.find(squid_api.model.project.get("domains"), "oid", selectedDimension);
-                if (dim.type != "CONTINUOUS") {
-                    univariate = false;
-                }
-            }
-            
-            if (univariate) {
-                a.setDimensionIds([mainModel.get("timeDimension")], silent);
-                changed = changed || a.hasChanged();
-                a.set({"limit": null}, {"silent" : silent});
-                changed = changed || a.hasChanged();
-            } else {
-                a.setDimensionIds([mainModel.get("selectedDimension"),mainModel.get("timeDimension")], silent);
-                changed = changed || a.hasChanged();
-                a.set({"orderBy" : [{"col" : 2 , "direction" : mainModel.get("orderByDirection")}]}, {"silent" : silent});
-                changed = changed || a.hasChanged();
-                a.set({"limit": 10}, {"silent" : silent});
-                changed = changed || a.hasChanged();
-            }
-            a.setMetricIds([mainModel.get("selectedMetric")], silent);
-            changed = changed || a.hasChanged();
-        }
-        a.setSelection(api.model.filters.get("selection"), silent);
+        a.setDimensionIds(mainModel.get("chosenDimensions"), silent);
+        changed = changed || a.hasChanged();
+        a.setMetricIds(mainModel.get("chosenMetrics"), silent);
+        changed = changed || a.hasChanged();
+        a.set({"orderBy" : null}, {"silent" : silent});
+        changed = changed || a.hasChanged();
+        a.set({"limit": null}, {"silent" : silent});
         changed = changed || a.hasChanged();
         // only re-compute if the analysis has changed
         if (changed) {    
@@ -250,6 +216,27 @@ var refreshCurrentAnalysis = function() {
                 a.trigger("change");
             }
         }
+    }
+};
+
+var refreshTableAnalysis = function() {
+    var a = mainModel.get("tableAnalysis");
+    if (a) {
+        // apply the settings depending on the type of analysis
+        var silent = true;
+        var changed = false;
+        a.setDimensionIds(mainModel.get("chosenDimensions"), silent);
+        changed = changed || a.hasChanged();
+        a.setMetricIds(mainModel.get("chosenMetrics"), silent);
+        changed = changed || a.hasChanged();
+        a.set({"orderBy" : [{"col" : getOrderByIndex() , "direction" : mainModel.get("orderByDirection")}]}, {"silent" : silent});
+        changed = changed || a.hasChanged();
+        a.set({"limit": 1000}, {"silent" : silent});
+        changed = changed || a.hasChanged();
+
+        a.setSelection(api.model.filters.get("selection"), silent);
+
+        compute(tableAnalysis);
     }
 };
 
@@ -420,15 +407,11 @@ $("#app #menu #user-management").click(function() {
 });
 
 $("button.refresh-analysis").click(function() {
-    mainModel.set("currentAnalysis", tableAnalysis);
-    refreshCurrentAnalysis();
+    refreshTableAnalysis();
 });
 
 setTimeout(function() {
-    $("#export .btn-open-export-panel").click(function() {
-        mainModel.set("currentAnalysis", exportAnalysis);
-        refreshCurrentAnalysis();
-    });
+    refreshTableAnalysis();
 }, 1000);
 
 // Trigger Sliding Nav
