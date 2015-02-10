@@ -63,7 +63,7 @@ var totalAnalysis = new api.model.AnalysisJob();
 // note model objects references contain oids
 var mainModel = new Backbone.Model({
     "timeDimension": null,
-    "currentAnalysis" : tableAnalysis,
+    "currentAnalysis" : exportAnalysis,
     "totalAnalysis" : totalAnalysis,
     "chosenDimensions" : [],
     "selectedDimension" :  null,
@@ -170,7 +170,6 @@ var compute = function(analysis) {
 };
 
 api.model.filters.on('change:selection', function() {
-    refreshCurrentAnalysis();
     if (totalAnalysis.get("metrics")) {
         var sel = api.model.filters.get("selection");
         totalAnalysis.setSelection(sel);
