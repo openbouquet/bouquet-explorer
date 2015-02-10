@@ -63,7 +63,7 @@ var totalAnalysis = new api.model.AnalysisJob();
 // note model objects references contain oids
 var mainModel = new Backbone.Model({
     "timeDimension": null,
-    "currentAnalysis" : exportAnalysis,
+    "currentAnalysis" : tableAnalysis,
     "totalAnalysis" : totalAnalysis,
     "chosenDimensions" : [],
     "selectedDimension" :  null,
