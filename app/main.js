@@ -254,26 +254,6 @@ var refreshCurrentAnalysis = function() {
     }
 };
 
-mainModel.on("change:currentAnalysis", function() {
-    refreshCurrentAnalysis();
-    var a = mainModel.get("currentAnalysis");
-    if (a == tableAnalysis) {
-        tableView.$el.show();
-    } else {
-        tableView.$el.hide();
-    }
-    if (a == barAnalysis) {
-        barView.$el.show();
-    } else {
-        barView.$el.hide();
-    }
-    if (a == timeAnalysis) {
-        timeView.$el.show();
-    } else {
-        timeView.$el.hide();
-    }
-});
-
 var getOrderByIndex = function() {
     var index = mainModel.get("chosenDimensions").length;
     var selectedMetric = mainModel.get("selectedMetric");
@@ -448,6 +428,7 @@ $("button.refresh-analysis").click(function() {
 setTimeout(function() {
     $("#export .btn-open-export-panel").click(function() {
         mainModel.set("currentAnalysis", exportAnalysis);
+        refreshCurrentAnalysis();
     });
 }, 1000);
 
