@@ -65,6 +65,7 @@ var mainModel = new Backbone.Model({
     "timeDimension": null,
     "tableAnalysis" : tableAnalysis,
     "exportAnalysis" : exportAnalysis,
+    "analysisRefreshNeeded" : false,
     "totalAnalysis" : totalAnalysis,
     "chosenDimensions" : [],
     "selectedDimension" :  null,
@@ -77,26 +78,66 @@ var mainModel = new Backbone.Model({
 
 mainModel.on("change:selectedDimension", function() {
     refreshExportAnalysis();
+    me.mainModel.set("analysisRefreshNeeded", true);
 });
 
 mainModel.on("change:chosenDimensions", function() {
     refreshExportAnalysis();
+    me.mainModel.set("analysisRefreshNeeded", true);
 });
 
 mainModel.on("change:orderByDirection", function() {
     refreshExportAnalysis();
+    me.mainModel.set("analysisRefreshNeeded", true);
 });
 
 mainModel.on("change:limit", function() {
     refreshExportAnalysis();
+    me.mainModel.set("analysisRefreshNeeded", true);
 });
 
 mainModel.on("change:chosenMetrics", function() {
     refreshExportAnalysis();
+    me.mainModel.set("analysisRefreshNeeded", true);
 });
 
 mainModel.on("change:selectedMetrics", function() {
     refreshExportAnalysis();
+    me.mainModel.set("analysisRefreshNeeded", true);
+});
+
+tableAnalysis.on("change", function() {
+    if (this.isDone()) {
+        $("button.refresh-analysis .text").html("Preview up to date");
+        $("button.refresh-analysis .glyphicon").hide();
+        $("button.refresh-analysis .glyphicon").removeClass("loading");
+    } else {
+        $("button.refresh-analysis .glyphicon").show();
+        $("button.refresh-analysis .text").html("Refreshing...");
+        $("button.refresh-analysis .glyphicon").addClass("loading");
+    }
+});
+
+mainModel.on("change:analysisRefreshNeeded", function() {
+    var analysisRefreshNeeded = me.mainModel.get("analysisRefreshNeeded");
+
+    if (analysisRefreshNeeded) {
+        // Bind click event and tell the model a refresh is needed
+        $("button.refresh-analysis").click(function() {
+            me.mainModel.set("analysisRefreshNeeded", false);
+            refreshTableAnalysis();
+        });
+        // Dom manipulations
+        $("button.refresh-analysis .glyphicon").show();
+        $("button.refresh-analysis .glyphicon").removeClass("loading");
+        $("button.refresh-analysis").removeClass("dataUpdated");
+        $("button.refresh-analysis .text").html("Refresh Preview");
+    } else {
+        // Unbind Click event / Dom manipulations
+        $("button.refresh-analysis").unbind("click");
+        $("button.refresh-analysis").addClass("dataUpdated");
+        $("button.refresh-analysis .glyphicon").removeClass("loading");
+    }
 });
 
 // Views
@@ -191,6 +232,7 @@ api.model.filters.on('change:selection', function() {
         var sel = api.model.filters.get("selection");
         totalAnalysis.setSelection(sel);
         api.compute(totalAnalysis);
+        me.mainModel.set("analysisRefreshNeeded", true);
     }
 });
 
@@ -263,6 +305,8 @@ api.model.status.on('change:project', function(model) {
         setTimeout(function() {
             $("#selectProject").addClass("hidden");
             $("#selectDomain").removeClass("hidden");
+            // Make sure loading icon doesn't appear
+            $("button.refresh-analysis .glyphicon").removeClass("loading");
         }, 100);
         var projectId = model.get("project").projectId;
         tableAnalysis.setProjectId(projectId);
@@ -273,6 +317,8 @@ api.model.status.on('change:project', function(model) {
     } else {
         setTimeout(function() {
             $("#selectProject").removeClass("hidden");
+            // Make sure loading icon doesn't appear
+            $("button.refresh-analysis .glyphicon").removeClass("loading");
         }, 100);
         tableAnalysis.setProjectId(null);
         barAnalysis.setProjectId(null);
@@ -288,9 +334,6 @@ api.model.status.on('change:domain', function(model) {
             $("#main").removeClass("hidden");
             $("#selectDomain").addClass("hidden");
         }, 100);
-        setTimeout(function() {
-            refreshTableAnalysis();
-        }, 1000);
         var domainId = model.get("domain").domainId;
        
         // launch the default filters computation
@@ -407,10 +450,6 @@ $("#app #menu #user-management").click(function() {
     $('#admin').show(); 
     $('#main').hide();
     userAdminView.fetchModels();
-});
-
-$("button.refresh-analysis").click(function() {
-    refreshTableAnalysis();
 });
 
 // Trigger Sliding Nav

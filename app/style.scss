@@ -6,7 +6,6 @@ $primary-color: #777;
 $navBarAndButtonColour: #e7e7e7;
 
 /* Application */
-
 #app {
     font-family: $primary-font-stack;
     color: $primary-color;
@@ -262,6 +261,20 @@ $navBarAndButtonColour: #e7e7e7;
                 cursor: pointer;
                 -webkit-box-shadow: inset 0 -2px #27ae60;
                 box-shadow: inset 0 -2px #27ae60;
+
+                &.dataUpdated {
+                    opacity: 0.5;
+                }
+
+                .glyphicon {
+                    top: 3px;
+                    right: -15px;
+
+                    &.loading {
+                        -moz-animation: spin .7s infinite linear;
+                        -webkit-animation: spin .7s infinite linear;
+                    }
+                }
             }
             #export {
                 button {
@@ -283,6 +296,11 @@ $navBarAndButtonColour: #e7e7e7;
                     cursor: pointer;
                     -webkit-box-shadow: inset 0 -2px #2980b9;
                     box-shadow: inset 0 -2px #2980b9;
+
+                    .glyphicon {
+                        top: 4px;
+                        right: -25px;
+                    }
                 }
             }
             .squid-api-data-widgets-data-table a {
@@ -371,84 +389,115 @@ $navBarAndButtonColour: #e7e7e7;
                 padding: 10px 0px 10px 3px;
                 background-color: #ffffff;
             }
-                    // Only preview tab to have a max height
-                    &#preview-tab {
-                        min-height: 600px;
-                    }
-                    .squid-api-data-widgets-data-table {
-                        .filtered-by {
-                            background: $navBarAndButtonColour;
-                        }
-                    }
-                    .squid-api-data-widgets-timeseries-widget {
-                        .ui-slider-range {
-                            background: $navBarAndButtonColour;
-                        }
-                    }
-                    .squid-api-data-widgets-displaytype-selector {
-                        color: $primary-color;
-                    }
-                    .squid-api-data-widgets-export-widget {
-                        hr {
-                            margin-top: 20px;
-                        }
-                    }
-                    .sq-loading {
-                        position:absolute;
-                        width:100%;
-                        top: 25% !important;
-                        left: 0px;
-                        top:0% !important;
-                    }
-                    .spinner {
-                        margin: 100px auto;
-                        width: 400px;
-                        height: 100px;
-                        text-align: center;
-                        font-size: 10px;
-                    }
-                    .spinner > div {
-                        margin-left:10px;
-                        background-color: rgba(102, 102, 102, .5);
-                        height: 100%;
-                        width: 10px;
-                        display: inline-block;
-                        -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
-                        animation: stretchdelay 1.2s infinite ease-in-out;
-                    }
-                    .spinner .rect2 {
-                        -webkit-animation-delay: -1.1s;
-                        animation-delay: -1.1s;
-                    }
-                    .spinner .rect3 {
-                        -webkit-animation-delay: -1.0s;
-                        animation-delay: -1.0s;
-                    }
-                    .spinner .rect4 {
-                        -webkit-animation-delay: -0.9s;
-                        animation-delay: -0.9s;
-                    }
-                    .spinner .rect5 {
-                        -webkit-animation-delay: -0.8s;
-                        animation-delay: -0.8s;
-                    }
-                    @-webkit-keyframes stretchdelay {
-                        0%, 40%, 100% { 
-                            -webkit-transform: scaleY(0.0) 
-                        }
-                        20% { 
-                            -webkit-transform: scaleY(1.0) 
-                        }
-                    }
-                    @keyframes stretchdelay {
-                        0%, 40%, 100% {
-                            transform: scaleY(0.0);
-                            -webkit-transform: scaleY(0.0);
-                        }
-                        20% {
-                            transform: scaleY(1.0);
-                            -webkit-transform: scaleY(1.0);
-                        }
+            .squid-api-data-widgets-data-table {
+                .filtered-by {
+                    background: $navBarAndButtonColour;
+                }
+            }
+            .squid-api-data-widgets-timeseries-widget {
+                .ui-slider-range {
+                    background: $navBarAndButtonColour;
+                }
+            }
+            .squid-api-data-widgets-displaytype-selector {
+                color: $primary-color;
+            }
+            .squid-api-data-widgets-export-widget {
+                hr {
+                    margin-top: 20px;
+                }
+            }
+            .sq-loading {
+                position:absolute;
+                width:100%;
+                top: 25% !important;
+                left: 0px;
+                top:0% !important;
+            }
+            .spinner {
+                margin: 100px auto;
+                width: 400px;
+                height: 100px;
+                text-align: center;
+                font-size: 10px;
+            }
+            .spinner > div {
+                margin-left:10px;
+                background-color: rgba(102, 102, 102, .5);
+                height: 100%;
+                width: 10px;
+                display: inline-block;
+                -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
+                animation: stretchdelay 1.2s infinite ease-in-out;
+            }
+            .spinner .rect2 {
+                -webkit-animation-delay: -1.1s;
+                animation-delay: -1.1s;
+            }
+            .spinner .rect3 {
+                -webkit-animation-delay: -1.0s;
+                animation-delay: -1.0s;
+            }
+            .spinner .rect4 {
+                -webkit-animation-delay: -0.9s;
+                animation-delay: -0.9s;
+            }
+            .spinner .rect5 {
+                -webkit-animation-delay: -0.8s;
+                animation-delay: -0.8s;
+            }
+            @-webkit-keyframes stretchdelay {
+                0%, 40%, 100% { 
+                    -webkit-transform: scaleY(0.0) 
+                }
+                20% { 
+                    -webkit-transform: scaleY(1.0) 
+                }
+            }
+            @keyframes stretchdelay {
+                0%, 40%, 100% {
+                    transform: scaleY(0.0);
+                    -webkit-transform: scaleY(0.0);
+                }
+                20% {
+                    transform: scaleY(1.0);
+                    -webkit-transform: scaleY(1.0);
+                }
+            }
+            @-moz-keyframes spin {
+                0% {
+                    -moz-transform: rotate(0deg);
+                }
+                100% {
+                    -moz-transform: rotate(360deg);
+                };
+            }
+
+            @-moz-keyframes spinoff {
+                0% {
+                    -moz-transform: rotate(0deg);
+                }
+                100% {
+                    -moz-transform: rotate(-360deg);
+                };
+            }
+
+            @-webkit-keyframes spin {
+                0% {
+                    -webkit-transform: rotate(0deg);
+                }
+                100% {
+                    -webkit-transform: rotate(360deg);
+                };
+            }
+
+            @-webkit-keyframes spinoff {
+                0% {
+                    -webkit-transform: rotate(0deg);
+                }
+                100% {
+                    -webkit-transform: rotate(-360deg);
+                };
             }
         }
     }
