@@ -451,15 +451,22 @@ api.model.filters.on('change:userSelection', function(filters) {
 $('#admin').hide();
 
 $("#app #menu #export-app").click(function() {
-    $('#admin').hide(); 
-    $('#main').show();
-    userAdminView.remove();
+    $('#admin').fadeOut(200, function() {
+        userAdminView.remove();
+      $('#main').fadeIn(200, function () {
+          
+      });
+   });
 });
 
 $("#app #menu #user-management").click(function() {
-    $('#admin').show(); 
-    $('#main').hide();
     userAdminView.fetchModels();
+
+    $('#main').fadeOut(200, function() {
+      $('#admin').fadeIn(200, function () {
+          
+      });
+   });
 });
 
 // Trigger Sliding Nav
