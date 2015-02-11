@@ -429,6 +429,12 @@ api.model.status.on('change:domain', function(model) {
                 mainModel.set({"selectedDimension": null});
             }
         });
+
+        // Fade in main
+        setTimeout(function() {
+            $('#main').fadeIn();
+        }, 1000);
+        
         api.controller.facetjob.compute(filters);
        
     } else {
@@ -471,6 +477,9 @@ $("#app #menu #user-management").click(function() {
 
 // Trigger Sliding Nav
 $('.menu-link').bigSlide();
+
+// Hide Main and unhide domain is selected
+$('#main').hide();
 
 /*
 * Start the App
