@@ -406,8 +406,30 @@ $navBarAndButtonColour: #e7e7e7;
                 color: $primary-color;
             }
             .squid-api-data-widgets-export-widget {
-                hr {
-                    margin-top: 20px;
+                .panel-body {
+                    .btn-default {
+                        cursor: pointer;
+                        color: #777;
+                        border-radius: 4px;
+                        border: 1px solid #e7e7e7;
+                        position: relative;
+                        vertical-align: top;
+                        height: 40px;
+                        width: 170px;
+                        font-size: 14px;
+                        color: #777;
+                        text-align: center;
+                        background: #fff;
+                        border-bottom: 2px solid #bdc3c7;
+                        cursor: pointer;
+                        -webkit-box-shadow: inset 0 -2px #bdc3c7;
+                        box-shadow: inset 0 -2px #bdc3c7;
+                    }
+                    .download-formats {
+                        display: inline-block;
+                        padding: 10px 0px;
+                        margin-top: 10px;
+                    }
                 }
             }
             .sq-loading {
