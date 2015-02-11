@@ -233,6 +233,9 @@ $navBarAndButtonColour: #e7e7e7;
         .main-container {
             margin-top: 10px;
             padding-right: 0px;
+            .orderby-col {
+                padding-left: 0px;
+            }
             #tableView {
                 position: relative;
                 .col-xs-12 {

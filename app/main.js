@@ -101,7 +101,7 @@ mainModel.on("change:chosenMetrics", function() {
     me.mainModel.set("analysisRefreshNeeded", true);
 });
 
-mainModel.on("change:selectedMetrics", function() {
+mainModel.on("change:selectedMetric", function() {
     refreshExportAnalysis();
     me.mainModel.set("analysisRefreshNeeded", true);
 });
@@ -150,6 +150,11 @@ new api.view.DimensionSelector({
     dimensionIndex: null
 });
 
+new api.view.OrderByView({
+    el : '#orderby',
+    model : mainModel
+});
+
 new api.view.DimensionView({
     el : '#dimension',
     model : mainModel,
@@ -163,6 +168,7 @@ var tableView = new squid_api.view.DataTableView ({
     selectMetricHeader : false,
     searching : false,
     paging : true,
+    ordering: false,
 });
 
 var timeView = new squid_api.view.TimeSeriesView ({
@@ -335,6 +341,10 @@ api.model.status.on('change:domain', function(model) {
             $("#selectDomain").addClass("hidden");
         }, 100);
         var domainId = model.get("domain").domainId;
+
+        // Set Table Analysis Limit
+        mainModel.get("tableAnalysis").set({"limit" : 1000}, {silent : true});
+        mainModel.get("tableAnalysis").set({"direction" : "DESC"}, {silent : true});
        
         // launch the default filters computation
         var filters = new api.controller.facetjob.FiltersModel();
