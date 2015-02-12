@@ -69,6 +69,8 @@ $navBarAndButtonColour: #e7e7e7;
     }
     #menu {
         background: #34495e;
+        margin-top: 49px;
+        border-radius: 0px;
         a {
             color: #fff;
         }
@@ -238,6 +240,14 @@ $navBarAndButtonColour: #e7e7e7;
             }
             #tableView {
                 position: relative;
+
+                .blur {
+                    -webkit-filter: blur(2px);
+                    -moz-filter: blur(2px);
+                    -o-filter: blur(2px);
+                    -ms-filter: blur(2px);
+                    filter: blur(2px);
+                }
                 .col-xs-12 {
                     padding-right: 0px;
                 }
@@ -321,7 +331,7 @@ $navBarAndButtonColour: #e7e7e7;
                 text-decoration:underline;
                 background: #f01967;
             }
-            .squid-api-data-widgets-data-table {
+            .squid-api-data-widgets-data-table, .noDataInTable {
                 color:#666;
                 background:#eaebec;
                 margin: 0px 0px 10px -15px;
@@ -335,6 +345,15 @@ $navBarAndButtonColour: #e7e7e7;
                 -moz-box-shadow: 0 1px 2px #d1d1d1;
                 -webkit-box-shadow: 0 1px 2px #d1d1d1;
                 box-shadow: 0 1px 2px #d1d1d1;
+            }
+            .noDataInTable {
+                padding: 10px;
+                font-size: 14px;
+                text-align: right;
+                padding-right: 215px;
+                i {
+                    padding-left: 10px;
+                }
             }
             .squid-api-data-widgets-data-table th {
                 padding:21px 25px 22px 25px;

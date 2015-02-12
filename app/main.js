@@ -84,11 +84,19 @@ mainModel.on("change:selectedDimension", function() {
 mainModel.on("change:chosenDimensions", function() {
     refreshExportAnalysis();
     me.mainModel.set("analysisRefreshNeeded", true);
+    tableView.$el.find('.dataTables_wrapper').addClass("blur");
+});
+
+mainModel.on("change:chosenMetrics", function() {
+    refreshExportAnalysis();
+    me.mainModel.set("analysisRefreshNeeded", true);
+    tableView.$el.find('.dataTables_wrapper').addClass("blur");
 });
 
 mainModel.on("change:orderByDirection", function() {
     refreshExportAnalysis();
     me.mainModel.set("analysisRefreshNeeded", true);
+    tableView.$el.find('.dataTables_wrapper').addClass("blur");
 });
 
 mainModel.on("change:limit", function() {
@@ -96,14 +104,10 @@ mainModel.on("change:limit", function() {
     me.mainModel.set("analysisRefreshNeeded", true);
 });
 
-mainModel.on("change:chosenMetrics", function() {
-    refreshExportAnalysis();
-    me.mainModel.set("analysisRefreshNeeded", true);
-});
-
 mainModel.on("change:selectedMetric", function() {
     refreshExportAnalysis();
     me.mainModel.set("analysisRefreshNeeded", true);
+    tableView.$el.find('.dataTables_wrapper').addClass("blur");
 });
 
 tableAnalysis.on("change", function() {
@@ -111,7 +115,9 @@ tableAnalysis.on("change", function() {
         $("button.refresh-analysis .text").html("Preview up to date");
         $("button.refresh-analysis .glyphicon").hide();
         $("button.refresh-analysis .glyphicon").removeClass("loading");
+        tableView.$el.find('.squid-api-data-widgets-data-table').removeClass("blur");
     } else {
+        tableView.$el.find('.squid-api-data-widgets-data-table').addClass("blur");
         $("button.refresh-analysis .glyphicon").show();
         $("button.refresh-analysis .text").html("Refreshing...");
         $("button.refresh-analysis .glyphicon").addClass("loading");
@@ -165,10 +171,11 @@ var tableView = new squid_api.view.DataTableView ({
     el : '#tableView',
     model : tableAnalysis,
     mainModel : mainModel,
+    noDataMessage : "Click the refresh button to start <i class='fa fa-hand-o-up'></i>",
     selectMetricHeader : false,
     searching : false,
     paging : true,
-    ordering: false,
+    ordering : false,
 });
 
 var timeView = new squid_api.view.TimeSeriesView ({
@@ -239,6 +246,7 @@ api.model.filters.on('change:selection', function() {
         totalAnalysis.setSelection(sel);
         api.compute(totalAnalysis);
         me.mainModel.set("analysisRefreshNeeded", true);
+        tableView.$el.find('.dataTables_wrapper').addClass("blur");
     }
 });
 
@@ -434,7 +442,7 @@ api.model.status.on('change:domain', function(model) {
         setTimeout(function() {
             $('#main').fadeIn();
         }, 1000);
-        
+
         api.controller.facetjob.compute(filters);
        
     } else {
