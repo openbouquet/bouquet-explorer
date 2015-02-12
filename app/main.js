@@ -112,6 +112,7 @@ mainModel.on("change:selectedMetric", function() {
 
 tableAnalysis.on("change", function() {
     if (this.isDone()) {
+        $("button.refresh-analysis").removeClass("first-view");
         $("button.refresh-analysis .text").html("Preview up to date");
         $("button.refresh-analysis .glyphicon").hide();
         $("button.refresh-analysis .glyphicon").removeClass("loading");
@@ -171,11 +172,11 @@ var tableView = new squid_api.view.DataTableView ({
     el : '#tableView',
     model : tableAnalysis,
     mainModel : mainModel,
-    noDataMessage : "Click the refresh button to start <i class='fa fa-hand-o-up'></i>",
+    noDataMessage : "<i class='fa fa-table'></i> <br />Click the refresh button",
     selectMetricHeader : false,
     searching : false,
     paging : true,
-    ordering : false,
+    ordering : true,
 });
 
 var timeView = new squid_api.view.TimeSeriesView ({
@@ -475,7 +476,6 @@ $("#app #menu #export-app").click(function() {
 
 $("#app #menu #user-management").click(function() {
     userAdminView.fetchModels();
-
     $('#main').fadeOut(200, function() {
       $('#admin').fadeIn(200, function () {
           

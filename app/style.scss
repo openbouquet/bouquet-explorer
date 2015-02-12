@@ -9,6 +9,7 @@ $navBarAndButtonColour: #e7e7e7;
 #app {
     font-family: $primary-font-stack;
     color: $primary-color;
+    -webkit-font-smoothing: antialiased;
 
     // Reduce spacing between each Horizontal Rule
     hr {
@@ -261,6 +262,11 @@ $navBarAndButtonColour: #e7e7e7;
                 margin-bottom: 15px;
                 width: 100%;
                 height: 40px;
+                &.first-view {
+                    -webkit-animation-name: greenPulse;
+                    -webkit-animation-duration: 1s;
+                    -webkit-animation-iteration-count: infinite;
+                }
                 padding: 0;
                 z-index: 1;
                 position: relative;
@@ -331,6 +337,10 @@ $navBarAndButtonColour: #e7e7e7;
                 text-decoration:underline;
                 background: #f01967;
             }
+            .squid-api-data-widgets-orderby-widget .onoffswitch-inner:before, .squid-api-data-widgets-orderby-widget .onoffswitch-inner:after {
+                background-color: #fff;
+                color: #777;
+            }
             .squid-api-data-widgets-data-table, .noDataInTable {
                 color:#666;
                 background:#eaebec;
@@ -347,13 +357,14 @@ $navBarAndButtonColour: #e7e7e7;
                 box-shadow: 0 1px 2px #d1d1d1;
             }
             .noDataInTable {
-                padding: 10px;
-                font-size: 14px;
-                text-align: right;
-                padding-right: 215px;
+                font-size: 18px;
+                height: 200px;
+                color: #b9b9b9;
+                line-height: 30px;
+                text-align: center;
                 i {
-                    padding-left: 10px;
-                    font-size: 23px;
+                    font-size: 60px;
+                    margin-top: 60px;
                 }
             }
             .squid-api-data-widgets-data-table th {
@@ -434,12 +445,12 @@ $navBarAndButtonColour: #e7e7e7;
                         border: 1px solid #e7e7e7;
                         position: relative;
                         vertical-align: top;
-                        height: 40px;
-                        width: 170px;
-                        font-size: 14px;
+                        height: 44px;
+                        width: 195px;
+                        font-size: 18px;
                         color: #777;
                         text-align: center;
-                        background: #fff;
+                        background: #ecf0f1;
                         border-bottom: 2px solid #bdc3c7;
                         cursor: pointer;
                         -webkit-box-shadow: inset 0 -2px #bdc3c7;
@@ -544,6 +555,29 @@ $navBarAndButtonColour: #e7e7e7;
                     -webkit-transform: rotate(-360deg);
                 };
             }
+            @-webkit-keyframes greenPulse {
+                from { 
+                    background-color: #2ecc71; 
+                    -webkit-box-shadow: 0 0 2px #999; 
+                }
+                50% { 
+                    background-color: #27ae60; 
+                    -webkit-box-shadow: 0 0 5px #2ecc71; 
+                }
+                to { 
+                    background-color: #2ecc71; 
+                    -webkit-box-shadow: 0 0 2px #999; 
+                }
+            }
         }
     }
+}
+
+@media
+only screen and (-webkit-min-device-pixel-ratio: 1.25),
+only screen and ( min-device-pixel-ratio: 1.25),
+only screen and ( min-resolution: 200dpi),
+only screen and ( min-resolution: 1.25dppx)
+{
+    -webkit-font-smoothing: subpixel-antialiased;
 }
