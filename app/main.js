@@ -1,4 +1,4 @@
-var api = squid_api, loginView, statusView, contentView, config;
+var api = squid_api, loginView, statusView, config;
 
 var me = this;
 
@@ -63,7 +63,9 @@ var totalAnalysis = new api.model.AnalysisJob();
 // note model objects references contain oids
 var mainModel = new Backbone.Model({
     "timeDimension": null,
-    "currentAnalysis" : exportAnalysis,
+    "tableAnalysis" : tableAnalysis,
+    "exportAnalysis" : exportAnalysis,
+    "analysisRefreshNeeded" : false,
     "totalAnalysis" : totalAnalysis,
     "chosenDimensions" : [],
     "selectedDimension" :  null,
@@ -72,6 +74,77 @@ var mainModel = new Backbone.Model({
     "limit" : null,
     "orderByDirection" : "DESC",
     "currentPage" : null
+});
+
+mainModel.on("change:selectedDimension", function() {
+    refreshExportAnalysis();
+    me.mainModel.set("analysisRefreshNeeded", true);
+});
+
+mainModel.on("change:chosenDimensions", function() {
+    refreshExportAnalysis();
+    me.mainModel.set("analysisRefreshNeeded", true);
+    tableView.$el.find('.dataTables_wrapper').addClass("blur");
+});
+
+mainModel.on("change:chosenMetrics", function() {
+    refreshExportAnalysis();
+    me.mainModel.set("analysisRefreshNeeded", true);
+    tableView.$el.find('.dataTables_wrapper').addClass("blur");
+});
+
+mainModel.on("change:orderByDirection", function() {
+    refreshExportAnalysis();
+    me.mainModel.set("analysisRefreshNeeded", true);
+    tableView.$el.find('.dataTables_wrapper').addClass("blur");
+});
+
+mainModel.on("change:limit", function() {
+    refreshExportAnalysis();
+    me.mainModel.set("analysisRefreshNeeded", true);
+});
+
+mainModel.on("change:selectedMetric", function() {
+    refreshExportAnalysis();
+    me.mainModel.set("analysisRefreshNeeded", true);
+    tableView.$el.find('.dataTables_wrapper').addClass("blur");
+});
+
+tableAnalysis.on("change", function() {
+    if (this.isDone()) {
+        $("button.refresh-analysis").removeClass("first-view");
+        $("button.refresh-analysis .text").html("Preview up to date");
+        $("button.refresh-analysis .glyphicon").hide();
+        $("button.refresh-analysis .glyphicon").removeClass("loading");
+        tableView.$el.find('.squid-api-data-widgets-data-table').removeClass("blur");
+    } else {
+        tableView.$el.find('.squid-api-data-widgets-data-table').addClass("blur");
+        $("button.refresh-analysis .glyphicon").show();
+        $("button.refresh-analysis .text").html("Refreshing...");
+        $("button.refresh-analysis .glyphicon").addClass("loading");
+    }
+});
+
+mainModel.on("change:analysisRefreshNeeded", function() {
+    var analysisRefreshNeeded = me.mainModel.get("analysisRefreshNeeded");
+
+    if (analysisRefreshNeeded) {
+        // Bind click event and tell the model a refresh is needed
+        $("button.refresh-analysis").click(function() {
+            me.mainModel.set("analysisRefreshNeeded", false);
+            refreshTableAnalysis();
+        });
+        // Dom manipulations
+        $("button.refresh-analysis .glyphicon").show();
+        $("button.refresh-analysis .glyphicon").removeClass("loading");
+        $("button.refresh-analysis").removeClass("dataUpdated");
+        $("button.refresh-analysis .text").html("Refresh Preview");
+    } else {
+        // Unbind Click event / Dom manipulations
+        $("button.refresh-analysis").unbind("click");
+        $("button.refresh-analysis").addClass("dataUpdated");
+        $("button.refresh-analysis .glyphicon").removeClass("loading");
+    }
 });
 
 // Views
@@ -84,15 +157,26 @@ new api.view.DimensionSelector({
     dimensionIndex: null
 });
 
+new api.view.OrderByView({
+    el : '#orderby',
+    model : mainModel
+});
+
 new api.view.DimensionView({
     el : '#dimension',
-    model : mainModel
+    model : mainModel,
+    selectDimension : false,
 });
 
 var tableView = new squid_api.view.DataTableView ({
     el : '#tableView',
     model : tableAnalysis,
-    mainModel : mainModel
+    mainModel : mainModel,
+    noDataMessage : "<i class='fa fa-table'></i> <br />Click the refresh button",
+    selectMetricHeader : false,
+    searching : false,
+    paging : true,
+    ordering : true,
 });
 
 var timeView = new squid_api.view.TimeSeriesView ({
@@ -103,14 +187,6 @@ var timeView = new squid_api.view.TimeSeriesView ({
 var barView = new squid_api.view.BarChartView ({
     el : '#barView',
     model : barAnalysis
-});
-
-new api.view.DisplayTypeSelectorView({
-    el : '#display-selector',
-    model : mainModel,
-    tableView : tableView,
-    barView : barView,
-    timeView : timeView
 });
 
 new api.view.FiltersSelectionView({
@@ -137,13 +213,16 @@ new api.view.MetricSelectorView({
 
 new api.view.MetricView({
     el : '#total',
-    model : mainModel
+    model : mainModel,
+    displayMetricValue : false,
+    selectMetric : false,
 });
 
 var exportView = new api.view.DataExport({
     el : '#export',
     renderTo : '#export-content',
-    model : exportAnalysis
+    model : exportAnalysis,
+    displayInAccordion : true,
 });
 
 new api.view.OrderByView({
@@ -163,77 +242,27 @@ var compute = function(analysis) {
 };
 
 api.model.filters.on('change:selection', function() {
-    refreshCurrentAnalysis();
     if (totalAnalysis.get("metrics")) {
         var sel = api.model.filters.get("selection");
         totalAnalysis.setSelection(sel);
         api.compute(totalAnalysis);
+        me.mainModel.set("analysisRefreshNeeded", true);
+        tableView.$el.find('.dataTables_wrapper').addClass("blur");
     }
 });
 
-var refreshCurrentAnalysis = function() {
-    var a = mainModel.get("currentAnalysis");
+var refreshExportAnalysis = function() {
+    var a = mainModel.get("exportAnalysis");
     if (a) {
-        // apply the settings depending on the type of analysis
         var silent = true;
         var changed = false;
-        if (a == tableAnalysis) {
-            a.setDimensionIds(mainModel.get("chosenDimensions"), silent);
-            changed = changed || a.hasChanged();
-            a.setMetricIds(mainModel.get("chosenMetrics"), silent);
-            changed = changed || a.hasChanged();
-            a.set({"orderBy" : [{"col" : getOrderByIndex() , "direction" : mainModel.get("orderByDirection")}]}, {"silent" : silent});
-            changed = changed || a.hasChanged();
-            a.set({"limit": 1000}, {"silent" : silent});
-            changed = changed || a.hasChanged();
-        }
-        if (a == exportAnalysis) {
-            a.setDimensionIds(mainModel.get("chosenDimensions"), silent);
-            changed = changed || a.hasChanged();
-            a.setMetricIds(mainModel.get("chosenMetrics"), silent);
-            changed = changed || a.hasChanged();
-            a.set({"orderBy" : null}, {"silent" : silent});
-            changed = changed || a.hasChanged();
-            a.set({"limit": null}, {"silent" : silent});
-            changed = changed || a.hasChanged();
-        }
-        if (a == barAnalysis) {
-            a.setDimensionIds([mainModel.get("selectedDimension")], silent);
-            changed = changed || a.hasChanged();
-            a.setMetricIds([mainModel.get("selectedMetric")], silent);
-            changed = changed || a.hasChanged();
-            a.set({"orderBy" : [{"col" : 1 , "direction" : mainModel.get("orderByDirection")}]}, {"silent" : silent});
-            changed = changed || a.hasChanged();
-            a.set({"limit": 10}, {"silent" : silent});
-            changed = changed || a.hasChanged();
-        }
-        if (a == timeAnalysis) {
-            var univariate = true;
-            var selectedDimension = mainModel.get("selectedDimension");
-            if (selectedDimension) {
-                var dim = squid_api.utils.find(squid_api.model.project.get("domains"), "oid", selectedDimension);
-                if (dim.type != "CONTINUOUS") {
-                    univariate = false;
-                }
-            }
-            
-            if (univariate) {
-                a.setDimensionIds([mainModel.get("timeDimension")], silent);
-                changed = changed || a.hasChanged();
-                a.set({"limit": null}, {"silent" : silent});
-                changed = changed || a.hasChanged();
-            } else {
-                a.setDimensionIds([mainModel.get("selectedDimension"),mainModel.get("timeDimension")], silent);
-                changed = changed || a.hasChanged();
-                a.set({"orderBy" : [{"col" : 2 , "direction" : mainModel.get("orderByDirection")}]}, {"silent" : silent});
-                changed = changed || a.hasChanged();
-                a.set({"limit": 10}, {"silent" : silent});
-                changed = changed || a.hasChanged();
-            }
-            a.setMetricIds([mainModel.get("selectedMetric")], silent);
-            changed = changed || a.hasChanged();
-        }
-        a.setSelection(api.model.filters.get("selection"), silent);
+        a.setDimensionIds(mainModel.get("chosenDimensions"), silent);
+        changed = changed || a.hasChanged();
+        a.setMetricIds(mainModel.get("chosenMetrics"), silent);
+        changed = changed || a.hasChanged();
+        a.set({"orderBy" : null}, {"silent" : silent});
+        changed = changed || a.hasChanged();
+        a.set({"limit": null}, {"silent" : silent});
         changed = changed || a.hasChanged();
         // only re-compute if the analysis has changed
         if (changed) {    
@@ -247,41 +276,26 @@ var refreshCurrentAnalysis = function() {
     }
 };
 
-mainModel.on("change:currentAnalysis", function() {
-    refreshCurrentAnalysis();
-    var a = mainModel.get("currentAnalysis");
-    if (a == tableAnalysis) {
-        tableView.$el.show();
-    } else {
-        tableView.$el.hide();
+var refreshTableAnalysis = function() {
+    var a = mainModel.get("tableAnalysis");
+    if (a) {
+        // apply the settings depending on the type of analysis
+        var silent = true;
+        var changed = false;
+        a.setDimensionIds(mainModel.get("chosenDimensions"), silent);
+        changed = changed || a.hasChanged();
+        a.setMetricIds(mainModel.get("chosenMetrics"), silent);
+        changed = changed || a.hasChanged();
+        a.set({"orderBy" : [{"col" : getOrderByIndex() , "direction" : mainModel.get("orderByDirection")}]}, {"silent" : silent});
+        changed = changed || a.hasChanged();
+        a.set({"limit": 1000}, {"silent" : silent});
+        changed = changed || a.hasChanged();
+
+        a.setSelection(api.model.filters.get("selection"), silent);
+
+        compute(tableAnalysis);
     }
-    if (a == barAnalysis) {
-        barView.$el.show();
-    } else {
-        barView.$el.hide();
-    }
-    if (a == timeAnalysis) {
-        timeView.$el.show();
-    } else {
-        timeView.$el.hide();
-    }
-});
-
-mainModel.on("change:selectedDimension", function() {
-    refreshCurrentAnalysis();
-});
-
-mainModel.on("change:orderByDirection", function() {
-    refreshCurrentAnalysis();
-});
-
-mainModel.on("change:limit", function() {
-    refreshCurrentAnalysis();
-});
-
-mainModel.on("change:chosenMetrics", function() {
-    refreshCurrentAnalysis();
-});
+};
 
 var getOrderByIndex = function() {
     var index = mainModel.get("chosenDimensions").length;
@@ -295,15 +309,10 @@ var getOrderByIndex = function() {
     return index;
 };
 
-mainModel.on("change:selectedMetric", function() {
-    refreshCurrentAnalysis();
-});
-
 mainModel.on("change:chosenDimensions", function(chosen) {
     if (mainModel.get("chosenDimensions").length === 0) {
         mainModel.set("selectedDimension", null);
     }
-    refreshCurrentAnalysis();
 });
 
 api.model.status.on('change:project', function(model) {
@@ -311,6 +320,8 @@ api.model.status.on('change:project', function(model) {
         setTimeout(function() {
             $("#selectProject").addClass("hidden");
             $("#selectDomain").removeClass("hidden");
+            // Make sure loading icon doesn't appear
+            $("button.refresh-analysis .glyphicon").removeClass("loading");
         }, 100);
         var projectId = model.get("project").projectId;
         tableAnalysis.setProjectId(projectId);
@@ -321,6 +332,8 @@ api.model.status.on('change:project', function(model) {
     } else {
         setTimeout(function() {
             $("#selectProject").removeClass("hidden");
+            // Make sure loading icon doesn't appear
+            $("button.refresh-analysis .glyphicon").removeClass("loading");
         }, 100);
         tableAnalysis.setProjectId(null);
         barAnalysis.setProjectId(null);
@@ -337,6 +350,10 @@ api.model.status.on('change:domain', function(model) {
             $("#selectDomain").addClass("hidden");
         }, 100);
         var domainId = model.get("domain").domainId;
+
+        // Set Table Analysis Limit
+        mainModel.get("tableAnalysis").set({"limit" : 1000}, {silent : true});
+        mainModel.get("tableAnalysis").set({"direction" : "DESC"}, {silent : true});
        
         // launch the default filters computation
         var filters = new api.controller.facetjob.FiltersModel();
@@ -421,6 +438,12 @@ api.model.status.on('change:domain', function(model) {
                 mainModel.set({"selectedDimension": null});
             }
         });
+
+        // Fade in main
+        setTimeout(function() {
+            $('#main').fadeIn();
+        }, 1000);
+
         api.controller.facetjob.compute(filters);
        
     } else {
@@ -439,78 +462,32 @@ api.model.filters.on('change:userSelection', function(filters) {
     squid_api.controller.facetjob.compute(filters, filters.get("userSelection"));
 });
 
-// handle preview/export switch
-mainModel.on("change:currentPage", function() {
-    if (mainModel.get("currentPage") == "preview") {
-        mainModel.set("currentAnalysis", tableAnalysis);
-    } else {
-        mainModel.set("currentAnalysis", exportAnalysis);
-    }
-});
-
-// Make sure all panels are closed on launch
-$(document).mouseup(function (e) {
-    var container = $(".collapse");
-    // Check to see if the target of the click is not container / descendant of container
-    if (!container.is(e.target) && container.has(e.target).length === 0) {
-        $('.collapse').each(function() {
-            if ($(this).hasClass("in")) {
-                $(this).collapse('hide');
-            }
-        });
-    }
-});
-
 /* Trigger Admin Section */
 $('#admin').hide();
-var userAdminView;
 
-var selectProjectVisible = false;
-var selectDomainVisible = false;
-
-$("#app .admin-switcher").click(function() {
-    if ($(this).attr('attr-value') === "dashboard") {
-        if ($("#selectProject").is(':visible')) {
-            selectProjectVisible = true;
-            $("#selectProject").hide();
-        }
-        if ($("#selectDomain").is(':visible')) {
-            selectDomainVisible = true;
-            $("#selectDomain").hide();
-        }
-        // Change Attribute Value
-        $(this).attr('attr-value', 'admin');
-        // Change Icons
-        $(this).find('.dashboard').show(); $(this).find('.user').hide();
-        
-        userAdminView.fetchModels();
-
-        // Hide and Show Sections
-        $('#admin').show(); $('#main').hide();
-        // Instantiate User Admin View
-        
-    } else {
-        if (selectProjectVisible) {
-            $("#selectProject").show();
-        }
-        if (selectDomainVisible) {
-            $("#selectDomain").show();
-        }
-        // Change Attribute Value
-        $(this).attr('attr-value', 'dashboard');
-        // Change Icons
-        $(this).find('.user').show(); $(this).find('.dashboard').hide();
-        // Hide and Show Sections
-        $('#admin').hide(); $('#main').show();
-        // Remove User Admin View
+$("#app #menu #export-app").click(function() {
+    $('#admin').fadeOut(200, function() {
         userAdminView.remove();
-    }
+      $('#main').fadeIn(200, function () {
+          
+      });
+   });
 });
 
-$(".nav-tabs li").click(function() {
-    var pageActivated = $(this).find("a").attr("data-content");
-    mainModel.set("currentPage", pageActivated);
+$("#app #menu #user-management").click(function() {
+    userAdminView.fetchModels();
+    $('#main').fadeOut(200, function() {
+      $('#admin').fadeIn(200, function () {
+          
+      });
+   });
 });
+
+// Trigger Sliding Nav
+$('.menu-link').bigSlide();
+
+// Hide Main and unhide domain is selected
+$('#main').hide();
 
 /*
 * Start the App
