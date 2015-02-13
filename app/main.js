@@ -53,8 +53,6 @@ api.model.login.on('change:login', function(model) {
 });
 
 var tableAnalysis = new api.model.AnalysisJob();
-var barAnalysis = new api.model.AnalysisJob();
-var timeAnalysis = new api.model.AnalysisJob();
 var exportAnalysis = new api.model.AnalysisJob();
 
 var totalAnalysis = new api.model.AnalysisJob();
@@ -177,16 +175,6 @@ var tableView = new squid_api.view.DataTableView ({
     searching : false,
     paging : true,
     ordering : true,
-});
-
-var timeView = new squid_api.view.TimeSeriesView ({
-    el : '#timeView',
-    model : timeAnalysis
-});
-
-var barView = new squid_api.view.BarChartView ({
-    el : '#barView',
-    model : barAnalysis
 });
 
 new api.view.FiltersSelectionView({
@@ -325,8 +313,6 @@ api.model.status.on('change:project', function(model) {
         }, 100);
         var projectId = model.get("project").projectId;
         tableAnalysis.setProjectId(projectId);
-        barAnalysis.setProjectId(projectId);
-        timeAnalysis.setProjectId(projectId);
         totalAnalysis.setProjectId(projectId);
         exportAnalysis.setProjectId(projectId);
     } else {
@@ -336,8 +322,6 @@ api.model.status.on('change:project', function(model) {
             $("button.refresh-analysis .glyphicon").removeClass("loading");
         }, 100);
         tableAnalysis.setProjectId(null);
-        barAnalysis.setProjectId(null);
-        timeAnalysis.setProjectId(null);
         totalAnalysis.setProjectId(null);
         exportAnalysis.setProjectId(null);
     }
@@ -409,8 +393,6 @@ api.model.status.on('change:domain', function(model) {
                 
                 // update the analyses
                 tableAnalysis.setDomainIds([domainId]);
-                barAnalysis.setDomainIds([domainId]);
-                timeAnalysis.setDomainIds([domainId]);
                 exportAnalysis.setDomainIds([domainId]);
                 
                 // update the total Analysis
@@ -450,8 +432,6 @@ api.model.status.on('change:domain', function(model) {
         $("#selectDomain").removeClass("hidden");
         $("#main").addClass("hidden");
         tableAnalysis.setDomainIds(null);
-        barAnalysis.setDomainIds(null);
-        timeAnalysis.setDomainIds(null);
         totalAnalysis.setDomainIds(null);
         exportAnalysis.setDomainIds(null);
     }
