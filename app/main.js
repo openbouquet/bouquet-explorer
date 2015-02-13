@@ -55,8 +55,6 @@ api.model.login.on('change:login', function(model) {
 var tableAnalysis = new api.model.AnalysisJob();
 var exportAnalysis = new api.model.AnalysisJob();
 
-var totalAnalysis = new api.model.AnalysisJob();
-
 // the main app model
 // note model objects references contain oids
 var mainModel = new Backbone.Model({
@@ -64,7 +62,6 @@ var mainModel = new Backbone.Model({
     "tableAnalysis" : tableAnalysis,
     "exportAnalysis" : exportAnalysis,
     "analysisRefreshNeeded" : false,
-    "totalAnalysis" : totalAnalysis,
     "chosenDimensions" : [],
     "selectedDimension" :  null,
     "chosenMetrics" : [],
@@ -229,16 +226,6 @@ var compute = function(analysis) {
     }
 };
 
-api.model.filters.on('change:selection', function() {
-    if (totalAnalysis.get("metrics")) {
-        var sel = api.model.filters.get("selection");
-        totalAnalysis.setSelection(sel);
-        api.compute(totalAnalysis);
-        me.mainModel.set("analysisRefreshNeeded", true);
-        tableView.$el.find('.dataTables_wrapper').addClass("blur");
-    }
-});
-
 var refreshExportAnalysis = function() {
     var a = mainModel.get("exportAnalysis");
     if (a) {
@@ -313,7 +300,6 @@ api.model.status.on('change:project', function(model) {
         }, 100);
         var projectId = model.get("project").projectId;
         tableAnalysis.setProjectId(projectId);
-        totalAnalysis.setProjectId(projectId);
         exportAnalysis.setProjectId(projectId);
     } else {
         setTimeout(function() {
@@ -322,7 +308,6 @@ api.model.status.on('change:project', function(model) {
             $("button.refresh-analysis .glyphicon").removeClass("loading");
         }, 100);
         tableAnalysis.setProjectId(null);
-        totalAnalysis.setProjectId(null);
         exportAnalysis.setProjectId(null);
     }
 });
@@ -355,7 +340,6 @@ api.model.status.on('change:domain', function(model) {
                     var facet = facets[i];
                     if (facet.dimension.type == "CONTINUOUS" && facet.items.length>0) {
                         // set the time dimension
-                        mainModel.set("timeDimension",facet.dimension.oid);
                         timeFacet = facet;
                         console.log("found time dimension = "+facet.dimension.name);
                     }
@@ -386,17 +370,14 @@ api.model.status.on('change:domain', function(model) {
                 }
                 // apply to main filters
                 api.model.filters.set("id", {
-                        "projectId": model.get("domain").projectId
-                    });
+                    "projectId": model.get("domain").projectId
+                });
                 api.model.filters.setDomainIds([domainId]);
                 api.model.filters.set("userSelection", defaultSelection);
                 
                 // update the analyses
                 tableAnalysis.setDomainIds([domainId]);
                 exportAnalysis.setDomainIds([domainId]);
-                
-                // update the total Analysis
-                totalAnalysis.setDomainIds([domainId]);
                 
                 // update the metrics
                 var domain = squid_api.utils.find(squid_api.model.project.get("domains"), "oid", domainId);
@@ -408,7 +389,6 @@ api.model.status.on('change:domain', function(model) {
                         for (var dmIdx=0; (dmIdx<domainMetrics.length && (dmIdx<5)); dmIdx++) {
                             totalMetricIds.push(domainMetrics[dmIdx].oid);
                         }
-                        totalAnalysis.setMetricIds(totalMetricIds);
                         // selections
                         mainModel.set({"chosenMetrics": totalMetricIds});
                         mainModel.set({"selectedMetric": totalMetricIds[0]});
@@ -432,7 +412,6 @@ api.model.status.on('change:domain', function(model) {
         $("#selectDomain").removeClass("hidden");
         $("#main").addClass("hidden");
         tableAnalysis.setDomainIds(null);
-        totalAnalysis.setDomainIds(null);
         exportAnalysis.setDomainIds(null);
     }
 });
