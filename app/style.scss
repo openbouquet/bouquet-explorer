@@ -11,6 +11,10 @@ $navBarAndButtonColour: #e7e7e7;
     color: $primary-color;
     -webkit-font-smoothing: antialiased;
 
+    .typed-cursor{
+        display: none;
+    }
+
     // Reduce spacing between each Horizontal Rule
     hr {
         margin: 0px 0px 15px 0px;
@@ -399,6 +403,21 @@ $navBarAndButtonColour: #e7e7e7;
                 a {
                     cursor: pointer;
                 }
+                thead .sorting_asc {
+                    background: url('../bower_components/data_tables/media/images/sort_asc.png') no-repeat center right;
+                    -webkit-filter: grayscale(100%);
+                    filter: grayscale(100%);
+                }
+                thead .sorting {
+                    background: url('../bower_components/data_tables/media/images/sort_both.png') no-repeat center right;
+                    -webkit-filter: grayscale(100%);
+                    filter: grayscale(100%);
+                }
+                thead .sorting_desc {
+                    background: url('../bower_components/data_tables/media/images/sort_desc.png') no-repeat center right;
+                    -webkit-filter: grayscale(100%);
+                    filter: grayscale(100%);
+                }
                 .dataTable {
                     .NUMBER {
                         text-align: center;
@@ -426,8 +445,10 @@ $navBarAndButtonColour: #e7e7e7;
             .squid-api-data-widgets-orderby-widget .onoffswitch-inner:before, .squid-api-data-widgets-orderby-widget .onoffswitch-inner:after {
                 background-color: #fff;
                 color: #777;
+                position: relative;
+                top: -1px;
             }
-            .squid-api-data-widgets-data-table, .noDataInTable {
+            .squid-api-data-widgets-data-table {
                 color:#666;
                 background:#eaebec;
                 margin: 0px 0px 10px -15px;
@@ -443,12 +464,17 @@ $navBarAndButtonColour: #e7e7e7;
                 box-shadow: 0 1px 2px #d1d1d1;
             }
             .noDataInTable {
-                font-size: 18px;
-                height: 200px;
-                color: #b9b9b9;
-                line-height: 30px;
-                text-align: center;
-                margin-top: 9px;
+                min-width: 330px;
+                background: #ecf0f1;
+                display: inline-block;
+                min-height: 192px;
+                color: #777;
+                padding: 20px;
+                border-radius: 10px;
+                position: relative;
+                left: -15px;
+                line-height: 25px;
+                margin-top: 39px;
                 i {
                     font-size: 60px;
                     margin-top: 60px;
@@ -460,9 +486,6 @@ $navBarAndButtonColour: #e7e7e7;
                 border-bottom:1px solid #e0e0e0;
                 font-weight: inherit;
                 text-align: center;
-                background: #ededed;
-                background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#ebebeb));
-                background: -moz-linear-gradient(top,  #ededed,  #ebebeb);
             }
             .squid-api-data-widgets-data-table th:first-child {
                 text-align: left;
@@ -509,11 +532,10 @@ $navBarAndButtonColour: #e7e7e7;
             .squid-api-data-widgets-data-table th {
                 width: 16.66%;
                 padding: 10px 0px 10px 3px;
-                background-color: #ffffff;
             }
             .squid-api-data-widgets-data-table {
                 .filtered-by {
-                    background: $navBarAndButtonColour;
+                    background-color: $navBarAndButtonColour;
                 }
             }
             .squid-api-data-widgets-timeseries-widget {
