@@ -166,7 +166,7 @@ var tableView = new squid_api.view.DataTableView ({
     el : '#tableView',
     model : tableAnalysis,
     mainModel : mainModel,
-    noDataMessage : ",",
+    noDataMessage : " ",
     selectMetricHeader : false,
     searching : false,
     paging : true,
@@ -238,6 +238,9 @@ var refreshExportAnalysis = function() {
         changed = changed || a.hasChanged();
         a.set({"limit": null}, {"silent" : silent});
         changed = changed || a.hasChanged();
+
+        a.setSelection(api.model.filters.get("selection"), silent);
+        
         // only re-compute if the analysis has changed
         if (changed) {    
             if (a != exportAnalysis) {
