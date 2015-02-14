@@ -240,7 +240,7 @@ var refreshExportAnalysis = function() {
         changed = changed || a.hasChanged();
 
         a.setSelection(api.model.filters.get("selection"), silent);
-        
+
         // only re-compute if the analysis has changed
         if (changed) {    
             if (a != exportAnalysis) {
@@ -312,6 +312,11 @@ api.model.status.on('change:project', function(model) {
         tableAnalysis.setProjectId(null);
         exportAnalysis.setProjectId(null);
     }
+});
+
+api.model.filters.on('change:selection', function() {
+    me.mainModel.set("analysisRefreshNeeded", true);
+    tableView.$el.find('.dataTables_wrapper').addClass("blur");
 });
 
 api.model.status.on('change:domain', function(model) {
