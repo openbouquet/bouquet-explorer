@@ -294,6 +294,7 @@ mainModel.on("change:chosenDimensions", function(chosen) {
 
 api.model.status.on('change:project', function(model) {
     if (model.get("project")) {
+        preAppState.selectProject = true;
         $("#selectProject").addClass("hidden");
         $("#selectDomain").removeClass("hidden");
         // Make sure loading icon doesn't appear
@@ -323,6 +324,7 @@ api.model.status.on('change:domain', function(model) {
                 typeSpeed: 5
             });
         }, 2000);
+        preAppState.selectDomain = true;
         $("#main").removeClass("hidden");
         $("#selectDomain").addClass("hidden");
         var domainId = model.get("domain").domainId;
@@ -431,7 +433,17 @@ api.model.filters.on('change:userSelection', function(filters) {
 /* Trigger Admin Section */
 $('#admin').hide();
 
+// Allow admin panel to be accessed when project / domain have not been chosen
+var preAppState = {};
+preAppState.selectProject = false;
+preAppState.selectDomain = false;
+
 $("#app #menu #export-app").click(function() {
+    if (! preAppState.selectProject) {
+        $("#selectProject").show();
+    } else if (! preAppState.selectDomain) {
+        $("#selectDomain").show();
+    }
     $('#admin').fadeOut(200, function() {
         userAdminView.remove();
       $('#main').fadeIn(200, function () {
@@ -441,6 +453,11 @@ $("#app #menu #export-app").click(function() {
 });
 
 $("#app #menu #user-management").click(function() {
+    if (! preAppState.selectProject) {
+        $("#selectProject").hide();
+    } else if (! preAppState.selectDomain) {
+        $("#selectDomain").hide();
+    }
     userAdminView.fetchModels();
     $('#main').fadeOut(200, function() {
       $('#admin').fadeIn(200, function () {

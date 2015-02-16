@@ -127,6 +127,7 @@ $navBarAndButtonColour: #e7e7e7;
         margin-top: 52px;
     }
     #selectProject, #selectDomain, #loading {
+        position: relative;
         .splash-container {
             text-align: center;
             margin-top: 20%;
