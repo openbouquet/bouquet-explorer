@@ -61,6 +61,14 @@ module.exports = function(grunt) {
                 ignorePath : '../'
             }
         },
+        cachebreaker: {
+            options: {
+                match: ['js', 'css'],
+            },
+            files: {
+                src: ['dist/index.html']
+            }
+        },
         wiredepCopy : {
             target : {
                 options : {
@@ -89,9 +97,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-wiredep');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-wiredep-copy');
+    grunt.loadNpmTasks('grunt-cache-breaker');
 
     grunt.registerTask('fast', [ 'handlebars', 'concat', 'copy', 'sass' ]);
     grunt.registerTask('build', [ 'jshint',  'clean', 'handlebars', 'concat',
-                                    'copy', 'sass', 'wiredep', 'wiredepCopy' ]);
+                                    'copy', 'sass', 'wiredep', 'wiredepCopy', 'cachebreaker' ]);
     grunt.registerTask('default', [ 'build' ]);
 };
