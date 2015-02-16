@@ -294,21 +294,17 @@ mainModel.on("change:chosenDimensions", function(chosen) {
 
 api.model.status.on('change:project', function(model) {
     if (model.get("project")) {
-        setTimeout(function() {
-            $("#selectProject").addClass("hidden");
-            $("#selectDomain").removeClass("hidden");
-            // Make sure loading icon doesn't appear
-            $("button.refresh-analysis .glyphicon").removeClass("loading");
-        }, 100);
+        $("#selectProject").addClass("hidden");
+        $("#selectDomain").removeClass("hidden");
+        // Make sure loading icon doesn't appear
+        $("button.refresh-analysis .glyphicon").removeClass("loading");
         var projectId = model.get("project").projectId;
         tableAnalysis.setProjectId(projectId);
         exportAnalysis.setProjectId(projectId);
     } else {
-        setTimeout(function() {
-            $("#selectProject").removeClass("hidden");
-            // Make sure loading icon doesn't appear
-            $("button.refresh-analysis .glyphicon").removeClass("loading");
-        }, 100);
+        $("#selectProject").removeClass("hidden");
+        // Make sure loading icon doesn't appear
+        $("button.refresh-analysis .glyphicon").removeClass("loading");
         tableAnalysis.setProjectId(null);
         exportAnalysis.setProjectId(null);
     }
@@ -327,10 +323,8 @@ api.model.status.on('change:domain', function(model) {
                 typeSpeed: 5
             });
         }, 2000);
-        setTimeout(function() {
-            $("#main").removeClass("hidden");
-            $("#selectDomain").addClass("hidden");
-        }, 100);
+        $("#main").removeClass("hidden");
+        $("#selectDomain").addClass("hidden");
         var domainId = model.get("domain").domainId;
 
         // Set Table Analysis Limit
