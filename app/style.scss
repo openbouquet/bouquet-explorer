@@ -11,10 +11,13 @@ $navBarAndButtonColour: #e7e7e7;
     color: $primary-color;
     -webkit-font-smoothing: antialiased;
 
+    .typed-cursor{
+        display: none;
+    }
+
     // Reduce spacing between each Horizontal Rule
     hr {
-        margin-top: 5px;
-        margin-bottom: 15px;
+        margin: 0px 0px 15px 0px;
         
         &.flat {
             margin: 0px;
@@ -41,11 +44,11 @@ $navBarAndButtonColour: #e7e7e7;
         margin-bottom: 0px;
         position: relative;
         a.navbar-brand {
-            font-size: 20px;
+            font-size: 14px;
         }
         .menu-link {
             padding-left: 0px;
-            font-size: 20px;
+            font-size: 17px;
             color: #4d4d4d;
         }
         .admin-switcher {
@@ -103,12 +106,12 @@ $navBarAndButtonColour: #e7e7e7;
                         background: #2c3e50;
                     }
                     .nav-item {
-                        font-size: 22px;
+                        font-size: 18px;
                         position: absolute;
                         display: inline-block;
                         text-align: center;
                         left: 50px;
-                        top: 35px;
+                        top: 40px;
                         width: 150px;
                     }
                 }
@@ -151,9 +154,7 @@ $navBarAndButtonColour: #e7e7e7;
                             border: none;
                             hr {
                                 border-color: #d9d9d9;
-                            }
-                            #curlbtn {
-                                font-weight: bold;
+                                margin-top: 15px;
                             }
                             pre {
                                 background-color: #fff;
@@ -164,10 +165,11 @@ $navBarAndButtonColour: #e7e7e7;
                                 border-radius: 4px;
                                 border: 1px solid #e7e7e7;
                                 position: relative;
+                                padding-top: 8px;
                                 vertical-align: top;
                                 height: 41px;
-                                width: 195px;
-                                font-size: 18px;
+                                font-size: 14px;
+                                text-shadow: 0 1px 2px rgba(0,0,0,0.25);
                                 color: #fff;
                                 text-align: center;
                                 background: #3498db;
@@ -181,12 +183,9 @@ $navBarAndButtonColour: #e7e7e7;
                                     margin-right: 5px;
                                     margin-left: 15px;
                                 }
-                                display: inline-block;
-                                position: absolute;
                                 background: #fff;
                                 border-radius: 10px;
                                 padding: 5px 16px 5px 0px;
-                                margin-left: 10px;
                                 padding-top: 10px;
                             }
                         }
@@ -200,6 +199,7 @@ $navBarAndButtonColour: #e7e7e7;
             }
             .squid-api-data-widgets-dimension-widget li, .squid-api-data-widgets-metric-widget li {
                 border: 1px solid #95a5a6;
+                font-size: 14px;
             }
             .squid-api-data-widgets-dimension-widget li {
                 margin: 0px 20px 10px 0px;
@@ -229,6 +229,7 @@ $navBarAndButtonColour: #e7e7e7;
             #date {
                 .col-md-6 {
                     margin-top: 20px;
+                    display: inline-block;
                 }
                 height: 30px;
                 #date-picker {
@@ -239,17 +240,22 @@ $navBarAndButtonColour: #e7e7e7;
                     height: 50px;
                 }
                 .date-wrap {
-                    font-size: 18px;
+                    font-size: 14px;
+                    top: 8px;
+                    position: relative;
                     #sq-startDate, #sq-endDate {
                         font-family: $primary-font-stack;
                     }
                 }
             }
             #selection {
+                .col-md-9 {
+                    display: inline-block;
+                }
                 .information {
-                    padding-top: 5px;
-                    font-size: 18px;
-                    margin-bottom: 20px;
+                    padding-top: 9px;
+                    font-size: 14px;
+                    margin-bottom: 23px;
                     color: #b9b9b9;
                     font-family: $primary-font-stack;
                 }
@@ -281,10 +287,10 @@ $navBarAndButtonColour: #e7e7e7;
             }
             .squid-api-data-widgets-dimension-widget {
                 .information {
-                    padding-top: 5px;
-                    font-size: 18px;
+                    padding-top: 10px;
+                    font-size: 14px;
                     color: #b9b9b9;
-                    margin-bottom: 20px;
+                    margin-bottom: 21px;
                     font-family: $primary-font-stack;
                 }
             }
@@ -326,6 +332,7 @@ $navBarAndButtonColour: #e7e7e7;
                 position: relative;
                 vertical-align: top;
                 margin-bottom: 15px;
+                min-width: 210px;
                 width: 100%;
                 height: 40px;
                 &.first-view {
@@ -339,7 +346,7 @@ $navBarAndButtonColour: #e7e7e7;
                 padding: 0;
                 z-index: 1;
                 position: relative;
-                font-size: 22px;
+                font-size: 18px;
                 color: white;
                 text-align: center;
                 text-shadow: 0 1px 2px rgba(0,0,0,0.25);
@@ -370,11 +377,12 @@ $navBarAndButtonColour: #e7e7e7;
                     vertical-align: top;
                     margin-bottom: 15px;
                     width: 100%;
+                    min-width: 135px;
                     height: 40px;
                     z-index: 1;
                     position: relative;
                     padding: 0;
-                    font-size: 22px;
+                    font-size: 18px;
                     color: white;
                     text-align: center;
                     text-shadow: 0 1px 2px rgba(0,0,0,0.25);
@@ -395,6 +403,21 @@ $navBarAndButtonColour: #e7e7e7;
                 a {
                     cursor: pointer;
                 }
+                thead .sorting_asc {
+                    background: url('../bower_components/data_tables/media/images/sort_asc.png') no-repeat center right;
+                    -webkit-filter: grayscale(100%);
+                    filter: grayscale(100%);
+                }
+                thead .sorting {
+                    background: url('../bower_components/data_tables/media/images/sort_both.png') no-repeat center right;
+                    -webkit-filter: grayscale(100%);
+                    filter: grayscale(100%);
+                }
+                thead .sorting_desc {
+                    background: url('../bower_components/data_tables/media/images/sort_desc.png') no-repeat center right;
+                    -webkit-filter: grayscale(100%);
+                    filter: grayscale(100%);
+                }
                 .dataTable {
                     .NUMBER {
                         text-align: center;
@@ -405,8 +428,14 @@ $navBarAndButtonColour: #e7e7e7;
                 padding-right: 20px;
                 font-weight: inherit;
             }
-            .squid-api-data-widgets-data-table.dataTable.no-footer {
-                border: none;
+            .squid-api-data-widgets-orderby-widget button.multiselect {
+                font-size: 14px;
+                font-weight: bold;
+                top: 4px;
+            }
+            .squid-api-data-widgets-orderby-widget {
+                position: relative;
+                top: -2px;
             }
             .squid-api-data-widgets-data-table a:active, .squid-api-data-widgets-data-table a:hover {
                 color: #bd5a35;
@@ -416,8 +445,10 @@ $navBarAndButtonColour: #e7e7e7;
             .squid-api-data-widgets-orderby-widget .onoffswitch-inner:before, .squid-api-data-widgets-orderby-widget .onoffswitch-inner:after {
                 background-color: #fff;
                 color: #777;
+                position: relative;
+                top: -1px;
             }
-            .squid-api-data-widgets-data-table, .noDataInTable {
+            .squid-api-data-widgets-data-table {
                 color:#666;
                 background:#eaebec;
                 margin: 0px 0px 10px -15px;
@@ -433,12 +464,17 @@ $navBarAndButtonColour: #e7e7e7;
                 box-shadow: 0 1px 2px #d1d1d1;
             }
             .noDataInTable {
-                font-size: 18px;
-                height: 200px;
-                color: #b9b9b9;
-                line-height: 30px;
-                text-align: center;
-                margin-top: 70px;
+                min-width: 330px;
+                background: #ecf0f1;
+                display: inline-block;
+                min-height: 192px;
+                color: #777;
+                padding: 20px;
+                border-radius: 10px;
+                position: relative;
+                left: -15px;
+                line-height: 25px;
+                margin-top: 39px;
                 i {
                     font-size: 60px;
                     margin-top: 60px;
@@ -450,9 +486,6 @@ $navBarAndButtonColour: #e7e7e7;
                 border-bottom:1px solid #e0e0e0;
                 font-weight: inherit;
                 text-align: center;
-                background: #ededed;
-                background: -webkit-gradient(linear, left top, left bottom, from(#ededed), to(#ebebeb));
-                background: -moz-linear-gradient(top,  #ededed,  #ebebeb);
             }
             .squid-api-data-widgets-data-table th:first-child {
                 text-align: left;
@@ -499,11 +532,10 @@ $navBarAndButtonColour: #e7e7e7;
             .squid-api-data-widgets-data-table th {
                 width: 16.66%;
                 padding: 10px 0px 10px 3px;
-                background-color: #ffffff;
             }
             .squid-api-data-widgets-data-table {
                 .filtered-by {
-                    background: $navBarAndButtonColour;
+                    background-color: $navBarAndButtonColour;
                 }
             }
             .squid-api-data-widgets-timeseries-widget {

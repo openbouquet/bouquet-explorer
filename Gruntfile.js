@@ -47,7 +47,7 @@ module.exports = function(grunt) {
             main : {
                 files : [ {
                     expand : true,
-                    src : [ "app/main.js", "*.html", "app/fonts/**",  "bower_components/font-awesome/fonts/*", "bower_components/bootstrap/dist/fonts/*" ],
+                    src : [ "app/main.js", "*.html", "app/fonts/**",  "bower_components/font-awesome/fonts/*", "bower_components/data_tables/media/images/*", "bower_components/bootstrap/dist/fonts/*" ],
                     dest : 'dist/',
                     rename : function(dest, src) {
                         return dest + src.replace(/\.template.html$/, ".html");
@@ -59,6 +59,14 @@ module.exports = function(grunt) {
             target : {
                 src : [ 'dist/index.html' ],
                 ignorePath : '../'
+            }
+        },
+        cachebreaker: {
+            options: {
+                match: ['js', 'css'],
+            },
+            files: {
+                src: ['dist/index.html']
             }
         },
         wiredepCopy : {
@@ -89,9 +97,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-wiredep');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-wiredep-copy');
+    grunt.loadNpmTasks('grunt-cache-breaker');
 
     grunt.registerTask('fast', [ 'handlebars', 'concat', 'copy', 'sass' ]);
     grunt.registerTask('build', [ 'jshint',  'clean', 'handlebars', 'concat',
-                                    'copy', 'sass', 'wiredep', 'wiredepCopy' ]);
+                                    'copy', 'sass', 'wiredep', 'wiredepCopy', 'cachebreaker' ]);
     grunt.registerTask('default', [ 'build' ]);
 };

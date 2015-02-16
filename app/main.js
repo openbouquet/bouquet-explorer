@@ -53,11 +53,7 @@ api.model.login.on('change:login', function(model) {
 });
 
 var tableAnalysis = new api.model.AnalysisJob();
-var barAnalysis = new api.model.AnalysisJob();
-var timeAnalysis = new api.model.AnalysisJob();
 var exportAnalysis = new api.model.AnalysisJob();
-
-var totalAnalysis = new api.model.AnalysisJob();
 
 // the main app model
 // note model objects references contain oids
@@ -66,14 +62,12 @@ var mainModel = new Backbone.Model({
     "tableAnalysis" : tableAnalysis,
     "exportAnalysis" : exportAnalysis,
     "analysisRefreshNeeded" : false,
-    "totalAnalysis" : totalAnalysis,
     "chosenDimensions" : [],
     "selectedDimension" :  null,
     "chosenMetrics" : [],
     "selectedMetric" : null,
     "limit" : null,
     "orderByDirection" : "DESC",
-    "currentPage" : null
 });
 
 mainModel.on("change:selectedDimension", function() {
@@ -172,21 +166,11 @@ var tableView = new squid_api.view.DataTableView ({
     el : '#tableView',
     model : tableAnalysis,
     mainModel : mainModel,
-    noDataMessage : "<i class='fa fa-table'></i> <br />Click the refresh button",
+    noDataMessage : " ",
     selectMetricHeader : false,
     searching : false,
     paging : true,
     ordering : true,
-});
-
-var timeView = new squid_api.view.TimeSeriesView ({
-    el : '#timeView',
-    model : timeAnalysis
-});
-
-var barView = new squid_api.view.BarChartView ({
-    el : '#barView',
-    model : barAnalysis
 });
 
 new api.view.FiltersSelectionView({
@@ -241,16 +225,6 @@ var compute = function(analysis) {
     }
 };
 
-api.model.filters.on('change:selection', function() {
-    if (totalAnalysis.get("metrics")) {
-        var sel = api.model.filters.get("selection");
-        totalAnalysis.setSelection(sel);
-        api.compute(totalAnalysis);
-        me.mainModel.set("analysisRefreshNeeded", true);
-        tableView.$el.find('.dataTables_wrapper').addClass("blur");
-    }
-});
-
 var refreshExportAnalysis = function() {
     var a = mainModel.get("exportAnalysis");
     if (a) {
@@ -264,6 +238,9 @@ var refreshExportAnalysis = function() {
         changed = changed || a.hasChanged();
         a.set({"limit": null}, {"silent" : silent});
         changed = changed || a.hasChanged();
+
+        a.setSelection(api.model.filters.get("selection"), silent);
+
         // only re-compute if the analysis has changed
         if (changed) {    
             if (a != exportAnalysis) {
@@ -317,38 +294,37 @@ mainModel.on("change:chosenDimensions", function(chosen) {
 
 api.model.status.on('change:project', function(model) {
     if (model.get("project")) {
-        setTimeout(function() {
-            $("#selectProject").addClass("hidden");
-            $("#selectDomain").removeClass("hidden");
-            // Make sure loading icon doesn't appear
-            $("button.refresh-analysis .glyphicon").removeClass("loading");
-        }, 100);
+        $("#selectProject").addClass("hidden");
+        $("#selectDomain").removeClass("hidden");
+        // Make sure loading icon doesn't appear
+        $("button.refresh-analysis .glyphicon").removeClass("loading");
         var projectId = model.get("project").projectId;
         tableAnalysis.setProjectId(projectId);
-        barAnalysis.setProjectId(projectId);
-        timeAnalysis.setProjectId(projectId);
-        totalAnalysis.setProjectId(projectId);
         exportAnalysis.setProjectId(projectId);
     } else {
-        setTimeout(function() {
-            $("#selectProject").removeClass("hidden");
-            // Make sure loading icon doesn't appear
-            $("button.refresh-analysis .glyphicon").removeClass("loading");
-        }, 100);
+        $("#selectProject").removeClass("hidden");
+        // Make sure loading icon doesn't appear
+        $("button.refresh-analysis .glyphicon").removeClass("loading");
         tableAnalysis.setProjectId(null);
-        barAnalysis.setProjectId(null);
-        timeAnalysis.setProjectId(null);
-        totalAnalysis.setProjectId(null);
         exportAnalysis.setProjectId(null);
     }
+});
+
+api.model.filters.on('change:selection', function() {
+    me.mainModel.set("analysisRefreshNeeded", true);
+    tableView.$el.find('.dataTables_wrapper').addClass("blur");
 });
 
 api.model.status.on('change:domain', function(model) {
     if (model.get("domain")) {
         setTimeout(function() {
-            $("#main").removeClass("hidden");
-            $("#selectDomain").addClass("hidden");
-        }, 100);
+            $(".noDataInTable").typed({
+                strings: ["<span style='font-size: 22px'>Welcome to the export app </span> ^1500. <br> A recommended workflow is: ^1000 <br> <br>1. Configure preview in the panel above^1000 <br>2. Click the refresh preview button^1000 <br> 3. Click the export button to export"],
+                typeSpeed: 5
+            });
+        }, 2000);
+        $("#main").removeClass("hidden");
+        $("#selectDomain").addClass("hidden");
         var domainId = model.get("domain").domainId;
 
         // Set Table Analysis Limit
@@ -371,7 +347,6 @@ api.model.status.on('change:domain', function(model) {
                     var facet = facets[i];
                     if (facet.dimension.type == "CONTINUOUS" && facet.items.length>0) {
                         // set the time dimension
-                        mainModel.set("timeDimension",facet.dimension.oid);
                         timeFacet = facet;
                         console.log("found time dimension = "+facet.dimension.name);
                     }
@@ -402,19 +377,14 @@ api.model.status.on('change:domain', function(model) {
                 }
                 // apply to main filters
                 api.model.filters.set("id", {
-                        "projectId": model.get("domain").projectId
-                    });
+                    "projectId": model.get("domain").projectId
+                });
                 api.model.filters.setDomainIds([domainId]);
                 api.model.filters.set("userSelection", defaultSelection);
                 
                 // update the analyses
                 tableAnalysis.setDomainIds([domainId]);
-                barAnalysis.setDomainIds([domainId]);
-                timeAnalysis.setDomainIds([domainId]);
                 exportAnalysis.setDomainIds([domainId]);
-                
-                // update the total Analysis
-                totalAnalysis.setDomainIds([domainId]);
                 
                 // update the metrics
                 var domain = squid_api.utils.find(squid_api.model.project.get("domains"), "oid", domainId);
@@ -426,7 +396,6 @@ api.model.status.on('change:domain', function(model) {
                         for (var dmIdx=0; (dmIdx<domainMetrics.length && (dmIdx<5)); dmIdx++) {
                             totalMetricIds.push(domainMetrics[dmIdx].oid);
                         }
-                        totalAnalysis.setMetricIds(totalMetricIds);
                         // selections
                         mainModel.set({"chosenMetrics": totalMetricIds});
                         mainModel.set({"selectedMetric": totalMetricIds[0]});
@@ -450,9 +419,6 @@ api.model.status.on('change:domain', function(model) {
         $("#selectDomain").removeClass("hidden");
         $("#main").addClass("hidden");
         tableAnalysis.setDomainIds(null);
-        barAnalysis.setDomainIds(null);
-        timeAnalysis.setDomainIds(null);
-        totalAnalysis.setDomainIds(null);
         exportAnalysis.setDomainIds(null);
     }
 });
