@@ -62,6 +62,7 @@ var mainModel = new Backbone.Model({
     "tableAnalysis" : tableAnalysis,
     "exportAnalysis" : exportAnalysis,
     "analysisRefreshNeeded" : false,
+    "refreshButtonPressed" : false,
     "chosenDimensions" : [],
     "selectedDimension" :  null,
     "chosenMetrics" : [],
@@ -78,19 +79,16 @@ mainModel.on("change:selectedDimension", function() {
 mainModel.on("change:chosenDimensions", function() {
     refreshExportAnalysis();
     me.mainModel.set("analysisRefreshNeeded", true);
-    tableView.$el.find('.dataTables_wrapper').addClass("blur");
 });
 
 mainModel.on("change:chosenMetrics", function() {
     refreshExportAnalysis();
     me.mainModel.set("analysisRefreshNeeded", true);
-    tableView.$el.find('.dataTables_wrapper').addClass("blur");
 });
 
 mainModel.on("change:orderByDirection", function() {
     refreshExportAnalysis();
     me.mainModel.set("analysisRefreshNeeded", true);
-    tableView.$el.find('.dataTables_wrapper').addClass("blur");
 });
 
 mainModel.on("change:limit", function() {
@@ -101,7 +99,6 @@ mainModel.on("change:limit", function() {
 mainModel.on("change:selectedMetric", function() {
     refreshExportAnalysis();
     me.mainModel.set("analysisRefreshNeeded", true);
-    tableView.$el.find('.dataTables_wrapper').addClass("blur");
 });
 
 tableAnalysis.on("change", function() {
@@ -110,9 +107,7 @@ tableAnalysis.on("change", function() {
         $("button.refresh-analysis .text").html("Preview up to date");
         $("button.refresh-analysis .glyphicon").hide();
         $("button.refresh-analysis .glyphicon").removeClass("loading");
-        tableView.$el.find('.squid-api-data-widgets-data-table').removeClass("blur");
     } else {
-        tableView.$el.find('.squid-api-data-widgets-data-table').addClass("blur");
         $("button.refresh-analysis .glyphicon").show();
         $("button.refresh-analysis .text").html("Refreshing...");
         $("button.refresh-analysis .glyphicon").addClass("loading");
@@ -126,6 +121,7 @@ mainModel.on("change:analysisRefreshNeeded", function() {
         // Bind click event and tell the model a refresh is needed
         $("button.refresh-analysis").click(function() {
             me.mainModel.set("analysisRefreshNeeded", false);
+            me.mainModel.set("refreshButtonPressed", true);
             refreshTableAnalysis();
         });
         // Dom manipulations
@@ -166,11 +162,13 @@ var tableView = new squid_api.view.DataTableView ({
     el : '#tableView',
     model : tableAnalysis,
     mainModel : mainModel,
-    noDataMessage : " ",
     selectMetricHeader : false,
     searching : false,
+    noDataMessage : " ",
     paging : true,
     ordering : true,
+    reactiveState : true,
+    reactiveMessage : "<i class='fa fa-table'></i><br>Click refresh to update",
 });
 
 new api.view.FiltersSelectionView({
@@ -313,16 +311,17 @@ api.model.status.on('change:project', function(model) {
 
 api.model.filters.on('change:selection', function() {
     me.mainModel.set("analysisRefreshNeeded", true);
-    tableView.$el.find('.dataTables_wrapper').addClass("blur");
 });
 
 api.model.status.on('change:domain', function(model) {
     if (model.get("domain")) {
         setTimeout(function() {
+        if ($(".noDataInTable").length > 0) {
             $(".noDataInTable").typed({
                 strings: ["<span style='font-size: 22px'>Welcome to the export app </span> ^1500. <br> A recommended workflow is: ^1000 <br> <br>1. Configure preview in the panel above^1000 <br>2. Click the refresh preview button^1000 <br> 3. Click the export button to export"],
                 typeSpeed: 5
             });
+        }
         }, 2000);
         preAppState.selectDomain = true;
         $("#main").removeClass("hidden");

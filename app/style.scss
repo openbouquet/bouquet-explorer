@@ -186,6 +186,7 @@ $navBarAndButtonColour: #e7e7e7;
                                 }
                                 background: #fff;
                                 border-radius: 10px;
+                                display: inline-block;
                                 padding: 5px 16px 5px 0px;
                                 padding-top: 10px;
                             }
@@ -313,21 +314,16 @@ $navBarAndButtonColour: #e7e7e7;
             margin-top: 20px;
             padding-right: 0px;
             .orderby-col {
+                z-index: 1;
                 padding-left: 0px;
                 display: inline-block;
             }
             #tableView {
                 position: relative;
+                top: 10px;
 
-                .blur {
-                    -webkit-filter: blur(2px);
-                    -moz-filter: blur(2px);
-                    -o-filter: blur(2px);
-                    -ms-filter: blur(2px);
-                    filter: blur(2px);
-                }
-                .col-xs-12 {
-                    padding-right: 0px;
+                .refreshNeeded {
+                    opacity: 0.5;
                 }
             }
             button.refresh-analysis {
@@ -402,6 +398,7 @@ $navBarAndButtonColour: #e7e7e7;
                 }
             }
             .squid-api-data-widgets-data-table {
+                margin-top: 0px !important;
                 a {
                     cursor: pointer;
                 }
@@ -453,9 +450,7 @@ $navBarAndButtonColour: #e7e7e7;
             .squid-api-data-widgets-data-table {
                 color:#666;
                 background:#eaebec;
-                margin: 0px 0px 10px -15px;
                 border: 1px solid #ccc;
-                margin-top: 22px;
 
                 -moz-border-radius:3px;
                 -webkit-border-radius:3px;
@@ -464,6 +459,21 @@ $navBarAndButtonColour: #e7e7e7;
                 -moz-box-shadow: 0 1px 2px #d1d1d1;
                 -webkit-box-shadow: 0 1px 2px #d1d1d1;
                 box-shadow: 0 1px 2px #d1d1d1;
+
+                tr {
+                    text-align: center;
+                    padding-left:20px;
+                }
+
+                &.setHeaders {
+                    tr {
+                        background:#eaebec;
+                    }
+                }
+
+                .reactiveMessage {
+                    top: 98px;
+                }
             }
             .noDataInTable {
                 min-width: 330px;
@@ -490,7 +500,7 @@ $navBarAndButtonColour: #e7e7e7;
                 text-align: center;
             }
             .squid-api-data-widgets-data-table th:first-child {
-                text-align: left;
+                text-align: center;
                 padding-left:20px;
             }
             .squid-api-data-widgets-data-table tr:first-child th:first-child {
@@ -503,12 +513,8 @@ $navBarAndButtonColour: #e7e7e7;
                 -webkit-border-top-right-radius:3px;
                 border-top-right-radius:3px;
             }
-            .squid-api-data-widgets-data-table tr {
-                text-align: center;
-                padding-left:20px;
-            }
             .squid-api-data-widgets-data-table td:first-child {
-                text-align: left;
+                text-align: center;
                 padding-left:20px;
                 border-left: 0;
             }
@@ -532,7 +538,7 @@ $navBarAndButtonColour: #e7e7e7;
                 border-bottom-right-radius:3px;
             }
             .squid-api-data-widgets-data-table th {
-                width: 16.66%;
+                min-width: 170px;
                 padding: 10px 0px 10px 3px;
             }
             .squid-api-data-widgets-data-table {
