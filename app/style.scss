@@ -203,6 +203,9 @@ $navBarAndButtonColour: #e7e7e7;
                 border: 1px solid #95a5a6;
                 font-size: 14px;
             }
+            .squid-api-data-widgets-dimension-widget li .fa {
+                color: #bdc3c7;
+            }
             .squid-api-data-widgets-dimension-widget li {
                 margin: 0px 20px 10px 0px;
             }
@@ -522,7 +525,6 @@ $navBarAndButtonColour: #e7e7e7;
                 border-top: 1px solid #ffffff;
                 border-bottom:1px solid #e0e0e0;
                 border-left: 1px solid #e0e0e0;
-                text-align: center;
             }
             .squid-api-data-widgets-data-table tr.even td {
                 background: #f6f6f6;
