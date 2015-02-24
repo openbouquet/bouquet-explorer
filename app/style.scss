@@ -373,6 +373,8 @@ $navBarAndButtonColour: #e7e7e7;
                 }
             }
             #export {
+                position: relative;
+                right: -15px;
                 button {
                     position: relative;
                     vertical-align: top;
@@ -411,7 +413,7 @@ $navBarAndButtonColour: #e7e7e7;
                     filter: grayscale(100%);
                 }
                 thead .sorting {
-                    background: url('../bower_components/data_tables/media/images/sort_both.png') no-repeat center right;
+                    background: url('../bower_components/data_tables/media/images/sort_both.png') #fff no-repeat center right;
                     -webkit-filter: grayscale(100%);
                     filter: grayscale(100%);
                 }
@@ -500,6 +502,7 @@ $navBarAndButtonColour: #e7e7e7;
                 border-top:1px solid #fafafa;
                 border-bottom:1px solid #e0e0e0;
                 font-weight: inherit;
+                background: #fff;
                 text-align: center;
             }
             .squid-api-data-widgets-data-table th:first-child {
