@@ -354,59 +354,56 @@ api.model.status.on('change:domain', function(model) {
                 }
                 var defaultSelection;
                 if (timeFacet && timeFacet.items.length>0) {
-                	console.log("selected time dimension = "+timeFacet.dimension.name);
+                    console.log("selected time dimension = "+timeFacet.dimension.name);
                     // set date range to -30 days
-                	var endDate = moment.utc(timeFacet.items[0].upperBound);
-                	var startDate = moment.utc(timeFacet.items[0].upperBound);
-                	startDate = moment(startDate).subtract(30, 'days');
-	                defaultSelection = {
-	                    "facets" : [ {
-	                        "dimension" : timeFacet.dimension,
-	                        "id" : timeFacet.id,
-	                        "selectedItems" : [ {
-	                            "type" : "i",
-	                            "lowerBound" : startDate.format("YYYY-MM-DDTHH:mm:ss.SSSZZ"),
-	                            "upperBound" : timeFacet.items[0].upperBound
-	                        } ]
-	                    } ]
-	                };
+                    var endDate = moment.utc(timeFacet.items[0].upperBound);
+                    var startDate = moment.utc(timeFacet.items[0].upperBound);
+                    startDate = moment(startDate).subtract(30, 'days');
+                    defaultSelection = {
+                            "facets" : [ {
+                                "dimension" : timeFacet.dimension,
+                                "id" : timeFacet.id,
+                                "selectedItems" : [ {
+                                    "type" : "i",
+                                    "lowerBound" : startDate.format("YYYY-MM-DDTHH:mm:ss.SSSZZ"),
+                                    "upperBound" : timeFacet.items[0].upperBound
+                                } ]
+                            } ]
+                    };
+                    // apply to main filters
+                    api.model.filters.set("id", {
+                        "projectId": model.get("domain").projectId
+                    });
+                    api.model.filters.setDomainIds([domainId]);
+                    api.model.filters.set("userSelection", defaultSelection);
                 } else {
-                	console.log("WARN: cannot use any time dimension to use for datepicker");
-                	defaultSelection = {
-    	                    "facets" : [ ]
-                	};
+                    console.log("WARN: cannot use any time dimension to use for datepicker");
                 }
-                // apply to main filters
-                api.model.filters.set("id", {
-                    "projectId": model.get("domain").projectId
-                });
-                api.model.filters.setDomainIds([domainId]);
-                api.model.filters.set("userSelection", defaultSelection);
-                
-                // update the analyses
-                tableAnalysis.setDomainIds([domainId]);
-                exportAnalysis.setDomainIds([domainId]);
-                
-                // update the metrics
-                var domain = squid_api.utils.find(squid_api.model.project.get("domains"), "oid", domainId);
-                if (domain) {
-                    var domainMetrics = domain.metrics;
-                    if (domainMetrics && (domainMetrics.length>0)) {
-                        // total metrics
-                        var totalMetricIds = [];
-                        for (var dmIdx=0; (dmIdx<domainMetrics.length && (dmIdx<5)); dmIdx++) {
-                            totalMetricIds.push(domainMetrics[dmIdx].oid);
-                        }
-                        // selections
-                        mainModel.set({"chosenMetrics": totalMetricIds});
-                        mainModel.set({"selectedMetric": totalMetricIds[0]});
-                    }
-                }
-                
-                // update the dimensions
-                mainModel.set({"chosenDimensions": []});
-                mainModel.set({"selectedDimension": null});
             }
+            
+            // update the analyses
+            tableAnalysis.setDomainIds([domainId]);
+            exportAnalysis.setDomainIds([domainId]);
+            
+            // update the metrics
+            var domain = squid_api.utils.find(squid_api.model.project.get("domains"), "oid", domainId);
+            if (domain) {
+                var domainMetrics = domain.metrics;
+                if (domainMetrics && (domainMetrics.length>0)) {
+                    // total metrics
+                    var totalMetricIds = [];
+                    for (var dmIdx=0; (dmIdx<domainMetrics.length && (dmIdx<5)); dmIdx++) {
+                        totalMetricIds.push(domainMetrics[dmIdx].oid);
+                    }
+                    // selections
+                    mainModel.set({"chosenMetrics": totalMetricIds});
+                    mainModel.set({"selectedMetric": totalMetricIds[0]});
+                }
+            }
+            
+            // update the dimensions
+            mainModel.set({"chosenDimensions": []});
+            mainModel.set({"selectedDimension": null});
         });
 
         // Fade in main
