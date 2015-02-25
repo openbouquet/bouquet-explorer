@@ -203,6 +203,9 @@ $navBarAndButtonColour: #e7e7e7;
                 border: 1px solid #95a5a6;
                 font-size: 14px;
             }
+            .squid-api-data-widgets-dimension-widget li .fa {
+                color: #bdc3c7;
+            }
             .squid-api-data-widgets-dimension-widget li {
                 margin: 0px 20px 10px 0px;
             }
@@ -370,6 +373,8 @@ $navBarAndButtonColour: #e7e7e7;
                 }
             }
             #export {
+                position: relative;
+                right: -15px;
                 button {
                     position: relative;
                     vertical-align: top;
@@ -408,7 +413,7 @@ $navBarAndButtonColour: #e7e7e7;
                     filter: grayscale(100%);
                 }
                 thead .sorting {
-                    background: url('../bower_components/data_tables/media/images/sort_both.png') no-repeat center right;
+                    background: url('../bower_components/data_tables/media/images/sort_both.png') #fff no-repeat center right;
                     -webkit-filter: grayscale(100%);
                     filter: grayscale(100%);
                 }
@@ -497,6 +502,7 @@ $navBarAndButtonColour: #e7e7e7;
                 border-top:1px solid #fafafa;
                 border-bottom:1px solid #e0e0e0;
                 font-weight: inherit;
+                background: #fff;
                 text-align: center;
             }
             .squid-api-data-widgets-data-table th:first-child {
@@ -522,7 +528,6 @@ $navBarAndButtonColour: #e7e7e7;
                 border-top: 1px solid #ffffff;
                 border-bottom:1px solid #e0e0e0;
                 border-left: 1px solid #e0e0e0;
-                text-align: center;
             }
             .squid-api-data-widgets-data-table tr.even td {
                 background: #f6f6f6;
