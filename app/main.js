@@ -2,6 +2,8 @@ var api = squid_api, loginView, statusView, config;
 
 var me = this;
 
+var filters = new api.controller.facetjob.FiltersModel();
+
 api.setup({
     "clientId" : "dashboard",
     "filtersDefaultEvents" : false
@@ -25,6 +27,13 @@ new api.view.ProjectSelector({
 
 new api.view.DomainSelector({
     el : '#domain'
+});
+
+new api.view.CategoricalView({
+    el : '#selection',
+    filterPanel : '#filters',
+    filterSelected : '#selected',
+    model : filters,
 });
 
 /*
@@ -169,12 +178,6 @@ var tableView = new squid_api.view.DataTableView ({
     ordering : true,
     reactiveState : true,
     reactiveMessage : "<i class='fa fa-table'></i><br>Click refresh to update",
-});
-
-new api.view.FiltersSelectionView({
-    el : '#selection',
-    filtersEl : $('#filters'),
-    refreshOnChange : false
 });
 
 new api.view.PeriodSelectionView({
@@ -333,7 +336,6 @@ api.model.status.on('change:domain', function(model) {
         mainModel.get("tableAnalysis").set({"direction" : "DESC"}, {silent : true});
        
         // launch the default filters computation
-        var filters = new api.controller.facetjob.FiltersModel();
         filters.set("id", {
             "projectId": model.get("domain").projectId
         });
