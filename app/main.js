@@ -2,8 +2,6 @@ var api = squid_api, loginView, statusView, config;
 
 var me = this;
 
-var filters = new api.controller.facetjob.FiltersModel();
-
 api.setup({
     "clientId" : "dashboard",
     "filtersDefaultEvents" : false
@@ -27,13 +25,6 @@ new api.view.ProjectSelector({
 
 new api.view.DomainSelector({
     el : '#domain'
-});
-
-new api.view.CategoricalView({
-    el : '#selection',
-    filterPanel : '#filters',
-    filterSelected : '#selected',
-    model : filters,
 });
 
 /*
@@ -178,6 +169,12 @@ var tableView = new squid_api.view.DataTableView ({
     ordering : true,
     reactiveState : true,
     reactiveMessage : "<i class='fa fa-table'></i><br>Click refresh to update",
+});
+
+new api.view.CategoricalView({
+    el : '#selection',
+    filterPanel : '#filters',
+    filterSelected : '#selected',
 });
 
 new api.view.PeriodSelectionView({
@@ -336,6 +333,7 @@ api.model.status.on('change:domain', function(model) {
         mainModel.get("tableAnalysis").set({"direction" : "DESC"}, {silent : true});
        
         // launch the default filters computation
+        var filters = new api.model.FiltersJob();
         filters.set("id", {
             "projectId": model.get("domain").projectId
         });
@@ -372,18 +370,16 @@ api.model.status.on('change:domain', function(model) {
 	                        } ]
 	                    } ]
 	                };
-                } else {
-                	console.log("WARN: cannot use any time dimension to use for datepicker");
-                	defaultSelection = {
-    	                    "facets" : [ ]
-                	};
-                }
                 // apply to main filters
                 api.model.filters.set("id", {
                     "projectId": model.get("domain").projectId
                 });
                 api.model.filters.setDomainIds([domainId]);
                 api.model.filters.set("userSelection", defaultSelection);
+                } else {
+                    console.log("WARN: cannot use any time dimension to use for datepicker");
+                }
+            }
                 
                 // update the analyses
                 tableAnalysis.setDomainIds([domainId]);
@@ -408,7 +404,6 @@ api.model.status.on('change:domain', function(model) {
                 // update the dimensions
                 mainModel.set({"chosenDimensions": []});
                 mainModel.set({"selectedDimension": null});
-            }
         });
 
         // Fade in main
