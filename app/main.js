@@ -214,6 +214,27 @@ new api.view.OrderByView({
 
 // Controllers
 
+// workaround to support old API (without facets)
+// get the dimension id from facet id
+var getDimensionOid = function(facetId){
+    var facets = api.model.filters.get("selection").facets;
+    for (var fIx = 0; fIx < facets.length; fIx++) {
+        var facet = facets[fIx];
+        if (facet.id == facetId) {
+            return facet.dimension.oid;
+        }
+    }
+};
+
+//workaround to support old API (without facets)
+var getDimensionOids = function(facetIds) {
+    var dimensionIds = [];
+    for (var fIx = 0; fIx < facetIds.length; fIx++) {
+        dimensionIds.push(this.getDimensionOid(facetIds[fIx]));
+    }
+    return dimensionIds;
+};
+
 var compute = function(analysis) {
     // get rid of previous errors
     api.model.status.set("error", null);
@@ -228,7 +249,8 @@ var refreshExportAnalysis = function() {
     if (a) {
         var silent = true;
         var changed = false;
-        a.setDimensionIds(mainModel.get("chosenDimensions"), silent);
+
+        a.setDimensionIds(this.getDimensionOids(mainModel.get("chosenDimensions")), silent);
         changed = changed || a.hasChanged();
         a.setMetricIds(mainModel.get("chosenMetrics"), silent);
         changed = changed || a.hasChanged();
@@ -257,7 +279,8 @@ var refreshTableAnalysis = function() {
         // apply the settings depending on the type of analysis
         var silent = true;
         var changed = false;
-        a.setDimensionIds(mainModel.get("chosenDimensions"), silent);
+        
+        a.setDimensionIds(this.getDimensionOids(mainModel.get("chosenDimensions")), silent);
         changed = changed || a.hasChanged();
         a.setMetricIds(mainModel.get("chosenMetrics"), silent);
         changed = changed || a.hasChanged();
@@ -349,36 +372,36 @@ api.model.status.on('change:domain', function(model) {
                     if (facet.dimension.type == "CONTINUOUS" && facet.items.length>0) {
                         // set the time dimension
                         timeFacet = facet;
-                        console.log("found time dimension = "+facet.dimension.name);
                     }
                 }
-                var defaultSelection;
-                if (timeFacet && timeFacet.items.length>0) {
-                	console.log("selected time dimension = "+timeFacet.dimension.name);
+                var defaultSelection = null;
+                if (timeFacet) {
+                    console.log("selected time dimension = "+timeFacet.dimension.name);
                     // set date range to -30 days
-                	var endDate = moment.utc(timeFacet.items[0].upperBound);
-                	var startDate = moment.utc(timeFacet.items[0].upperBound);
-                	startDate = moment(startDate).subtract(30, 'days');
-	                defaultSelection = {
-	                    "facets" : [ {
-	                        "dimension" : timeFacet.dimension,
-	                        "id" : timeFacet.id,
-	                        "selectedItems" : [ {
-	                            "type" : "i",
-	                            "lowerBound" : startDate.format("YYYY-MM-DDTHH:mm:ss.SSSZZ"),
-	                            "upperBound" : timeFacet.items[0].upperBound
-	                        } ]
-	                    } ]
-	                };
+                    var endDate = moment.utc(timeFacet.items[0].upperBound);
+                    var startDate = moment.utc(timeFacet.items[0].upperBound);
+                    startDate = moment(startDate).subtract(30, 'days');
+                    defaultSelection = {
+                            "facets" : [ {
+                                "dimension" : timeFacet.dimension,
+                                "id" : timeFacet.id,
+                                "selectedItems" : [ {
+                                    "type" : "i",
+                                    "lowerBound" : startDate.format("YYYY-MM-DDTHH:mm:ss.SSSZZ"),
+                                    "upperBound" : timeFacet.items[0].upperBound
+                                } ]
+                            } ]
+                    };
+                    
+                } else {
+                    console.log("WARN: cannot use any time dimension to use for datepicker");
+                }
                 // apply to main filters
                 api.model.filters.set("id", {
                     "projectId": model.get("domain").projectId
                 });
                 api.model.filters.setDomainIds([domainId]);
                 api.model.filters.set("userSelection", defaultSelection);
-                } else {
-                    console.log("WARN: cannot use any time dimension to use for datepicker");
-                }
             }
                 
                 // update the analyses
