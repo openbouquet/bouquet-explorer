@@ -372,36 +372,36 @@ api.model.status.on('change:domain', function(model) {
                     if (facet.dimension.type == "CONTINUOUS" && facet.items.length>0) {
                         // set the time dimension
                         timeFacet = facet;
-                        console.log("found time dimension = "+facet.dimension.name);
                     }
                 }
-                var defaultSelection;
-                if (timeFacet && timeFacet.items.length>0) {
-                	console.log("selected time dimension = "+timeFacet.dimension.name);
+                var defaultSelection = null;
+                if (timeFacet) {
+                    console.log("selected time dimension = "+timeFacet.dimension.name);
                     // set date range to -30 days
-                	var endDate = moment.utc(timeFacet.items[0].upperBound);
-                	var startDate = moment.utc(timeFacet.items[0].upperBound);
-                	startDate = moment(startDate).subtract(30, 'days');
-	                defaultSelection = {
-	                    "facets" : [ {
-	                        "dimension" : timeFacet.dimension,
-	                        "id" : timeFacet.id,
-	                        "selectedItems" : [ {
-	                            "type" : "i",
-	                            "lowerBound" : startDate.format("YYYY-MM-DDTHH:mm:ss.SSSZZ"),
-	                            "upperBound" : timeFacet.items[0].upperBound
-	                        } ]
-	                    } ]
-	                };
+                    var endDate = moment.utc(timeFacet.items[0].upperBound);
+                    var startDate = moment.utc(timeFacet.items[0].upperBound);
+                    startDate = moment(startDate).subtract(30, 'days');
+                    defaultSelection = {
+                            "facets" : [ {
+                                "dimension" : timeFacet.dimension,
+                                "id" : timeFacet.id,
+                                "selectedItems" : [ {
+                                    "type" : "i",
+                                    "lowerBound" : startDate.format("YYYY-MM-DDTHH:mm:ss.SSSZZ"),
+                                    "upperBound" : timeFacet.items[0].upperBound
+                                } ]
+                            } ]
+                    };
+                    
+                } else {
+                    console.log("WARN: cannot use any time dimension to use for datepicker");
+                }
                 // apply to main filters
                 api.model.filters.set("id", {
                     "projectId": model.get("domain").projectId
                 });
                 api.model.filters.setDomainIds([domainId]);
                 api.model.filters.set("userSelection", defaultSelection);
-                } else {
-                    console.log("WARN: cannot use any time dimension to use for datepicker");
-                }
             }
                 
                 // update the analyses
