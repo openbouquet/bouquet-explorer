@@ -310,10 +310,11 @@ $navBarAndButtonColour: #e7e7e7;
                     }
                 }
             }
-            #origin .multiselect:active, #metric .multiselect:active, #selection a:active {
+            #origin .multiselect:active, #metric .multiselect:active, #selection button:active, #date-picker button:first-of-type:active {
                 top: 1px;
                 outline: none;
                 -webkit-box-shadow: none;
+                border-bottom: 1px solid;
                 box-shadow: none;
             }
             .squid-api-data-widgets-dimension-widget {
