@@ -116,25 +116,25 @@ tableAnalysis.on("change", function() {
 
 mainModel.on("change:analysisRefreshNeeded", function() {
     var analysisRefreshNeeded = me.mainModel.get("analysisRefreshNeeded");
-
+    // Bind click event and tell the model a refresh is needed
     if (analysisRefreshNeeded) {
-        // Bind click event and tell the model a refresh is needed
-        $("button.refresh-analysis").click(function() {
-            me.mainModel.set("analysisRefreshNeeded", false);
-            me.mainModel.set("refreshButtonPressed", true);
-            refreshTableAnalysis();
-        });
         // Dom manipulations
         $("button.refresh-analysis .glyphicon").show();
         $("button.refresh-analysis .glyphicon").removeClass("loading");
         $("button.refresh-analysis").removeClass("dataUpdated");
         $("button.refresh-analysis .text").html("Refresh Preview");
     } else {
-        // Unbind Click event / Dom manipulations
-        $("button.refresh-analysis").unbind("click");
+        // Dom manipulations
         $("button.refresh-analysis").addClass("dataUpdated");
         $("button.refresh-analysis .glyphicon").removeClass("loading");
     }
+});
+
+$("button.refresh-analysis").click(function() {
+    me.mainModel.set("analysisRefreshNeeded", false);
+    me.mainModel.set("refreshButtonPressed", true);
+    refreshTableAnalysis();
+    console.log("refreshed");
 });
 
 // Views
@@ -171,10 +171,10 @@ var tableView = new squid_api.view.DataTableView ({
     reactiveMessage : "<i class='fa fa-table'></i><br>Click refresh to update",
 });
 
-new api.view.FiltersSelectionView({
+new api.view.CategoricalView({
     el : '#selection',
-    filtersEl : $('#filters'),
-    refreshOnChange : false
+    filterPanel : '#filters',
+    filterSelected : '#selected',
 });
 
 new api.view.PeriodSelectionView({
@@ -214,6 +214,27 @@ new api.view.OrderByView({
 
 // Controllers
 
+// workaround to support old API (without facets)
+// get the dimension id from facet id
+var getDimensionOid = function(facetId){
+    var facets = api.model.filters.get("selection").facets;
+    for (var fIx = 0; fIx < facets.length; fIx++) {
+        var facet = facets[fIx];
+        if (facet.id == facetId) {
+            return facet.dimension.oid;
+        }
+    }
+};
+
+//workaround to support old API (without facets)
+var getDimensionOids = function(facetIds) {
+    var dimensionIds = [];
+    for (var fIx = 0; fIx < facetIds.length; fIx++) {
+        dimensionIds.push(this.getDimensionOid(facetIds[fIx]));
+    }
+    return dimensionIds;
+};
+
 var compute = function(analysis) {
     // get rid of previous errors
     api.model.status.set("error", null);
@@ -228,7 +249,8 @@ var refreshExportAnalysis = function() {
     if (a) {
         var silent = true;
         var changed = false;
-        a.setDimensionIds(mainModel.get("chosenDimensions"), silent);
+
+        a.setDimensionIds(this.getDimensionOids(mainModel.get("chosenDimensions")), silent);
         changed = changed || a.hasChanged();
         a.setMetricIds(mainModel.get("chosenMetrics"), silent);
         changed = changed || a.hasChanged();
@@ -257,7 +279,8 @@ var refreshTableAnalysis = function() {
         // apply the settings depending on the type of analysis
         var silent = true;
         var changed = false;
-        a.setDimensionIds(mainModel.get("chosenDimensions"), silent);
+        
+        a.setDimensionIds(this.getDimensionOids(mainModel.get("chosenDimensions")), silent);
         changed = changed || a.hasChanged();
         a.setMetricIds(mainModel.get("chosenMetrics"), silent);
         changed = changed || a.hasChanged();
@@ -333,7 +356,7 @@ api.model.status.on('change:domain', function(model) {
         mainModel.get("tableAnalysis").set({"direction" : "DESC"}, {silent : true});
        
         // launch the default filters computation
-        var filters = new api.controller.facetjob.FiltersModel();
+        var filters = new api.model.FiltersJob();
         filters.set("id", {
             "projectId": model.get("domain").projectId
         });
@@ -349,11 +372,10 @@ api.model.status.on('change:domain', function(model) {
                     if (facet.dimension.type == "CONTINUOUS" && facet.items.length>0) {
                         // set the time dimension
                         timeFacet = facet;
-                        console.log("found time dimension = "+facet.dimension.name);
                     }
                 }
-                var defaultSelection;
-                if (timeFacet && timeFacet.items.length>0) {
+                var defaultSelection = null;
+                if (timeFacet) {
                     console.log("selected time dimension = "+timeFacet.dimension.name);
                     // set date range to -30 days
                     var endDate = moment.utc(timeFacet.items[0].upperBound);
@@ -370,40 +392,41 @@ api.model.status.on('change:domain', function(model) {
                                 } ]
                             } ]
                     };
-                    // apply to main filters
-                    api.model.filters.set("id", {
-                        "projectId": model.get("domain").projectId
-                    });
-                    api.model.filters.setDomainIds([domainId]);
-                    api.model.filters.set("userSelection", defaultSelection);
+                    
                 } else {
                     console.log("WARN: cannot use any time dimension to use for datepicker");
                 }
+                // apply to main filters
+                api.model.filters.set("id", {
+                    "projectId": model.get("domain").projectId
+                });
+                api.model.filters.setDomainIds([domainId]);
+                api.model.filters.set("userSelection", defaultSelection);
             }
-            
-            // update the analyses
-            tableAnalysis.setDomainIds([domainId]);
-            exportAnalysis.setDomainIds([domainId]);
-            
-            // update the metrics
-            var domain = squid_api.utils.find(squid_api.model.project.get("domains"), "oid", domainId);
-            if (domain) {
-                var domainMetrics = domain.metrics;
-                if (domainMetrics && (domainMetrics.length>0)) {
-                    // total metrics
-                    var totalMetricIds = [];
-                    for (var dmIdx=0; (dmIdx<domainMetrics.length && (dmIdx<5)); dmIdx++) {
-                        totalMetricIds.push(domainMetrics[dmIdx].oid);
+                
+                // update the analyses
+                tableAnalysis.setDomainIds([domainId]);
+                exportAnalysis.setDomainIds([domainId]);
+                
+                // update the metrics
+                var domain = squid_api.utils.find(squid_api.model.project.get("domains"), "oid", domainId);
+                if (domain) {
+                    var domainMetrics = domain.metrics;
+                    if (domainMetrics && (domainMetrics.length>0)) {
+                        // total metrics
+                        var totalMetricIds = [];
+                        for (var dmIdx=0; (dmIdx<domainMetrics.length && (dmIdx<5)); dmIdx++) {
+                            totalMetricIds.push(domainMetrics[dmIdx].oid);
+                        }
+                        // selections
+                        mainModel.set({"chosenMetrics": totalMetricIds});
+                        mainModel.set({"selectedMetric": totalMetricIds[0]});
                     }
-                    // selections
-                    mainModel.set({"chosenMetrics": totalMetricIds});
-                    mainModel.set({"selectedMetric": totalMetricIds[0]});
                 }
-            }
-            
-            // update the dimensions
-            mainModel.set({"chosenDimensions": []});
-            mainModel.set({"selectedDimension": null});
+                
+                // update the dimensions
+                mainModel.set({"chosenDimensions": []});
+                mainModel.set({"selectedDimension": null});
         });
 
         // Fade in main
