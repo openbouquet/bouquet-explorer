@@ -134,7 +134,6 @@ $("button.refresh-analysis").click(function() {
     me.mainModel.set("analysisRefreshNeeded", false);
     me.mainModel.set("refreshButtonPressed", true);
     refreshTableAnalysis();
-    console.log("refreshed");
 });
 
 // Views
