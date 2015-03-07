@@ -63,7 +63,7 @@ module.exports = function(grunt) {
         },
         cachebreaker: {
             options: {
-                match: ['js', 'css'],
+                match: ['js', 'css']
             },
             files: {
                 src: ['dist/index.html']
@@ -102,6 +102,6 @@ module.exports = function(grunt) {
     grunt.registerTask('build', [ 'jshint',  'clean', 'handlebars', 'concat',
                                     'copy', 'sass', 'wiredep', 'wiredepCopy']);
     grunt.registerTask('dist', [ 'jshint',  'clean', 'handlebars', 'concat',
-                                    'copy', 'sass', 'wiredep', 'wiredepCopy', 'cachebreaker' ]);
+                                    'copy', 'sass', 'wiredep', 'wiredepCopy' ]);
     grunt.registerTask('default', [ 'dist' ]);
 };
