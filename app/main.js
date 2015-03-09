@@ -401,7 +401,7 @@ api.model.status.on('change:domain', function(model) {
                 api.model.filters.setDomainIds([domainId]);
                 api.model.filters.set("userSelection", defaultSelection);
             }
-                
+
             // update the analyses
             tableAnalysis.setDomainIds([domainId]);
             exportAnalysis.setDomainIds([domainId]);
