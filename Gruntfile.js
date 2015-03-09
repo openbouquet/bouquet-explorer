@@ -109,5 +109,6 @@ module.exports = function(grunt) {
                                     'copy', 'sass', 'wiredep', 'wiredepCopy']);
     grunt.registerTask('dist', [ 'jshint',  'clean', 'handlebars', 'concat',
                                     'copy', 'sass', 'wiredep', 'wiredepCopy', 'cacheBust' ]);
+
     grunt.registerTask('default', [ 'dist' ]);
 };

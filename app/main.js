@@ -116,25 +116,24 @@ tableAnalysis.on("change", function() {
 
 mainModel.on("change:analysisRefreshNeeded", function() {
     var analysisRefreshNeeded = me.mainModel.get("analysisRefreshNeeded");
-
+    // Bind click event and tell the model a refresh is needed
     if (analysisRefreshNeeded) {
-        // Bind click event and tell the model a refresh is needed
-        $("button.refresh-analysis").click(function() {
-            me.mainModel.set("analysisRefreshNeeded", false);
-            me.mainModel.set("refreshButtonPressed", true);
-            refreshTableAnalysis();
-        });
         // Dom manipulations
         $("button.refresh-analysis .glyphicon").show();
         $("button.refresh-analysis .glyphicon").removeClass("loading");
         $("button.refresh-analysis").removeClass("dataUpdated");
         $("button.refresh-analysis .text").html("Refresh Preview");
     } else {
-        // Unbind Click event / Dom manipulations
-        $("button.refresh-analysis").unbind("click");
+        // Dom manipulations
         $("button.refresh-analysis").addClass("dataUpdated");
         $("button.refresh-analysis .glyphicon").removeClass("loading");
     }
+});
+
+$("button.refresh-analysis").click(function() {
+    me.mainModel.set("analysisRefreshNeeded", false);
+    me.mainModel.set("refreshButtonPressed", true);
+    refreshTableAnalysis();
 });
 
 // Views
@@ -416,9 +415,6 @@ api.model.status.on('change:domain', function(model) {
                     for (var dmIdx=0; (dmIdx<domainMetrics.length && (dmIdx<5)); dmIdx++) {
                         totalMetricIds.push(domainMetrics[dmIdx].oid);
                     }
-                    // selections
-                    mainModel.set({"chosenMetrics": totalMetricIds});
-                    mainModel.set({"selectedMetric": totalMetricIds[0]});
                 }
             }
             

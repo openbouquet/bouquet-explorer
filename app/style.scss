@@ -310,10 +310,11 @@ $navBarAndButtonColour: #e7e7e7;
                     }
                 }
             }
-            #origin .multiselect:active, #metric .multiselect:active, #selection a:active {
+            #origin .multiselect:active, #metric .multiselect:active, #selection button:active, #date-picker button:first-of-type:active {
                 top: 1px;
                 outline: none;
                 -webkit-box-shadow: none;
+                border-bottom: 1px solid;
                 box-shadow: none;
             }
             .squid-api-data-widgets-dimension-widget {
@@ -380,10 +381,6 @@ $navBarAndButtonColour: #e7e7e7;
                 cursor: pointer;
                 -webkit-box-shadow: inset 0 -2px #27ae60;
                 box-shadow: inset 0 -2px #27ae60;
-
-                &.dataUpdated {
-                    opacity: 0.5;
-                }
 
                 .glyphicon {
                     top: 3px;
