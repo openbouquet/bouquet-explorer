@@ -35,6 +35,7 @@ api.model.login.on('change:login', function(model) {
     // performed when login is updated
     if (model.get("login")) {
         $(".navbar").removeClass("hidden");
+        
         //init the projects
         projects.addParameter("deepread","1");
         projects.fetch({
@@ -72,31 +73,37 @@ var mainModel = new Backbone.Model({
 });
 
 mainModel.on("change:selectedDimension", function() {
+    me.saveState();
     refreshExportAnalysis();
     me.mainModel.set("analysisRefreshNeeded", true);
 });
 
 mainModel.on("change:chosenDimensions", function() {
+    me.saveState();
     refreshExportAnalysis();
     me.mainModel.set("analysisRefreshNeeded", true);
 });
 
 mainModel.on("change:chosenMetrics", function() {
+    me.saveState();
     refreshExportAnalysis();
     me.mainModel.set("analysisRefreshNeeded", true);
 });
 
 mainModel.on("change:orderByDirection", function() {
+    me.saveState();
     refreshExportAnalysis();
     me.mainModel.set("analysisRefreshNeeded", true);
 });
 
 mainModel.on("change:limit", function() {
+    me.saveState();
     refreshExportAnalysis();
     me.mainModel.set("analysisRefreshNeeded", true);
 });
 
 mainModel.on("change:selectedMetric", function() {
+    me.saveState();
     refreshExportAnalysis();
     me.mainModel.set("analysisRefreshNeeded", true);
 });
@@ -245,7 +252,7 @@ var compute = function(analysis) {
 
 var refreshExportAnalysis = function() {
     var a = mainModel.get("exportAnalysis");
-    if (a) {
+    if (a && api.model.filters.get("selection")) {
         var silent = true;
         var changed = false;
 
@@ -331,7 +338,19 @@ api.model.status.on('change:project', function(model) {
     }
 });
 
+var saveState = function() {
+    var config = [];
+    config.push({"chosenDimensions" : me.mainModel.get("chosenDimensions")});
+    config.push({"selectedDimensions" : me.mainModel.get("selectedDimensions")});
+    config.push({"chosenMetrics" : me.mainModel.get("chosenMetrics")});
+    config.push({"selectedMetric" : me.mainModel.get("selectedMetric")});
+    config.push({"limit" : me.mainModel.get("limit")});
+    config.push({"orderByDirection" : me.mainModel.get("orderByDirection")});
+    api.saveState(config);
+};
+
 api.model.filters.on('change:selection', function() {
+    me.saveState();
     me.mainModel.set("analysisRefreshNeeded", true);
 });
 
@@ -373,24 +392,22 @@ api.model.status.on('change:domain', function(model) {
                         timeFacet = facet;
                     }
                 }
-                var defaultSelection = {};
-                if (timeFacet) {
+                if (timeFacet && (timeFacet.selectedItems.length === 0)) {
                     console.log("selected time dimension = "+timeFacet.dimension.name);
                     // set date range to -30 days
                     var endDate = moment.utc(timeFacet.items[0].upperBound);
                     var startDate = moment.utc(timeFacet.items[0].upperBound);
                     startDate = moment(startDate).subtract(30, 'days');
-                    defaultSelection = {
-                            "facets" : [ {
-                                "dimension" : timeFacet.dimension,
-                                "id" : timeFacet.id,
-                                "selectedItems" : [ {
-                                    "type" : "i",
-                                    "lowerBound" : startDate.format("YYYY-MM-DDTHH:mm:ss.SSSZZ"),
-                                    "upperBound" : timeFacet.items[0].upperBound
-                                } ]
-                            } ]
-                    };
+                    for (var fidx=0; fidx<sel.facets.length; fidx++) {
+                        var facet2 = sel.facets[fidx];
+                        if (facet2.id == timeFacet.id) {
+                            facet2.selectedItems = [ {
+                                "type" : "i",
+                                "lowerBound" : startDate.format("YYYY-MM-DDTHH:mm:ss.SSSZZ"),
+                                "upperBound" : timeFacet.items[0].upperBound
+                            }];
+                        }
+                    }
                     
                 } else {
                     console.log("WARN: cannot use any time dimension to use for datepicker");
@@ -398,7 +415,22 @@ api.model.status.on('change:domain', function(model) {
                 // apply to main filters
                 api.model.filters.set("id", filters.get("id"));
                 api.model.filters.setDomainIds([domainId]);
-                api.model.filters.set("userSelection", defaultSelection);
+
+                $.when(api.controller.facetjob.compute(api.model.filters, sel))
+                .then(function() {
+                    // manage the status
+                    var state = api.model.status.get("state");
+                    if (state) {
+                        mainModel.set({
+                            "chosenDimensions" : (state.chosenDimensions || mainModel.get("chosenDimensions")),
+                            "selectedDimension" :  (state.selectedDimension ||  mainModel.get("selectedDimension")),
+                            "chosenMetrics" : (state.chosenMetrics || mainModel.get("chosenMetrics")),
+                            "selectedMetric" : (state.selectedMetric || mainModel.get("selectedMetric")),
+                            "limit" : (state.limit || mainModel.get("limit")),
+                            "orderByDirection" : (state.orderByDirection || mainModel.get("orderByDirection"))
+                        });
+                    }
+                });
             }
 
             // update the analyses
@@ -417,18 +449,28 @@ api.model.status.on('change:domain', function(model) {
                     }
                 }
             }
-            
-            // update the dimensions
-            mainModel.set({"chosenDimensions": []});
-            mainModel.set({"selectedDimension": null});
+
+            if ((!state) || (state.domain.domainId != domainId)) {
+                // reset the settings
+                mainModel.set({"chosenDimensions": []});
+                mainModel.set({"selectedDimension": null});
+                mainModel.set({"chosenMetrics": []});
+                mainModel.set({"selectedMetric": null});
+            }
         });
 
         // Fade in main
         setTimeout(function() {
             $('#main').fadeIn();
         }, 1000);
-
-        api.controller.facetjob.compute(filters);
+        
+        // initial filters computation
+        var state = api.model.status.get("state");
+        if (state) {
+            api.controller.facetjob.compute(filters,state.selection);
+        } else {
+            api.controller.facetjob.compute(filters);
+        }
        
     } else {
         $("#selectDomain").removeClass("hidden");
