@@ -35,6 +35,7 @@ api.model.login.on('change:login', function(model) {
     // performed when login is updated
     if (model.get("login")) {
         $(".navbar").removeClass("hidden");
+        
         //init the projects
         projects.addParameter("deepread","1");
         projects.fetch({
@@ -72,31 +73,37 @@ var mainModel = new Backbone.Model({
 });
 
 mainModel.on("change:selectedDimension", function() {
+    me.saveState();
     refreshExportAnalysis();
     me.mainModel.set("analysisRefreshNeeded", true);
 });
 
 mainModel.on("change:chosenDimensions", function() {
+    me.saveState();
     refreshExportAnalysis();
     me.mainModel.set("analysisRefreshNeeded", true);
 });
 
 mainModel.on("change:chosenMetrics", function() {
+    me.saveState();
     refreshExportAnalysis();
     me.mainModel.set("analysisRefreshNeeded", true);
 });
 
 mainModel.on("change:orderByDirection", function() {
+    me.saveState();
     refreshExportAnalysis();
     me.mainModel.set("analysisRefreshNeeded", true);
 });
 
 mainModel.on("change:limit", function() {
+    me.saveState();
     refreshExportAnalysis();
     me.mainModel.set("analysisRefreshNeeded", true);
 });
 
 mainModel.on("change:selectedMetric", function() {
+    me.saveState();
     refreshExportAnalysis();
     me.mainModel.set("analysisRefreshNeeded", true);
 });
@@ -116,25 +123,24 @@ tableAnalysis.on("change", function() {
 
 mainModel.on("change:analysisRefreshNeeded", function() {
     var analysisRefreshNeeded = me.mainModel.get("analysisRefreshNeeded");
-
+    // Bind click event and tell the model a refresh is needed
     if (analysisRefreshNeeded) {
-        // Bind click event and tell the model a refresh is needed
-        $("button.refresh-analysis").click(function() {
-            me.mainModel.set("analysisRefreshNeeded", false);
-            me.mainModel.set("refreshButtonPressed", true);
-            refreshTableAnalysis();
-        });
         // Dom manipulations
         $("button.refresh-analysis .glyphicon").show();
         $("button.refresh-analysis .glyphicon").removeClass("loading");
         $("button.refresh-analysis").removeClass("dataUpdated");
         $("button.refresh-analysis .text").html("Refresh Preview");
     } else {
-        // Unbind Click event / Dom manipulations
-        $("button.refresh-analysis").unbind("click");
+        // Dom manipulations
         $("button.refresh-analysis").addClass("dataUpdated");
         $("button.refresh-analysis .glyphicon").removeClass("loading");
     }
+});
+
+$("button.refresh-analysis").click(function() {
+    me.mainModel.set("analysisRefreshNeeded", false);
+    me.mainModel.set("refreshButtonPressed", true);
+    refreshTableAnalysis();
 });
 
 // Views
@@ -171,10 +177,10 @@ var tableView = new squid_api.view.DataTableView ({
     reactiveMessage : "<i class='fa fa-table'></i><br>Click refresh to update",
 });
 
-new api.view.FiltersSelectionView({
+new api.view.CategoricalView({
     el : '#selection',
-    filtersEl : $('#filters'),
-    refreshOnChange : false
+    filterPanel : '#filters',
+    filterSelected : '#selected',
 });
 
 new api.view.PeriodSelectionView({
@@ -214,6 +220,27 @@ new api.view.OrderByView({
 
 // Controllers
 
+// workaround to support old API (without facets)
+// get the dimension id from facet id
+var getDimensionOid = function(facetId){
+    var facets = api.model.filters.get("selection").facets;
+    for (var fIx = 0; fIx < facets.length; fIx++) {
+        var facet = facets[fIx];
+        if (facet.id == facetId) {
+            return facet.dimension.oid;
+        }
+    }
+};
+
+//workaround to support old API (without facets)
+var getDimensionOids = function(facetIds) {
+    var dimensionIds = [];
+    for (var fIx = 0; fIx < facetIds.length; fIx++) {
+        dimensionIds.push(this.getDimensionOid(facetIds[fIx]));
+    }
+    return dimensionIds;
+};
+
 var compute = function(analysis) {
     // get rid of previous errors
     api.model.status.set("error", null);
@@ -225,10 +252,11 @@ var compute = function(analysis) {
 
 var refreshExportAnalysis = function() {
     var a = mainModel.get("exportAnalysis");
-    if (a) {
+    if (a && api.model.filters.get("selection")) {
         var silent = true;
         var changed = false;
-        a.setDimensionIds(mainModel.get("chosenDimensions"), silent);
+
+        a.setDimensionIds(this.getDimensionOids(mainModel.get("chosenDimensions")), silent);
         changed = changed || a.hasChanged();
         a.setMetricIds(mainModel.get("chosenMetrics"), silent);
         changed = changed || a.hasChanged();
@@ -257,7 +285,8 @@ var refreshTableAnalysis = function() {
         // apply the settings depending on the type of analysis
         var silent = true;
         var changed = false;
-        a.setDimensionIds(mainModel.get("chosenDimensions"), silent);
+        
+        a.setDimensionIds(this.getDimensionOids(mainModel.get("chosenDimensions")), silent);
         changed = changed || a.hasChanged();
         a.setMetricIds(mainModel.get("chosenMetrics"), silent);
         changed = changed || a.hasChanged();
@@ -309,7 +338,19 @@ api.model.status.on('change:project', function(model) {
     }
 });
 
+var saveState = function() {
+    var config = [];
+    config.push({"chosenDimensions" : me.mainModel.get("chosenDimensions")});
+    config.push({"selectedDimensions" : me.mainModel.get("selectedDimensions")});
+    config.push({"chosenMetrics" : me.mainModel.get("chosenMetrics")});
+    config.push({"selectedMetric" : me.mainModel.get("selectedMetric")});
+    config.push({"limit" : me.mainModel.get("limit")});
+    config.push({"orderByDirection" : me.mainModel.get("orderByDirection")});
+    api.saveState(config);
+};
+
 api.model.filters.on('change:selection', function() {
+    me.saveState();
     me.mainModel.set("analysisRefreshNeeded", true);
 });
 
@@ -333,7 +374,7 @@ api.model.status.on('change:domain', function(model) {
         mainModel.get("tableAnalysis").set({"direction" : "DESC"}, {silent : true});
        
         // launch the default filters computation
-        var filters = new api.controller.facetjob.FiltersModel();
+        var filters = new api.model.FiltersJob();
         filters.set("id", {
             "projectId": model.get("domain").projectId
         });
@@ -349,38 +390,49 @@ api.model.status.on('change:domain', function(model) {
                     if (facet.dimension.type == "CONTINUOUS" && facet.items.length>0) {
                         // set the time dimension
                         timeFacet = facet;
-                        console.log("found time dimension = "+facet.dimension.name);
                     }
                 }
-                var defaultSelection;
-                if (timeFacet && timeFacet.items.length>0) {
+                if (timeFacet && (timeFacet.selectedItems.length === 0)) {
                     console.log("selected time dimension = "+timeFacet.dimension.name);
                     // set date range to -30 days
                     var endDate = moment.utc(timeFacet.items[0].upperBound);
                     var startDate = moment.utc(timeFacet.items[0].upperBound);
                     startDate = moment(startDate).subtract(30, 'days');
-                    defaultSelection = {
-                            "facets" : [ {
-                                "dimension" : timeFacet.dimension,
-                                "id" : timeFacet.id,
-                                "selectedItems" : [ {
-                                    "type" : "i",
-                                    "lowerBound" : startDate.format("YYYY-MM-DDTHH:mm:ss.SSSZZ"),
-                                    "upperBound" : timeFacet.items[0].upperBound
-                                } ]
-                            } ]
-                    };
-                    // apply to main filters
-                    api.model.filters.set("id", {
-                        "projectId": model.get("domain").projectId
-                    });
-                    api.model.filters.setDomainIds([domainId]);
-                    api.model.filters.set("userSelection", defaultSelection);
+                    for (var fidx=0; fidx<sel.facets.length; fidx++) {
+                        var facet2 = sel.facets[fidx];
+                        if (facet2.id == timeFacet.id) {
+                            facet2.selectedItems = [ {
+                                "type" : "i",
+                                "lowerBound" : startDate.format("YYYY-MM-DDTHH:mm:ss.SSSZZ"),
+                                "upperBound" : timeFacet.items[0].upperBound
+                            }];
+                        }
+                    }
+                    
                 } else {
                     console.log("WARN: cannot use any time dimension to use for datepicker");
                 }
+                // apply to main filters
+                api.model.filters.set("id", filters.get("id"));
+                api.model.filters.setDomainIds([domainId]);
+
+                $.when(api.controller.facetjob.compute(api.model.filters, sel))
+                .then(function() {
+                    // manage the status
+                    var state = api.model.status.get("state");
+                    if (state) {
+                        mainModel.set({
+                            "chosenDimensions" : (state.chosenDimensions || mainModel.get("chosenDimensions")),
+                            "selectedDimension" :  (state.selectedDimension ||  mainModel.get("selectedDimension")),
+                            "chosenMetrics" : (state.chosenMetrics || mainModel.get("chosenMetrics")),
+                            "selectedMetric" : (state.selectedMetric || mainModel.get("selectedMetric")),
+                            "limit" : (state.limit || mainModel.get("limit")),
+                            "orderByDirection" : (state.orderByDirection || mainModel.get("orderByDirection"))
+                        });
+                    }
+                });
             }
-            
+
             // update the analyses
             tableAnalysis.setDomainIds([domainId]);
             exportAnalysis.setDomainIds([domainId]);
@@ -395,23 +447,30 @@ api.model.status.on('change:domain', function(model) {
                     for (var dmIdx=0; (dmIdx<domainMetrics.length && (dmIdx<5)); dmIdx++) {
                         totalMetricIds.push(domainMetrics[dmIdx].oid);
                     }
-                    // selections
-                    mainModel.set({"chosenMetrics": totalMetricIds});
-                    mainModel.set({"selectedMetric": totalMetricIds[0]});
                 }
             }
-            
-            // update the dimensions
-            mainModel.set({"chosenDimensions": []});
-            mainModel.set({"selectedDimension": null});
+
+            if ((!state) || (state.domain.domainId != domainId)) {
+                // reset the settings
+                mainModel.set({"chosenDimensions": []});
+                mainModel.set({"selectedDimension": null});
+                mainModel.set({"chosenMetrics": []});
+                mainModel.set({"selectedMetric": null});
+            }
         });
 
         // Fade in main
         setTimeout(function() {
             $('#main').fadeIn();
         }, 1000);
-
-        api.controller.facetjob.compute(filters);
+        
+        // initial filters computation
+        var state = api.model.status.get("state");
+        if (state) {
+            api.controller.facetjob.compute(filters,state.selection);
+        } else {
+            api.controller.facetjob.compute(filters);
+        }
        
     } else {
         $("#selectDomain").removeClass("hidden");
