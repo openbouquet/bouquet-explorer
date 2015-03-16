@@ -354,6 +354,44 @@ api.model.filters.on('change:selection', function() {
     me.mainModel.set("analysisRefreshNeeded", true);
 });
 
+var setTimeFacet = function(filters, timeFacet) {
+    if (timeFacet) {
+        console.log("selected time dimension = "+timeFacet.dimension.name);
+        if (timeFacet.selectedItems.length === 0) {
+            // set date range to -30 days
+            var endDate = moment.utc(timeFacet.items[0].upperBound);
+            var startDate = moment.utc(timeFacet.items[0].upperBound);
+            startDate = moment(startDate).subtract(30, 'days');
+            timeFacet.selectedItems = [ {
+                        "type" : "i",
+                        "lowerBound" : startDate.format("YYYY-MM-DDTHH:mm:ss.SSSZZ"),
+                        "upperBound" : timeFacet.items[0].upperBound
+                    }];
+        }
+    } else {
+        console.log("WARN: cannot use any time dimension to use for datepicker");
+    }
+    
+    // apply to main filters
+    api.model.filters.set("id", filters.get("id"));
+
+    $.when(api.controller.facetjob.compute(api.model.filters, filters.get("selection")))
+    .then(function() {
+        // manage the status
+        var state = api.model.status.get("state");
+        if (state && (state.domain.domainId == api.model.status.get("domain").domainId)) {
+            mainModel.set({
+                "chosenDimensions" : (state.chosenDimensions || mainModel.get("chosenDimensions")),
+                "selectedDimension" :  (state.selectedDimension ||  mainModel.get("selectedDimension")),
+                "chosenMetrics" : (state.chosenMetrics || mainModel.get("chosenMetrics")),
+                "selectedMetric" : (state.selectedMetric || mainModel.get("selectedMetric")),
+                "limit" : (state.limit || mainModel.get("limit")),
+                "orderByDirection" : (state.orderByDirection || mainModel.get("orderByDirection"))
+            });
+        }
+    });
+};
+
 api.model.status.on('change:domain', function(model) {
     if (model.get("domain")) {
         setTimeout(function() {
@@ -368,6 +406,7 @@ api.model.status.on('change:domain', function(model) {
         $("#main").removeClass("hidden");
         $("#selectDomain").addClass("hidden");
         var domainId = model.get("domain").domainId;
+        api.model.filters.setDomainIds([domainId]);
 
         // Set Table Analysis Limit
         mainModel.get("tableAnalysis").set({"limit" : 1000}, {silent : true});
@@ -379,7 +418,15 @@ api.model.status.on('change:domain', function(model) {
             "projectId": model.get("domain").projectId
         });
         filters.setDomainIds([domainId]);
-        filters.on("change:selection", function() {
+        var state = api.model.status.get("state");
+        var defaultFilters;
+        if (state && (state.domain.domainId == domainId)) {
+            defaultFilters = state.selection;
+        } else {
+            defaultFilters = null;
+        }
+        $.when(api.controller.facetjob.compute(filters,defaultFilters))
+        .then(function() {
             // filters computation done
             var sel = filters.get("selection");
             if (sel && sel.facets) {
@@ -387,50 +434,20 @@ api.model.status.on('change:domain', function(model) {
                 var timeFacet;
                 for (var i = 0; i < facets.length; i++) {
                     var facet = facets[i];
-                    if (facet.dimension.type == "CONTINUOUS" && facet.items.length>0) {
-                        // set the time dimension
+                    if (facet.dimension.type == "CONTINUOUS") {
                         timeFacet = facet;
                     }
                 }
-                if (timeFacet && (timeFacet.selectedItems.length === 0)) {
-                    console.log("selected time dimension = "+timeFacet.dimension.name);
-                    // set date range to -30 days
-                    var endDate = moment.utc(timeFacet.items[0].upperBound);
-                    var startDate = moment.utc(timeFacet.items[0].upperBound);
-                    startDate = moment(startDate).subtract(30, 'days');
-                    for (var fidx=0; fidx<sel.facets.length; fidx++) {
-                        var facet2 = sel.facets[fidx];
-                        if (facet2.id == timeFacet.id) {
-                            facet2.selectedItems = [ {
-                                "type" : "i",
-                                "lowerBound" : startDate.format("YYYY-MM-DDTHH:mm:ss.SSSZZ"),
-                                "upperBound" : timeFacet.items[0].upperBound
-                            }];
-                        }
-                    }
-                    
+                
+                if (timeFacet && (timeFacet.done === false)) {
+                    // retrieve time facet's members
+                    $.when(api.controller.facetjob.getFacetMembers(filters, timeFacet.id))
+                    .always(function() {
+                        me.setTimeFacet(filters, timeFacet);
+                    });
                 } else {
-                    console.log("WARN: cannot use any time dimension to use for datepicker");
+                    me.setTimeFacet(filters, timeFacet);
                 }
-                // apply to main filters
-                api.model.filters.set("id", filters.get("id"));
-                api.model.filters.setDomainIds([domainId]);
-
-                $.when(api.controller.facetjob.compute(api.model.filters, sel))
-                .then(function() {
-                    // manage the status
-                    var state = api.model.status.get("state");
-                    if (state) {
-                        mainModel.set({
-                            "chosenDimensions" : (state.chosenDimensions || mainModel.get("chosenDimensions")),
-                            "selectedDimension" :  (state.selectedDimension ||  mainModel.get("selectedDimension")),
-                            "chosenMetrics" : (state.chosenMetrics || mainModel.get("chosenMetrics")),
-                            "selectedMetric" : (state.selectedMetric || mainModel.get("selectedMetric")),
-                            "limit" : (state.limit || mainModel.get("limit")),
-                            "orderByDirection" : (state.orderByDirection || mainModel.get("orderByDirection"))
-                        });
-                    }
-                });
             }
 
             // update the analyses
@@ -463,14 +480,6 @@ api.model.status.on('change:domain', function(model) {
         setTimeout(function() {
             $('#main').fadeIn();
         }, 1000);
-        
-        // initial filters computation
-        var state = api.model.status.get("state");
-        if (state) {
-            api.controller.facetjob.compute(filters,state.selection);
-        } else {
-            api.controller.facetjob.compute(filters);
-        }
        
     } else {
         $("#selectDomain").removeClass("hidden");
