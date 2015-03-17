@@ -220,32 +220,11 @@ new api.view.OrderByView({
 
 // Controllers
 
-// workaround to support old API (without facets)
-// get the dimension id from facet id
-var getDimensionOid = function(facetId){
-    var facets = api.model.filters.get("selection").facets;
-    for (var fIx = 0; fIx < facets.length; fIx++) {
-        var facet = facets[fIx];
-        if (facet.id == facetId) {
-            return facet.dimension.oid;
-        }
-    }
-};
-
-//workaround to support old API (without facets)
-var getDimensionOids = function(facetIds) {
-    var dimensionIds = [];
-    for (var fIx = 0; fIx < facetIds.length; fIx++) {
-        dimensionIds.push(this.getDimensionOid(facetIds[fIx]));
-    }
-    return dimensionIds;
-};
-
 var compute = function(analysis) {
     // get rid of previous errors
     api.model.status.set("error", null);
     // compute if the analysis is correct
-    if (analysis.get("dimensions") && analysis.get("metrics")) {
+    if (analysis.get("facets") && analysis.get("metrics")) {
         api.compute(analysis);
     }
 };
@@ -256,7 +235,7 @@ var refreshExportAnalysis = function() {
         var silent = true;
         var changed = false;
 
-        a.setDimensionIds(this.getDimensionOids(mainModel.get("chosenDimensions")), silent);
+        a.setFacets(mainModel.get("chosenDimensions"), silent);
         changed = changed || a.hasChanged();
         a.setMetricIds(mainModel.get("chosenMetrics"), silent);
         changed = changed || a.hasChanged();
@@ -286,7 +265,7 @@ var refreshTableAnalysis = function() {
         var silent = true;
         var changed = false;
         
-        a.setDimensionIds(this.getDimensionOids(mainModel.get("chosenDimensions")), silent);
+        a.setFacets(mainModel.get("chosenDimensions"), silent);
         changed = changed || a.hasChanged();
         a.setMetricIds(mainModel.get("chosenMetrics"), silent);
         changed = changed || a.hasChanged();
