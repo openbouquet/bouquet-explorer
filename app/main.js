@@ -110,7 +110,6 @@ mainModel.on("change:selectedMetric", function() {
 
 tableAnalysis.on("change", function() {
     if (this.isDone()) {
-        $("button.refresh-analysis").removeClass("first-view");
         $("button.refresh-analysis .text").html("Preview up to date");
         $("button.refresh-analysis .glyphicon").hide();
         $("button.refresh-analysis .glyphicon").removeClass("loading");
@@ -262,7 +261,6 @@ var refreshTableAnalysis = function() {
     var chosenMetrics = mainModel.get("chosenMetrics");
     if ((!chosenDimensions || chosenDimensions.length === 0) && (!chosenMetrics || chosenMetrics.length === 0)) {
         $("button.refresh-analysis").prop('disabled', true);
-        $("button.refresh-analysis").removeClass("first-view");
     } else {
         $("button.refresh-analysis").prop('disabled', false);
     }
