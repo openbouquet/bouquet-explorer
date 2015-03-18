@@ -75,37 +75,37 @@ var mainModel = new Backbone.Model({
 mainModel.on("change:selectedDimension", function() {
     me.saveState();
     refreshExportAnalysis();
-    me.mainModel.set("analysisRefreshNeeded", true);
+    refreshTableAnalysis();
 });
 
 mainModel.on("change:chosenDimensions", function() {
     me.saveState();
     refreshExportAnalysis();
-    me.mainModel.set("analysisRefreshNeeded", true);
+    refreshTableAnalysis();
 });
 
 mainModel.on("change:chosenMetrics", function() {
     me.saveState();
     refreshExportAnalysis();
-    me.mainModel.set("analysisRefreshNeeded", true);
+    refreshTableAnalysis();
 });
 
 mainModel.on("change:orderByDirection", function() {
     me.saveState();
     refreshExportAnalysis();
-    me.mainModel.set("analysisRefreshNeeded", true);
+    refreshTableAnalysis();
 });
 
 mainModel.on("change:limit", function() {
     me.saveState();
     refreshExportAnalysis();
-    me.mainModel.set("analysisRefreshNeeded", true);
+    refreshTableAnalysis();
 });
 
 mainModel.on("change:selectedMetric", function() {
     me.saveState();
     refreshExportAnalysis();
-    me.mainModel.set("analysisRefreshNeeded", true);
+    refreshTableAnalysis();
 });
 
 tableAnalysis.on("change", function() {
@@ -139,9 +139,9 @@ mainModel.on("change:analysisRefreshNeeded", function() {
 
 $("button.refresh-analysis").click(function(event) {
     event.preventDefault();
-    me.mainModel.set("analysisRefreshNeeded", false);
     me.mainModel.set("refreshButtonPressed", true);
-    refreshTableAnalysis();
+    compute(tableAnalysis);
+    me.mainModel.set("analysisRefreshNeeded", false);
 });
 
 // Views
@@ -270,8 +270,10 @@ var refreshTableAnalysis = function() {
         changed = changed || a.hasChanged();
 
         a.setSelection(api.model.filters.get("selection"), silent);
-
-        compute(tableAnalysis);
+        // only trigger change if the analysis has changed
+        if (changed) {
+            me.mainModel.set("analysisRefreshNeeded", true);
+        }
     }
 };
 
