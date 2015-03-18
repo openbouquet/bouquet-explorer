@@ -61,14 +61,6 @@ module.exports = function(grunt) {
                 ignorePath : '../'
             }
         },
-        cachebreaker: {
-            options: {
-                match: ['js', 'css'],
-            },
-            files: {
-                src: ['dist/index.html']
-            }
-        },
         wiredepCopy : {
             target : {
                 options : {
@@ -84,9 +76,22 @@ module.exports = function(grunt) {
         watch : {
             js : {
                 files : [ 'app/**/*.js', 'app/**/*.hbs', 'index.template.html', 'app/style.scss' ],
-                tasks : [ 'default', 'sass' ]
+                tasks : [ 'build']
             }
-        }
+        },
+        cacheBust: {
+            options: {
+              encoding: 'utf8',
+              algorithm: 'md5',
+              length: 8,
+              deleteOriginals: true
+            },
+            assets: {
+              files: [{
+                src: ['dist/index.html']
+              }]
+            }
+          }
     });
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-sass');
@@ -98,9 +103,12 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-wiredep-copy');
     grunt.loadNpmTasks('grunt-cache-breaker');
+    grunt.loadNpmTasks('grunt-cache-bust');
 
-    grunt.registerTask('fast', [ 'handlebars', 'concat', 'copy', 'sass' ]);
     grunt.registerTask('build', [ 'jshint',  'clean', 'handlebars', 'concat',
-                                    'copy', 'sass', 'wiredep', 'wiredepCopy', 'cachebreaker' ]);
-    grunt.registerTask('default', [ 'build' ]);
+                                    'copy', 'sass', 'wiredep', 'wiredepCopy']);
+    grunt.registerTask('dist', [ 'jshint',  'clean', 'handlebars', 'concat',
+                                    'copy', 'sass', 'wiredep', 'wiredepCopy', 'cacheBust' ]);
+
+    grunt.registerTask('default', [ 'dist' ]);
 };

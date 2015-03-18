@@ -126,6 +126,15 @@ $navBarAndButtonColour: #e7e7e7;
         }
         margin-top: 52px;
     }
+    #selected {
+        .noData {
+            padding-top: 10px;
+            font-size: 14px;
+            color: #b9b9b9;
+            margin-bottom: 21px;
+            color: #b9b9b9;
+        }
+    }
     #selectProject, #selectDomain, #loading {
         position: relative;
         .splash-container {
@@ -140,6 +149,23 @@ $navBarAndButtonColour: #e7e7e7;
             #filters {
                 dt {
                     margin-top: 8px;
+                }
+            }
+            .squid_api_filters_categorical_filter_panel  {
+                #filter-selection {
+                    .btn-group {
+                        button {
+                            text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+                            background: #3498db;
+                            border-bottom: 2px solid #2980b9;
+                            cursor: pointer;
+                            -webkit-box-shadow: inset 0 -2px #2980b9;
+                            box-shadow: inset 0 -2px #2980b9;
+                        }
+                    }
+                }
+                .no-items {
+                      color: #b9b9b9;
                 }
             }
             .export-container {
@@ -284,13 +310,14 @@ $navBarAndButtonColour: #e7e7e7;
                     }
                 }
             }
-            #origin .multiselect:active, #metric .multiselect:active, #selection a:active {
+            #origin .multiselect:active, #metric .multiselect:active, #selection button:active, #date-picker button:first-of-type:active {
                 top: 1px;
                 outline: none;
                 -webkit-box-shadow: none;
+                border-bottom: 1px solid;
                 box-shadow: none;
             }
-            .squid-api-data-widgets-dimension-widget {
+            .squid-api-data-widgets-dimension-widget, .squid-api-data-widgets-metric-widget {
                 .information {
                     padding-top: 10px;
                     font-size: 14px;
@@ -303,11 +330,8 @@ $navBarAndButtonColour: #e7e7e7;
                 margin-bottom: 10px;
             }
             #filters {
-                &.in, &.collapsing {
-                    margin-top: 20px;
-                }
                 .caret {
-                    position: relative;
+                    position: absolute;
                     top: 0px;
                     right: 0px;
                 }
@@ -336,14 +360,6 @@ $navBarAndButtonColour: #e7e7e7;
                 min-width: 210px;
                 width: 100%;
                 height: 40px;
-                &.first-view {
-                    -webkit-animation-name: greenPulse;
-                    -webkit-animation-duration: 1s;
-                    -webkit-animation-iteration-count: infinite;
-                    -moz-animation-name: greenPulse;
-                    -moz-animation-duration: 1s;
-                    -moz-animation-iteration-count: infinite;
-                }
                 padding: 0;
                 z-index: 1;
                 position: relative;
@@ -357,10 +373,6 @@ $navBarAndButtonColour: #e7e7e7;
                 cursor: pointer;
                 -webkit-box-shadow: inset 0 -2px #27ae60;
                 box-shadow: inset 0 -2px #27ae60;
-
-                &.dataUpdated {
-                    opacity: 0.5;
-                }
 
                 .glyphicon {
                     top: 3px;
