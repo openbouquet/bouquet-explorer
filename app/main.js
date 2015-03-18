@@ -255,14 +255,22 @@ var refreshExportAnalysis = function() {
 
 var refreshTableAnalysis = function() {
     var a = mainModel.get("tableAnalysis");
+    var chosenDimensions = mainModel.get("chosenDimensions");
+    var chosenMetrics = mainModel.get("chosenMetrics");
+    if ((!chosenDimensions || chosenDimensions.length === 0) && (!chosenMetrics || chosenMetrics.length === 0)) {
+        $("button.refresh-analysis").prop('disabled', true);
+        $("button.refresh-analysis").removeClass("first-view");
+    } else {
+        $("button.refresh-analysis").prop('disabled', false);
+    }
     if (a) {
         // apply the settings depending on the type of analysis
         var silent = true;
         var changed = false;
         
-        a.setFacets(mainModel.get("chosenDimensions"), silent);
+        a.setFacets(chosenDimensions, silent);
         changed = changed || a.hasChanged();
-        a.setMetricIds(mainModel.get("chosenMetrics"), silent);
+        a.setMetricIds(chosenMetrics, silent);
         changed = changed || a.hasChanged();
         a.set({"orderBy" : [{"col" : getOrderByIndex() , "direction" : mainModel.get("orderByDirection")}]}, {"silent" : silent});
         changed = changed || a.hasChanged();
