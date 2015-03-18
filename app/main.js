@@ -225,17 +225,18 @@ var compute = function(analysis) {
     // get rid of previous errors
     api.model.status.set("error", null);
     // compute if the analysis is correct
-    if (analysis.get("facets") && analysis.get("metrics")) {
+    if ((analysis.get("facets") && analysis.get("facets").length>0) || (analysis.get("metrics") && analysis.get("metrics").length>0)) {
         api.compute(analysis);
+    } else {
+        api.model.status.set({"error" : {"reason" : "Please select at least a dimension or a metric"}});
     }
 };
 
 var refreshExportAnalysis = function() {
     var a = mainModel.get("exportAnalysis");
-    if (a && api.model.filters.get("selection")) {
+    if (a) {
         var silent = true;
         var changed = false;
-
         a.setFacets(mainModel.get("chosenDimensions"), silent);
         changed = changed || a.hasChanged();
         a.setMetricIds(mainModel.get("chosenMetrics"), silent);
@@ -244,17 +245,10 @@ var refreshExportAnalysis = function() {
         changed = changed || a.hasChanged();
         a.set({"limit": null}, {"silent" : silent});
         changed = changed || a.hasChanged();
-
         a.setSelection(api.model.filters.get("selection"), silent);
-
-        // only re-compute if the analysis has changed
+        // only trigger change if the analysis has changed
         if (changed) {    
-            if (a != exportAnalysis) {
-                compute(a);
-            } else {
-                // export analysis should not be computed
-                a.trigger("change");
-            }
+            a.trigger("change");
         }
     }
 };
