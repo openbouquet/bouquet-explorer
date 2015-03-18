@@ -146,7 +146,10 @@ $("button.refresh-analysis").click(function(event) {
 
 // Views
 
-userAdminView = new api.view.UsersAdminView({el : '#adminDisplay', status : api.model.status});
+userAdminView = new api.view.UsersAdminView({
+    el : '#adminDisplay', 
+    status : api.model.status
+});
 
 new api.view.DimensionSelector({
     el : '#origin',
@@ -470,9 +473,6 @@ api.model.filters.on('change:userSelection', function(filters) {
     squid_api.controller.facetjob.compute(filters, filters.get("userSelection"));
 });
 
-/* Trigger Admin Section */
-$('#admin').hide();
-
 // Allow admin panel to be accessed when project / domain have not been chosen
 var preAppState = {};
 preAppState.selectProject = false;
@@ -499,6 +499,7 @@ $("#app #menu #user-management").click(function() {
         $("#selectDomain").hide();
     }
     userAdminView.fetchModels();
+    $('#admin').removeClass("hidden");
     $('#main').fadeOut(200, function() {
       $('#admin').fadeIn(200, function () {
           
