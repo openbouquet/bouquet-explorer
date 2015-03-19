@@ -248,6 +248,7 @@ var refreshExportAnalysis = function() {
         a.set({"limit": null}, {"silent" : silent});
         changed = changed || a.hasChanged();
         a.setSelection(api.model.filters.get("selection"), silent);
+        changed = changed || a.hasChanged();
         // only trigger change if the analysis has changed
         if (changed) {    
             a.trigger("change");
@@ -277,8 +278,8 @@ var refreshTableAnalysis = function() {
         changed = changed || a.hasChanged();
         a.set({"limit": 1000}, {"silent" : silent});
         changed = changed || a.hasChanged();
-
         a.setSelection(api.model.filters.get("selection"), silent);
+        changed = changed || a.hasChanged();
         // only trigger change if the analysis has changed
         if (changed) {
             me.mainModel.set("analysisRefreshNeeded", true);
@@ -338,7 +339,8 @@ var saveState = function() {
 
 api.model.filters.on('change:selection', function() {
     me.saveState();
-    me.mainModel.set("analysisRefreshNeeded", true);
+    refreshExportAnalysis();
+    refreshTableAnalysis();
 });
 
 var updateFilters = function(filters) {
