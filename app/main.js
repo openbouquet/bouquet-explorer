@@ -109,11 +109,11 @@ mainModel.on("change:selectedMetric", function() {
 });
 
 tableAnalysis.on("change", function() {
-    if (this.isDone()) {
+    if (tableAnalysis.get("status") == "DONE") {
         $("button.refresh-analysis .text").html("Preview up to date");
         $("button.refresh-analysis .glyphicon").hide();
         $("button.refresh-analysis .glyphicon").removeClass("loading");
-    } else {
+    } else if (tableAnalysis.get("status") == "RUNNING") {
         $("button.refresh-analysis .glyphicon").show();
         $("button.refresh-analysis .text").html("Refreshing...");
         $("button.refresh-analysis .glyphicon").addClass("loading");
