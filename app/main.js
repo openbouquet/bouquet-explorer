@@ -64,9 +64,9 @@ var mainModel = new Backbone.Model({
     "exportAnalysis" : exportAnalysis,
     "analysisRefreshNeeded" : false,
     "refreshButtonPressed" : false,
-    "chosenDimensions" : [],
+    "chosenDimensions" : null,
     "selectedDimension" :  null,
-    "chosenMetrics" : [],
+    "chosenMetrics" : null,
     "selectedMetric" : null,
     "limit" : null,
     "orderByDirection" : "DESC",
@@ -75,42 +75,41 @@ var mainModel = new Backbone.Model({
 mainModel.on("change:selectedDimension", function() {
     me.saveState();
     refreshExportAnalysis();
-    me.mainModel.set("analysisRefreshNeeded", true);
+    refreshTableAnalysis();
 });
 
 mainModel.on("change:chosenDimensions", function() {
     me.saveState();
     refreshExportAnalysis();
-    me.mainModel.set("analysisRefreshNeeded", true);
+    refreshTableAnalysis();
 });
 
 mainModel.on("change:chosenMetrics", function() {
     me.saveState();
     refreshExportAnalysis();
-    me.mainModel.set("analysisRefreshNeeded", true);
+    refreshTableAnalysis();
 });
 
 mainModel.on("change:orderByDirection", function() {
     me.saveState();
     refreshExportAnalysis();
-    me.mainModel.set("analysisRefreshNeeded", true);
+    refreshTableAnalysis();
 });
 
 mainModel.on("change:limit", function() {
     me.saveState();
     refreshExportAnalysis();
-    me.mainModel.set("analysisRefreshNeeded", true);
+    refreshTableAnalysis();
 });
 
 mainModel.on("change:selectedMetric", function() {
     me.saveState();
     refreshExportAnalysis();
-    me.mainModel.set("analysisRefreshNeeded", true);
+    refreshTableAnalysis();
 });
 
 tableAnalysis.on("change", function() {
     if (this.isDone()) {
-        $("button.refresh-analysis").removeClass("first-view");
         $("button.refresh-analysis .text").html("Preview up to date");
         $("button.refresh-analysis .glyphicon").hide();
         $("button.refresh-analysis .glyphicon").removeClass("loading");
@@ -137,15 +136,19 @@ mainModel.on("change:analysisRefreshNeeded", function() {
     }
 });
 
-$("button.refresh-analysis").click(function() {
-    me.mainModel.set("analysisRefreshNeeded", false);
+$("button.refresh-analysis").click(function(event) {
+    event.preventDefault();
     me.mainModel.set("refreshButtonPressed", true);
-    refreshTableAnalysis();
+    compute(tableAnalysis);
+    me.mainModel.set("analysisRefreshNeeded", false);
 });
 
 // Views
 
-userAdminView = new api.view.UsersAdminView({el : '#adminDisplay', status : api.model.status});
+userAdminView = new api.view.UsersAdminView({
+    el : '#adminDisplay', 
+    status : api.model.status
+});
 
 new api.view.DimensionSelector({
     el : '#origin',
@@ -224,17 +227,18 @@ var compute = function(analysis) {
     // get rid of previous errors
     api.model.status.set("error", null);
     // compute if the analysis is correct
-    if (analysis.get("facets") && analysis.get("metrics")) {
+    if ((analysis.get("facets") && analysis.get("facets").length>0) || (analysis.get("metrics") && analysis.get("metrics").length>0)) {
         api.compute(analysis);
+    } else {
+        api.model.status.set({"error" : {"reason" : "Please select at least a dimension or a metric"}});
     }
 };
 
 var refreshExportAnalysis = function() {
     var a = mainModel.get("exportAnalysis");
-    if (a && api.model.filters.get("selection")) {
+    if (a) {
         var silent = true;
         var changed = false;
-
         a.setFacets(mainModel.get("chosenDimensions"), silent);
         changed = changed || a.hasChanged();
         a.setMetricIds(mainModel.get("chosenMetrics"), silent);
@@ -243,31 +247,31 @@ var refreshExportAnalysis = function() {
         changed = changed || a.hasChanged();
         a.set({"limit": null}, {"silent" : silent});
         changed = changed || a.hasChanged();
-
         a.setSelection(api.model.filters.get("selection"), silent);
-
-        // only re-compute if the analysis has changed
+        // only trigger change if the analysis has changed
         if (changed) {    
-            if (a != exportAnalysis) {
-                compute(a);
-            } else {
-                // export analysis should not be computed
-                a.trigger("change");
-            }
+            a.trigger("change");
         }
     }
 };
 
 var refreshTableAnalysis = function() {
     var a = mainModel.get("tableAnalysis");
+    var chosenDimensions = mainModel.get("chosenDimensions");
+    var chosenMetrics = mainModel.get("chosenMetrics");
+    if ((!chosenDimensions || chosenDimensions.length === 0) && (!chosenMetrics || chosenMetrics.length === 0)) {
+        $("button.refresh-analysis").prop('disabled', true);
+    } else {
+        $("button.refresh-analysis").prop('disabled', false);
+    }
     if (a) {
         // apply the settings depending on the type of analysis
         var silent = true;
         var changed = false;
         
-        a.setFacets(mainModel.get("chosenDimensions"), silent);
+        a.setFacets(chosenDimensions, silent);
         changed = changed || a.hasChanged();
-        a.setMetricIds(mainModel.get("chosenMetrics"), silent);
+        a.setMetricIds(chosenMetrics, silent);
         changed = changed || a.hasChanged();
         a.set({"orderBy" : [{"col" : getOrderByIndex() , "direction" : mainModel.get("orderByDirection")}]}, {"silent" : silent});
         changed = changed || a.hasChanged();
@@ -275,8 +279,10 @@ var refreshTableAnalysis = function() {
         changed = changed || a.hasChanged();
 
         a.setSelection(api.model.filters.get("selection"), silent);
-
-        compute(tableAnalysis);
+        // only trigger change if the analysis has changed
+        if (changed) {
+            me.mainModel.set("analysisRefreshNeeded", true);
+        }
     }
 };
 
@@ -284,9 +290,11 @@ var getOrderByIndex = function() {
     var index = mainModel.get("chosenDimensions").length;
     var selectedMetric = mainModel.get("selectedMetric");
     var metrics = mainModel.get("chosenMetrics");
-    for (i=0; i<metrics.length; i++) {
-        if (metrics[i] === selectedMetric) {
-            index += i;
+    if (metrics) {
+        for (i=0; i<metrics.length; i++) {
+            if (metrics[i] === selectedMetric) {
+                index += i;
+            }
         }
     }
     return index;
@@ -465,9 +473,6 @@ api.model.filters.on('change:userSelection', function(filters) {
     squid_api.controller.facetjob.compute(filters, filters.get("userSelection"));
 });
 
-/* Trigger Admin Section */
-$('#admin').hide();
-
 // Allow admin panel to be accessed when project / domain have not been chosen
 var preAppState = {};
 preAppState.selectProject = false;
@@ -494,6 +499,7 @@ $("#app #menu #user-management").click(function() {
         $("#selectDomain").hide();
     }
     userAdminView.fetchModels();
+    $('#admin').removeClass("hidden");
     $('#main').fadeOut(200, function() {
       $('#admin').fadeIn(200, function () {
           

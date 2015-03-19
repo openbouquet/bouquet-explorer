@@ -317,7 +317,7 @@ $navBarAndButtonColour: #e7e7e7;
                 border-bottom: 1px solid;
                 box-shadow: none;
             }
-            .squid-api-data-widgets-dimension-widget {
+            .squid-api-data-widgets-dimension-widget, .squid-api-data-widgets-metric-widget {
                 .information {
                     padding-top: 10px;
                     font-size: 14px;
@@ -360,14 +360,6 @@ $navBarAndButtonColour: #e7e7e7;
                 min-width: 210px;
                 width: 100%;
                 height: 40px;
-                &.first-view {
-                    -webkit-animation-name: greenPulse;
-                    -webkit-animation-duration: 1s;
-                    -webkit-animation-iteration-count: infinite;
-                    -moz-animation-name: greenPulse;
-                    -moz-animation-duration: 1s;
-                    -moz-animation-iteration-count: infinite;
-                }
                 padding: 0;
                 z-index: 1;
                 position: relative;
