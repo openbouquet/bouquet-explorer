@@ -290,9 +290,11 @@ var getOrderByIndex = function() {
     var index = mainModel.get("chosenDimensions").length;
     var selectedMetric = mainModel.get("selectedMetric");
     var metrics = mainModel.get("chosenMetrics");
-    for (i=0; i<metrics.length; i++) {
-        if (metrics[i] === selectedMetric) {
-            index += i;
+    if (metrics) {
+        for (i=0; i<metrics.length; i++) {
+            if (metrics[i] === selectedMetric) {
+                index += i;
+            }
         }
     }
     return index;
