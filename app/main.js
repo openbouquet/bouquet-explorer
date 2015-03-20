@@ -139,8 +139,8 @@ mainModel.on("change:analysisRefreshNeeded", function() {
 $("button.refresh-analysis").click(function(event) {
     event.preventDefault();
     me.mainModel.set("refreshButtonPressed", true);
-    compute(tableAnalysis);
     me.mainModel.set("analysisRefreshNeeded", false);
+    compute(tableAnalysis);
 });
 
 // Views
