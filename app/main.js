@@ -374,6 +374,8 @@ api.model.status.on('change:domain', function(model) {
         filters.set("id", {
             "projectId": model.get("domain").projectId
         });
+        filters.set("engineVersion", "2");
+
         filters.setDomainIds([model.get("domain")]);
         var state = api.model.status.get("state");
         var defaultFilters;
