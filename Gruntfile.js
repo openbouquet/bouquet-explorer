@@ -102,7 +102,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-wiredep');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-wiredep-copy');
-    grunt.loadNpmTasks('grunt-cache-breaker');
     grunt.loadNpmTasks('grunt-cache-bust');
 
     grunt.registerTask('build', [ 'jshint',  'clean', 'handlebars', 'concat',
