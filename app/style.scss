@@ -171,6 +171,9 @@ $navBarAndButtonColour: #e7e7e7;
                     .filter-panel {
                         border-radius: 0px;
 
+                        .panel-heading {
+                            display: none;
+                        }
                         .panel-body {
                             padding: 15px;
                             background: #f3f3f3;
