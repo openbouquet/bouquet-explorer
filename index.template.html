@@ -36,6 +36,10 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li>
+                    	<!-- Button trigger shortcuts -->
+						<button type="button" class="btn btn-primary btn-lg" data-toggle="collapse" data-target="#shortcutsModal">
+						  Shortcuts
+						</button>
                         <div id="login"></div>
                     </li>
                 </ul>
@@ -63,6 +67,24 @@
     		<div class="splash-message">Please select your domain</div>
     	</div>
     </div>
+    
+
+
+	<!-- Shortcuts Modal -->
+	<div class="collapse" id="shortcutsModal">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="myModalLabel">Shortcuts</h4>
+	      </div>
+	      <div class="modal-body">
+	        <div id="shortcuts"></div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
     <div class="hidden push" id="admin">
     	<div class="container">
             <div class="row">

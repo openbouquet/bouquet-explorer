@@ -27,6 +27,10 @@ new api.view.DomainSelector({
     el : '#domain'
 });
 
+new api.view.ShortcutsAdminView({
+    el : '#shortcuts'
+});
+
 /*
  * Controllers
  */
