@@ -378,9 +378,13 @@ api.model.status.on('change:domain', function(model) {
 
         filters.setDomainIds([model.get("domain")]);
         var state = api.model.status.get("state");
+        var config;
+        if (state) {
+            config = state.get("config");
+        }
         var defaultFilters;
-        if (state && (state.domain.domainId == domainId)) {
-            defaultFilters = state.selection;
+        if (config && (config.domain.domainId == domainId)) {
+            defaultFilters = config.selection;
         } else {
             defaultFilters = null;
         }
@@ -439,21 +443,21 @@ api.model.status.on('change:domain', function(model) {
             }
 
             // manage app state
-            if ((!state) || (state.domain.domainId != domainId)) {
+            if ((!config) || (config.domain.domainId != domainId)) {
                 // reset the settings
                 mainModel.set({"chosenDimensions": []});
                 mainModel.set({"selectedDimension": null});
                 mainModel.set({"chosenMetrics": []});
                 mainModel.set({"selectedMetric": null});
             } else {
-                if (state.domain.domainId == domainId) {
+                if (config.domain.domainId == domainId) {
                     mainModel.set({
-                        "chosenDimensions" : (state.chosenDimensions || mainModel.get("chosenDimensions")),
-                        "selectedDimension" :  (state.selectedDimension ||  mainModel.get("selectedDimension")),
-                        "chosenMetrics" : (state.chosenMetrics || mainModel.get("chosenMetrics")),
-                        "selectedMetric" : (state.selectedMetric || mainModel.get("selectedMetric")),
-                        "limit" : (state.limit || mainModel.get("limit")),
-                        "orderByDirection" : (state.orderByDirection || mainModel.get("orderByDirection"))
+                        "chosenDimensions" : (config.chosenDimensions || mainModel.get("chosenDimensions")),
+                        "selectedDimension" :  (config.selectedDimension ||  mainModel.get("selectedDimension")),
+                        "chosenMetrics" : (config.chosenMetrics || mainModel.get("chosenMetrics")),
+                        "selectedMetric" : (config.selectedMetric || mainModel.get("selectedMetric")),
+                        "limit" : (config.limit || mainModel.get("limit")),
+                        "orderByDirection" : (config.orderByDirection || mainModel.get("orderByDirection"))
                     });
                 }
             }
