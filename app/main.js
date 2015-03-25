@@ -184,6 +184,7 @@ new api.view.CategoricalView({
     el : '#selection',
     filterPanel : '#filters',
     filterSelected : '#selected',
+    panelButtons : false
 });
 
 new api.view.PeriodSelectionView({
