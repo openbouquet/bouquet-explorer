@@ -109,11 +109,11 @@ mainModel.on("change:selectedMetric", function() {
 });
 
 tableAnalysis.on("change", function() {
-    if (this.isDone()) {
+    if (tableAnalysis.get("status") == "DONE") {
         $("button.refresh-analysis .text").html("Preview up to date");
         $("button.refresh-analysis .glyphicon").hide();
         $("button.refresh-analysis .glyphicon").removeClass("loading");
-    } else {
+    } else if (tableAnalysis.get("status") == "RUNNING") {
         $("button.refresh-analysis .glyphicon").show();
         $("button.refresh-analysis .text").html("Refreshing...");
         $("button.refresh-analysis .glyphicon").addClass("loading");
@@ -139,8 +139,8 @@ mainModel.on("change:analysisRefreshNeeded", function() {
 $("button.refresh-analysis").click(function(event) {
     event.preventDefault();
     me.mainModel.set("refreshButtonPressed", true);
-    compute(tableAnalysis);
     me.mainModel.set("analysisRefreshNeeded", false);
+    compute(tableAnalysis);
 });
 
 // Views
@@ -184,6 +184,7 @@ new api.view.CategoricalView({
     el : '#selection',
     filterPanel : '#filters',
     filterSelected : '#selected',
+    panelButtons : false
 });
 
 new api.view.PeriodSelectionView({
@@ -248,6 +249,7 @@ var refreshExportAnalysis = function() {
         a.set({"limit": null}, {"silent" : silent});
         changed = changed || a.hasChanged();
         a.setSelection(api.model.filters.get("selection"), silent);
+        changed = changed || a.hasChanged();
         // only trigger change if the analysis has changed
         if (changed) {    
             a.trigger("change");
@@ -277,8 +279,8 @@ var refreshTableAnalysis = function() {
         changed = changed || a.hasChanged();
         a.set({"limit": 1000}, {"silent" : silent});
         changed = changed || a.hasChanged();
-
         a.setSelection(api.model.filters.get("selection"), silent);
+        changed = changed || a.hasChanged();
         // only trigger change if the analysis has changed
         if (changed) {
             me.mainModel.set("analysisRefreshNeeded", true);
@@ -338,7 +340,8 @@ var saveState = function() {
 
 api.model.filters.on('change:selection', function() {
     me.saveState();
-    me.mainModel.set("analysisRefreshNeeded", true);
+    refreshExportAnalysis();
+    refreshTableAnalysis();
 });
 
 var updateFilters = function(filters) {
@@ -372,6 +375,8 @@ api.model.status.on('change:domain', function(model) {
         filters.set("id", {
             "projectId": model.get("domain").projectId
         });
+        filters.set("engineVersion", "2");
+
         filters.setDomainIds([model.get("domain")]);
         var state = api.model.status.get("state");
         var defaultFilters;
