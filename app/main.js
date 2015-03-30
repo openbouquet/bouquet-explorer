@@ -27,6 +27,13 @@ new api.view.DomainSelector({
     el : '#domain'
 });
 
+new api.view.ShortcutsAdminView({
+    el : '#shortcuts',
+    onSave : function() {
+        $('#shortcutsModal').modal('hide');
+    }
+});
+
 /*
  * Controllers
  */
@@ -514,6 +521,10 @@ $("#app #menu #user-management").click(function() {
           
       });
    });
+});
+
+$("#app #menu #shortcut-management").click(function() {
+    $('#shortcutsModal').modal('show');
 });
 
 // Trigger Sliding Nav
