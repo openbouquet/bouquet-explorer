@@ -28,7 +28,10 @@ new api.view.DomainSelector({
 });
 
 new api.view.ShortcutsAdminView({
-    el : '#shortcuts'
+    el : '#shortcuts',
+    onSave : function() {
+        $('#shortcutsModal').modal('hide');
+    }
 });
 
 /*
@@ -187,7 +190,7 @@ var tableView = new squid_api.view.DataTableView ({
 new api.view.CategoricalView({
     el : '#selection',
     filterPanel : '#filters',
-    filterSelected : '#selected',
+    filterSelected : '#selected'
 });
 
 new api.view.PeriodSelectionView({
@@ -517,6 +520,10 @@ $("#app #menu #user-management").click(function() {
           
       });
    });
+});
+
+$("#app #menu #shortcut-management").click(function() {
+    $('#shortcutsModal').modal('show');
 });
 
 // Trigger Sliding Nav

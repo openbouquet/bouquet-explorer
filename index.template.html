@@ -36,10 +36,6 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                    	<!-- Button trigger shortcuts -->
-						<button type="button" class="btn btn-primary btn-lg" data-toggle="collapse" data-target="#shortcutsModal">
-						  Shortcuts
-						</button>
                         <div id="login"></div>
                     </li>
                 </ul>
@@ -48,8 +44,9 @@
     </div>
     <nav id="menu" class="panel" role="navigation">
         <ul>
-            <li><a id="export-app"><i class="user fa fa-download"></i><span class="nav-item">export</span></a></li>
-            <li><a id="user-management"><i class="user fa fa-users"></i><span class="nav-item">users</span></a></li>
+            <li><a id="export-app"><i class="user fa fa-download"></i><span class="nav-item">Export</span></a></li>
+            <li><a id="user-management"><i class="user fa fa-users"></i><span class="nav-item">Users</span></a></li>
+            <li><a id="shortcut-management"><i class="tag fa fa-tag"></i><span class="nav-item">Shortcuts</span></a></li>
         </ul>
     </nav>
     <div id="loading" class="push">
@@ -71,12 +68,12 @@
 
 
 	<!-- Shortcuts Modal -->
-	<div class="collapse" id="shortcutsModal">
+	<div class="modal" id="shortcutsModal">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
 	      <div class="modal-header">
-	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	        <h4 class="modal-title" id="myModalLabel">Shortcuts</h4>
+	        <button type="button" class="close" data-dismiss="modal" ><span>&times;</span></button>
+	        <h4 class="modal-title" id="myModalLabel">Create/Update a Shortcut</h4>
 	      </div>
 	      <div class="modal-body">
 	        <div id="shortcuts"></div>
