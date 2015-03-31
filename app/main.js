@@ -224,11 +224,6 @@ var exportView = new api.view.DataExport({
     displayInAccordion : true,
 });
 
-new api.view.OrderByView({
-    el : '#orderby',
-    model : mainModel
-});
-
 // Controllers
 
 var compute = function(analysis) {
