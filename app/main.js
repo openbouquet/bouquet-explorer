@@ -346,7 +346,18 @@ api.model.filters.on('change:selection', function() {
     refreshTableAnalysis();
 });
 
-var updateFilters = function(filters) {
+var updateFilters = function(filters, timeFacet) {
+    if (timeFacet && (timeFacet.selectedItems.length === 0)) {
+        // set date range to -30 days
+        var endDate = moment.utc(timeFacet.items[0].upperBound);
+        var startDate = moment.utc(timeFacet.items[0].upperBound);
+        startDate = moment(startDate).subtract(30, 'days');
+        timeFacet.selectedItems = [ {
+                    "type" : "i",
+                    "lowerBound" : startDate.format("YYYY-MM-DDTHH:mm:ss.SSSZZ"),
+                    "upperBound" : timeFacet.items[0].upperBound
+                }];
+    }
     // apply to main filters
     api.model.filters.set("id", filters.get("id"));
     api.controller.facetjob.compute(api.model.filters, filters.get("selection"));
@@ -405,27 +416,20 @@ api.model.status.on('change:domain', function(model) {
                     }
                 }
             }
-            if (timeFacet && (timeFacet.done === false)) {
-                // retrieve time facet's members
-                $.when(api.controller.facetjob.getFacetMembers(filters, timeFacet.id))
-                .always(function() {
-                    console.log("selected time dimension = "+timeFacet.dimension.name);
-                    if (timeFacet.selectedItems.length === 0) {
-                        // set date range to -30 days
-                        var endDate = moment.utc(timeFacet.items[0].upperBound);
-                        var startDate = moment.utc(timeFacet.items[0].upperBound);
-                        startDate = moment(startDate).subtract(30, 'days');
-                        timeFacet.selectedItems = [ {
-                                    "type" : "i",
-                                    "lowerBound" : startDate.format("YYYY-MM-DDTHH:mm:ss.SSSZZ"),
-                                    "upperBound" : timeFacet.items[0].upperBound
-                                }];
-                    }
-                    me.updateFilters(filters);
-                });
+            if (timeFacet) {
+                if (timeFacet.done === false) {
+                    // retrieve time facet's members
+                    $.when(api.controller.facetjob.getFacetMembers(filters, timeFacet.id))
+                    .always(function() {
+                            console.log("selected time dimension = "+timeFacet.dimension.name);
+                            me.updateFilters(filters, timeFacet);
+                        });
+                } else {
+                    me.updateFilters(filters, timeFacet);
+                }
             } else {
                 console.log("WARN: cannot use any time dimension to use for datepicker");
-                me.updateFilters(filters);
+                me.updateFilters(filters, null);
             }
 
             // update the analyses
