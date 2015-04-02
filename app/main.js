@@ -79,37 +79,9 @@ var mainModel = new Backbone.Model({
     "orderByDirection" : "DESC",
 });
 
-mainModel.on("change:selectedDimension", function() {
-    me.saveState();
-    refreshExportAnalysis();
-    refreshTableAnalysis();
-});
+config = api.model.status.get("state");
 
-mainModel.on("change:chosenDimensions", function() {
-    me.saveState();
-    refreshExportAnalysis();
-    refreshTableAnalysis();
-});
-
-mainModel.on("change:chosenMetrics", function() {
-    me.saveState();
-    refreshExportAnalysis();
-    refreshTableAnalysis();
-});
-
-mainModel.on("change:orderByDirection", function() {
-    me.saveState();
-    refreshExportAnalysis();
-    refreshTableAnalysis();
-});
-
-mainModel.on("change:limit", function() {
-    me.saveState();
-    refreshExportAnalysis();
-    refreshTableAnalysis();
-});
-
-mainModel.on("change:selectedMetric", function() {
+config.on("change", function() {
     me.saveState();
     refreshExportAnalysis();
     refreshTableAnalysis();
@@ -159,18 +131,18 @@ userAdminView = new api.view.UsersAdminView({
 
 new api.view.DimensionSelector({
     el : '#origin',
-    model : mainModel,
+    model : config,
     dimensionIndex: null
 });
 
 new api.view.OrderByView({
     el : '#orderby',
-    model : mainModel
+    model : config
 });
 
 new api.view.DimensionView({
     el : '#dimension',
-    model : mainModel,
+    model : config,
     selectDimension : false,
 });
 
@@ -206,13 +178,13 @@ new api.view.PeriodSelectionView({
 
 new api.view.MetricSelectorView({
     el : '#metric',
-    model : mainModel,
+    model : config,
     metricIndex: null
 });
 
 new api.view.MetricView({
     el : '#total',
-    model : mainModel,
+    model : config,
     displayMetricValue : false,
     selectMetric : false,
 });
@@ -242,9 +214,9 @@ var refreshExportAnalysis = function() {
     if (a) {
         var silent = true;
         var changed = false;
-        a.setFacets(mainModel.get("chosenDimensions"), silent);
+        a.setFacets(config.get("chosenDimensions"), silent);
         changed = changed || a.hasChanged();
-        a.setMetricIds(mainModel.get("chosenMetrics"), silent);
+        a.setMetricIds(config.get("chosenMetrics"), silent);
         changed = changed || a.hasChanged();
         a.set({"orderBy" : null}, {"silent" : silent});
         changed = changed || a.hasChanged();
@@ -261,8 +233,8 @@ var refreshExportAnalysis = function() {
 
 var refreshTableAnalysis = function() {
     var a = mainModel.get("tableAnalysis");
-    var chosenDimensions = mainModel.get("chosenDimensions");
-    var chosenMetrics = mainModel.get("chosenMetrics");
+    var chosenDimensions = config.get("chosenDimensions");
+    var chosenMetrics = config.get("chosenMetrics");
     if ((!chosenDimensions || chosenDimensions.length === 0) && (!chosenMetrics || chosenMetrics.length === 0)) {
         $("button.refresh-analysis").prop('disabled', true);
     } else {
@@ -277,7 +249,7 @@ var refreshTableAnalysis = function() {
         changed = changed || a.hasChanged();
         a.setMetricIds(chosenMetrics, silent);
         changed = changed || a.hasChanged();
-        a.set({"orderBy" : [{"col" : getOrderByIndex() , "direction" : mainModel.get("orderByDirection")}]}, {"silent" : silent});
+        a.set({"orderBy" : [{"col" : getOrderByIndex() , "direction" : config.get("orderByDirection")}]}, {"silent" : silent});
         changed = changed || a.hasChanged();
         a.set({"limit": 1000}, {"silent" : silent});
         changed = changed || a.hasChanged();
@@ -292,10 +264,10 @@ var refreshTableAnalysis = function() {
 
 var getOrderByIndex = function() {
     var index;
-    if (mainModel.get("chosenDimensions")) {
-        index = mainModel.get("chosenDimensions").length;
-        var selectedMetric = mainModel.get("selectedMetric");
-        var metrics = mainModel.get("chosenMetrics");
+    if (config.get("chosenDimensions")) {
+        index = config.get("chosenDimensions").length;
+        var selectedMetric = config.get("selectedMetric");
+        var metrics = config.get("chosenMetrics");
         if (metrics) {
             for (i=0; i<metrics.length; i++) {
                 if (metrics[i] === selectedMetric) {
@@ -308,16 +280,6 @@ var getOrderByIndex = function() {
     }
     return index;
 };
-
-mainModel.on("change:chosenDimensions", function(chosen) {
-    if (mainModel.get("chosenDimensions").length === 0) {
-        mainModel.set("selectedDimension", null);
-    }
-});
-
-api.model.status.on('change:domain', function(model) {
-    saveState();
-});
 
 api.model.status.on('change:project', function(model) {
     if (model.get("project")) {
@@ -339,15 +301,6 @@ api.model.status.on('change:project', function(model) {
 });
 
 var saveState = function() {
-    var config = [];
-    api.model.status.get("state").set({"project" : api.model.status.get("project")});
-    api.model.status.get("state").set({"domain" : api.model.status.get("domain")});
-    api.model.status.get("state").set({"chosenDimensions" : me.mainModel.get("chosenDimensions")});
-    api.model.status.get("state").set({"selectedDimensions" : me.mainModel.get("selectedDimensions")});
-    api.model.status.get("state").set({"chosenMetrics" : me.mainModel.get("chosenMetrics")});
-    api.model.status.get("state").set({"selectedMetric" : me.mainModel.get("selectedMetric")});
-    api.model.status.get("state").set({"limit" : me.mainModel.get("limit")});
-    api.model.status.get("state").set({"orderByDirection" : me.mainModel.get("orderByDirection")});
     api.saveState();
 };
 
@@ -394,7 +347,7 @@ api.model.status.get("state").on('change:domain', function(model) {
         filters.setDomainIds([domainPk]);
         var config = api.model.status.get("state");
         var defaultFilters;
-        if (config.get("domain") && (api.model.status.get("domain").domainId == domainId)) {
+        if (config.get("domain")) {
             defaultFilters = config.get("selection");
         } else {
             defaultFilters = null;
@@ -452,26 +405,6 @@ api.model.status.get("state").on('change:domain', function(model) {
                     for (var dmIdx=0; (dmIdx<domainMetrics.length && (dmIdx<5)); dmIdx++) {
                         totalMetricIds.push(domainMetrics[dmIdx].oid);
                     }
-                }
-            }
-
-            // manage app state
-            if ((!config.get("domain")) || (config.get("domain").domainId != domainId)) {
-                // reset the settings
-                mainModel.set({"chosenDimensions": []});
-                mainModel.set({"selectedDimension": null});
-                mainModel.set({"chosenMetrics": []});
-                mainModel.set({"selectedMetric": null});
-            } else {
-                if (config.get("domain").domainId == domainId) {
-                    mainModel.set({
-                        "chosenDimensions" : (config.get("chosenDimensions") || mainModel.get("chosenDimensions")),
-                        "selectedDimension" :  (config.get("selectedDimension") ||  mainModel.get("selectedDimension")),
-                        "chosenMetrics" : (config.get("chosenMetrics") || mainModel.get("chosenMetrics")),
-                        "selectedMetric" : (config.get("selectedMetric") || mainModel.get("selectedMetric")),
-                        "limit" : (config.get("limit") || mainModel.get("limit")),
-                        "orderByDirection" : (config.get("orderByDirection") || mainModel.get("orderByDirection"))
-                    });
                 }
             }
         });
