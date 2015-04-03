@@ -4,8 +4,14 @@ var me = this;
 
 api.setup({
     "clientId" : "dashboard",
-    "filtersDefaultEvents" : false
+    "filtersDefaultEvents" : false,
+    "config" : {
+        "orderByDirection" : "DESC",
+        "limit" : 1000
+    }
 });
+
+config = api.model.status.get("state");
 
 new api.view.LoginView({
     el : '#login',
@@ -20,11 +26,23 @@ var projects = new api.model.ProjectCollection();
 
 new api.view.ProjectSelector({
     el : '#project',
-    model : projects
+    model : config,
+    projects : projects
 });
 
 new api.view.DomainSelector({
-    el : '#domain'
+    el : '#domain',
+    model : config,
+    onChangeHandler : function(event) {
+        var selectedOid = event.target.value;
+        config.set({
+            "domain" : selectedOid,
+            "chosenDimensions" : null,
+            "selectedDimension" : null,
+            "chosenMetrics" : null,
+            "selectedMetric" : null
+        });
+    }
 });
 
 new api.view.ShortcutsAdminView({
@@ -70,16 +88,8 @@ var mainModel = new Backbone.Model({
     "tableAnalysis" : tableAnalysis,
     "exportAnalysis" : exportAnalysis,
     "analysisRefreshNeeded" : false,
-    "refreshButtonPressed" : false,
-    "chosenDimensions" : null,
-    "selectedDimension" :  null,
-    "chosenMetrics" : null,
-    "selectedMetric" : null,
-    "limit" : null,
-    "orderByDirection" : "DESC",
+    "refreshButtonPressed" : false
 });
-
-config = api.model.status.get("state");
 
 config.on("change", function() {
     me.saveState();
@@ -150,6 +160,7 @@ var tableView = new squid_api.view.DataTableView ({
     el : '#tableView',
     model : tableAnalysis,
     mainModel : mainModel,
+    config : config,
     selectMetricHeader : false,
     searching : false,
     noDataMessage : " ",
@@ -211,7 +222,7 @@ var compute = function(analysis) {
 
 var refreshExportAnalysis = function() {
     var a = mainModel.get("exportAnalysis");
-    if (a) {
+    if (a.get("domains")) {
         var silent = true;
         var changed = false;
         a.setFacets(config.get("chosenDimensions"), silent);
@@ -240,7 +251,7 @@ var refreshTableAnalysis = function() {
     } else {
         $("button.refresh-analysis").prop('disabled', false);
     }
-    if (a) {
+    if (a.get("domains")) {
         // apply the settings depending on the type of analysis
         var silent = true;
         var changed = false;
@@ -251,7 +262,7 @@ var refreshTableAnalysis = function() {
         changed = changed || a.hasChanged();
         a.set({"orderBy" : [{"col" : getOrderByIndex() , "direction" : config.get("orderByDirection")}]}, {"silent" : silent});
         changed = changed || a.hasChanged();
-        a.set({"limit": 1000}, {"silent" : silent});
+        a.set({"limit": config.get("limit")}, {"silent" : silent});
         changed = changed || a.hasChanged();
         a.setSelection(api.model.filters.get("selection"), silent);
         changed = changed || a.hasChanged();
@@ -285,7 +296,6 @@ api.model.status.on('change:project', function(model) {
     if (model.get("project")) {
         preAppState.selectProject = true;
         $("#selectProject").addClass("hidden");
-        $("#selectDomain").removeClass("hidden");
         // Make sure loading icon doesn't appear
         $("button.refresh-analysis .glyphicon").removeClass("loading");
         var projectId = model.get("project").projectId;
@@ -317,8 +327,13 @@ var updateFilters = function(filters) {
 };
 
 api.model.status.get("state").on('change:domain', function(model) {
-    var domainPk = model.get("domain");
-    if (domainPk) {
+    var domainId = model.get("domain");
+    var projectId = model.get("project");
+    if (projectId && domainId) {
+        var domainPk = {
+                "projectId" : projectId,
+                "domainId" : domainId
+        };
         setTimeout(function() {
         if ($(".noDataInTable").length > 0) {
             $(".noDataInTable").typed({
@@ -330,17 +345,12 @@ api.model.status.get("state").on('change:domain', function(model) {
         preAppState.selectDomain = true;
         $("#main").removeClass("hidden");
         $("#selectDomain").addClass("hidden");
-        var domainId = domainPk.domainId;
         api.model.filters.setDomainIds([domainPk]);
-
-        // Set Table Analysis Limit
-        mainModel.get("tableAnalysis").set({"limit" : 1000}, {silent : true});
-        mainModel.get("tableAnalysis").set({"direction" : "DESC"}, {silent : true});
        
         // launch the default filters computation
         var filters = new api.model.FiltersJob();
         filters.set("id", {
-            "projectId": domainPk.projectId
+            "projectId": model.get("project")
         });
         filters.set("engineVersion", "2");
 
@@ -390,13 +400,13 @@ api.model.status.get("state").on('change:domain', function(model) {
             }
 
             // update the analyses
-            tableAnalysis.setProjectId(domainPk.projectId);
+            tableAnalysis.setProjectId(projectId);
             tableAnalysis.setDomainIds([domainPk]);
-            exportAnalysis.setProjectId(domainPk.projectId);
+            exportAnalysis.setProjectId(projectId);
             exportAnalysis.setDomainIds([domainPk]);
             
             // update the metrics
-            var domain = squid_api.utils.find(squid_api.model.project.get("domains"), "oid", domainId);
+            var domain = squid_api.utils.find(squid_api.model.project.get("domains"), "oid", domainPk.domainId);
             if (domain) {
                 var domainMetrics = domain.metrics;
                 if (domainMetrics && (domainMetrics.length>0)) {
