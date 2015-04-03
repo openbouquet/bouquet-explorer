@@ -27,6 +27,13 @@ new api.view.DomainSelector({
     el : '#domain'
 });
 
+new api.view.ShortcutsAdminView({
+    el : '#shortcuts',
+    onSave : function() {
+        $('#shortcutsModal').modal('hide');
+    }
+});
+
 /*
  * Controllers
  */
@@ -217,11 +224,6 @@ var exportView = new api.view.DataExport({
     displayInAccordion : true,
 });
 
-new api.view.OrderByView({
-    el : '#orderby',
-    model : mainModel
-});
-
 // Controllers
 
 var compute = function(analysis) {
@@ -344,7 +346,18 @@ api.model.filters.on('change:selection', function() {
     refreshTableAnalysis();
 });
 
-var updateFilters = function(filters) {
+var updateFilters = function(filters, timeFacet) {
+    if (timeFacet && (timeFacet.selectedItems.length === 0)) {
+        // set date range to -30 days
+        var endDate = moment.utc(timeFacet.items[0].upperBound);
+        var startDate = moment.utc(timeFacet.items[0].upperBound);
+        startDate = moment(startDate).subtract(30, 'days');
+        timeFacet.selectedItems = [ {
+                    "type" : "i",
+                    "lowerBound" : startDate.format("YYYY-MM-DDTHH:mm:ss.SSSZZ"),
+                    "upperBound" : timeFacet.items[0].upperBound
+                }];
+    }
     // apply to main filters
     api.model.filters.set("id", filters.get("id"));
     api.controller.facetjob.compute(api.model.filters, filters.get("selection"));
@@ -379,9 +392,13 @@ api.model.status.on('change:domain', function(model) {
 
         filters.setDomainIds([model.get("domain")]);
         var state = api.model.status.get("state");
+        var config;
+        if (state) {
+            config = state.get("config");
+        }
         var defaultFilters;
-        if (state && (state.domain.domainId == domainId)) {
-            defaultFilters = state.selection;
+        if (config && (config.domain.domainId == domainId)) {
+            defaultFilters = config.selection;
         } else {
             defaultFilters = null;
         }
@@ -399,27 +416,20 @@ api.model.status.on('change:domain', function(model) {
                     }
                 }
             }
-            if (timeFacet && (timeFacet.done === false)) {
-                // retrieve time facet's members
-                $.when(api.controller.facetjob.getFacetMembers(filters, timeFacet.id))
-                .always(function() {
-                    console.log("selected time dimension = "+timeFacet.dimension.name);
-                    if (timeFacet.selectedItems.length === 0) {
-                        // set date range to -30 days
-                        var endDate = moment.utc(timeFacet.items[0].upperBound);
-                        var startDate = moment.utc(timeFacet.items[0].upperBound);
-                        startDate = moment(startDate).subtract(30, 'days');
-                        timeFacet.selectedItems = [ {
-                                    "type" : "i",
-                                    "lowerBound" : startDate.format("YYYY-MM-DDTHH:mm:ss.SSSZZ"),
-                                    "upperBound" : timeFacet.items[0].upperBound
-                                }];
-                    }
-                    me.updateFilters(filters);
-                });
+            if (timeFacet) {
+                if (timeFacet.done === false) {
+                    // retrieve time facet's members
+                    $.when(api.controller.facetjob.getFacetMembers(filters, timeFacet.id))
+                    .always(function() {
+                            console.log("selected time dimension = "+timeFacet.dimension.name);
+                            me.updateFilters(filters, timeFacet);
+                        });
+                } else {
+                    me.updateFilters(filters, timeFacet);
+                }
             } else {
                 console.log("WARN: cannot use any time dimension to use for datepicker");
-                me.updateFilters(filters);
+                me.updateFilters(filters, null);
             }
 
             // update the analyses
@@ -440,21 +450,21 @@ api.model.status.on('change:domain', function(model) {
             }
 
             // manage app state
-            if ((!state) || (state.domain.domainId != domainId)) {
+            if ((!config) || (config.domain.domainId != domainId)) {
                 // reset the settings
                 mainModel.set({"chosenDimensions": []});
                 mainModel.set({"selectedDimension": null});
                 mainModel.set({"chosenMetrics": []});
                 mainModel.set({"selectedMetric": null});
             } else {
-                if (state.domain.domainId == domainId) {
+                if (config.domain.domainId == domainId) {
                     mainModel.set({
-                        "chosenDimensions" : (state.chosenDimensions || mainModel.get("chosenDimensions")),
-                        "selectedDimension" :  (state.selectedDimension ||  mainModel.get("selectedDimension")),
-                        "chosenMetrics" : (state.chosenMetrics || mainModel.get("chosenMetrics")),
-                        "selectedMetric" : (state.selectedMetric || mainModel.get("selectedMetric")),
-                        "limit" : (state.limit || mainModel.get("limit")),
-                        "orderByDirection" : (state.orderByDirection || mainModel.get("orderByDirection"))
+                        "chosenDimensions" : (config.chosenDimensions || mainModel.get("chosenDimensions")),
+                        "selectedDimension" :  (config.selectedDimension ||  mainModel.get("selectedDimension")),
+                        "chosenMetrics" : (config.chosenMetrics || mainModel.get("chosenMetrics")),
+                        "selectedMetric" : (config.selectedMetric || mainModel.get("selectedMetric")),
+                        "limit" : (config.limit || mainModel.get("limit")),
+                        "orderByDirection" : (config.orderByDirection || mainModel.get("orderByDirection"))
                     });
                 }
             }
@@ -510,6 +520,10 @@ $("#app #menu #user-management").click(function() {
           
       });
    });
+});
+
+$("#app #menu #shortcut-management").click(function() {
+    $('#shortcutsModal').modal('show');
 });
 
 // Trigger Sliding Nav
