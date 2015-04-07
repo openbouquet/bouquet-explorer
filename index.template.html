@@ -54,19 +54,7 @@
     		<span class="splash-message">Application is loading ...</span>
     	</div>
     </div>
-    <div class="hidden push" id="selectProject">
-    	<div class="col-md-12 splash-container">
-    		<span class="splash-message">Please select your project</span>
-    	</div>
-    </div>
-    <div class="hidden push" id="selectDomain">
-    	<div class="col-md-12 splash-container">
-    		<div class="splash-message">Please select your domain</div>
-    	</div>
-    </div>
-    
-
-
+   
 	<!-- Shortcuts Modal -->
 	<div class="modal" id="shortcutsModal">
 	  <div class="modal-dialog">
@@ -92,7 +80,18 @@
     		<div id="adminDisplay"></div>
     	</div>
     </div>
-    <div class="hidden push" id="main">
+    <div class="hidden push" id="app-export">
+        <div class="hidden push" id="selectProject">
+	    	<div class="col-md-12 splash-container">
+	    		<span class="splash-message">Please select your project</span>
+	    	</div>
+	    </div>
+	    <div class="hidden push" id="selectDomain">
+	    	<div class="col-md-12 splash-container">
+	    		<div class="splash-message">Please select your domain</div>
+	    	</div>
+	    </div>
+	    <div class="hidden push" id="main">
 	    <div class="container configuration">
 	    	<div class="row">
 	    		<div id="date"></div>
@@ -133,21 +132,22 @@
                 <hr class="flat">
                 <div class="collapse" id="export-content"></div>
             </div>
-	    </div>
-	   <div class="push container main-container">
-            <div class="col-md-5 orderby-col">
-                <div id="orderby"></div>
-            </div>
-            <div class="col-md-2">
-            </div>
-            <div class="col-sm-4 col-sm-4 col-md-3">
-                <button type="button" class="btn refresh-analysis first-view"><span class="text">Refresh Preview</span><span class="glyphicon glyphicon-refresh"></span></button>
-            </div>
-            <div class="col-sm-3 col-md-2">
-                <div id="export"></div>
-            </div>
-            <div id="tableView">Refresh Table</div>
-	   </div>
+		</div>
+		   <div class="push container main-container">
+	            <div class="col-md-5 orderby-col">
+	                <div id="orderby"></div>
+	            </div>
+	            <div class="col-md-2">
+	            </div>
+	            <div class="col-sm-4 col-sm-4 col-md-3">
+	                <button type="button" class="btn refresh-analysis first-view"><span class="text">Refresh Preview</span><span class="glyphicon glyphicon-refresh"></span></button>
+	            </div>
+	            <div class="col-sm-3 col-md-2">
+	                <div id="export"></div>
+	            </div>
+	            <div id="tableView">Refresh Table</div>
+		   </div>
+		</div>
 	</div>
 
 	<script src="main.js"></script>

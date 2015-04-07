@@ -27,14 +27,21 @@ var projects = new api.model.ProjectCollection();
 new api.view.ProjectSelector({
     el : '#project',
     model : config,
-    projects : projects
+    projects : projects,
+    onChangeHandler : function(event) {
+        var selectedOid = event.target.value || null;
+        config.set({
+            "project" : selectedOid,
+            "domain" : null
+        });
+    }
 });
 
 new api.view.DomainSelector({
     el : '#domain',
     model : config,
     onChangeHandler : function(event) {
-        var selectedOid = event.target.value;
+        var selectedOid = event.target.value || null;
         config.set({
             "domain" : selectedOid,
             "chosenDimensions" : null,
@@ -66,12 +73,11 @@ api.model.login.on('change:login', function(model) {
         projects.fetch({
             success : function(model, response) {
                 $("#loading").addClass("hidden");
-                $("#selectProject").removeClass("hidden");
+                $("#app-export").removeClass("hidden");
                 console.log(model);
             },
             error : function(model, response) {
                 $("#loading").addClass("hidden");
-                $("#selectProject").addClass("hidden");
                 console.log(model);
             }
         });
@@ -98,21 +104,21 @@ config.on("change", function() {
 });
 
 tableAnalysis.on("change", function() {
-    if (tableAnalysis.get("status") == "DONE") {
-        $("button.refresh-analysis .text").html("Preview up to date");
-        $("button.refresh-analysis .glyphicon").hide();
-        $("button.refresh-analysis .glyphicon").removeClass("loading");
-    } else if (tableAnalysis.get("status") == "RUNNING") {
-        $("button.refresh-analysis .glyphicon").show();
-        $("button.refresh-analysis .text").html("Refreshing...");
-        $("button.refresh-analysis .glyphicon").addClass("loading");
+    if (!me.mainModel.get("analysisRefreshNeeded")) {
+        if (tableAnalysis.get("status") == "DONE") {
+            $("button.refresh-analysis .text").html("Preview up to date");
+            $("button.refresh-analysis .glyphicon").hide();
+            $("button.refresh-analysis .glyphicon").removeClass("loading");
+        } else if (tableAnalysis.get("status") == "RUNNING") {
+            $("button.refresh-analysis .glyphicon").show();
+            $("button.refresh-analysis .text").html("Refreshing...");
+            $("button.refresh-analysis .glyphicon").addClass("loading");
+        }
     }
 });
 
 mainModel.on("change:analysisRefreshNeeded", function() {
-    var analysisRefreshNeeded = me.mainModel.get("analysisRefreshNeeded");
-    // Bind click event and tell the model a refresh is needed
-    if (analysisRefreshNeeded) {
+    if (me.mainModel.get("analysisRefreshNeeded")) {
         // Dom manipulations
         $("button.refresh-analysis .glyphicon").show();
         $("button.refresh-analysis .glyphicon").removeClass("loading");
@@ -252,10 +258,8 @@ var refreshTableAnalysis = function() {
         $("button.refresh-analysis").prop('disabled', false);
     }
     if (a.get("domains")) {
-        // apply the settings depending on the type of analysis
         var silent = true;
         var changed = false;
-        
         a.setFacets(chosenDimensions, silent);
         changed = changed || a.hasChanged();
         a.setMetricIds(chosenMetrics, silent);
@@ -292,9 +296,8 @@ var getOrderByIndex = function() {
     return index;
 };
 
-api.model.status.on('change:project', function(model) {
+config.on('change:project', function(model) {
     if (model.get("project")) {
-        preAppState.selectProject = true;
         $("#selectProject").addClass("hidden");
         // Make sure loading icon doesn't appear
         $("button.refresh-analysis .glyphicon").removeClass("loading");
@@ -303,6 +306,7 @@ api.model.status.on('change:project', function(model) {
         exportAnalysis.setProjectId(projectId);
     } else {
         $("#selectProject").removeClass("hidden");
+        $("#selectDomain").addClass("hidden");
         // Make sure loading icon doesn't appear
         $("button.refresh-analysis .glyphicon").removeClass("loading");
         tableAnalysis.setProjectId(null);
@@ -326,10 +330,18 @@ var updateFilters = function(filters) {
     api.controller.facetjob.compute(api.model.filters, filters.get("selection"));
 };
 
-api.model.status.get("state").on('change:domain', function(model) {
+config.on('change:domain', function(model) {
     var domainId = model.get("domain");
     var projectId = model.get("project");
+    
+    if (model.get("domain")) {
+        $("#selectDomain").addClass("hidden");
+    } else {
+        $("#selectDomain").removeClass("hidden");
+    }
+    
     if (projectId && domainId) {
+        $('#main').removeClass("hidden");
         var domainPk = {
                 "projectId" : projectId,
                 "domainId" : domainId
@@ -342,9 +354,7 @@ api.model.status.get("state").on('change:domain', function(model) {
             });
         }
         }, 2000);
-        preAppState.selectDomain = true;
-        $("#main").removeClass("hidden");
-        $("#selectDomain").addClass("hidden");
+
         api.model.filters.setDomainIds([domainPk]);
        
         // launch the default filters computation
@@ -355,7 +365,6 @@ api.model.status.get("state").on('change:domain', function(model) {
         filters.set("engineVersion", "2");
 
         filters.setDomainIds([domainPk]);
-        var config = api.model.status.get("state");
         var defaultFilters;
         if (config.get("domain")) {
             defaultFilters = config.get("selection");
@@ -425,8 +434,7 @@ api.model.status.get("state").on('change:domain', function(model) {
         }, 1000);
        
     } else {
-        $("#selectDomain").removeClass("hidden");
-        $("#main").addClass("hidden");
+        $('#main').addClass("hidden");
         tableAnalysis.setDomainIds(null);
         exportAnalysis.setDomainIds(null);
     }
@@ -437,38 +445,18 @@ api.model.filters.on('change:userSelection', function(filters) {
     squid_api.controller.facetjob.compute(filters, filters.get("userSelection"));
 });
 
-// Allow admin panel to be accessed when project / domain have not been chosen
-var preAppState = {};
-preAppState.selectProject = false;
-preAppState.selectDomain = false;
+// Menu State management
 
 $("#app #menu #export-app").click(function() {
-    if (! preAppState.selectProject) {
-        $("#selectProject").show();
-    } else if (! preAppState.selectDomain) {
-        $("#selectDomain").show();
-    }
-    $('#admin').fadeOut(200, function() {
-        userAdminView.remove();
-      $('#main').fadeIn(200, function () {
-          
-      });
-   });
+    $('#admin').addClass("hidden");
+    userAdminView.remove();
+    $('#app-export').removeClass("hidden");
 });
 
 $("#app #menu #user-management").click(function() {
-    if (! preAppState.selectProject) {
-        $("#selectProject").hide();
-    } else if (! preAppState.selectDomain) {
-        $("#selectDomain").hide();
-    }
     userAdminView.fetchModels();
     $('#admin').removeClass("hidden");
-    $('#main').fadeOut(200, function() {
-      $('#admin').fadeIn(200, function () {
-          
-      });
-   });
+    $('#app-export').addClass("hidden");
 });
 
 $("#app #menu #shortcut-management").click(function() {
@@ -477,9 +465,6 @@ $("#app #menu #shortcut-management").click(function() {
 
 // Trigger Sliding Nav
 $('.menu-link').bigSlide();
-
-// Hide Main and unhide domain is selected
-$('#main').hide();
 
 /*
 * Start the App
