@@ -11,7 +11,7 @@ api.setup({
     }
 });
 
-config = api.model.status.get("state");
+config = api.model.config;
 
 new api.view.LoginView({
     el : '#login',
