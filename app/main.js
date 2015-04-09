@@ -419,7 +419,7 @@ config.on('change:domain', function(model) {
             exportAnalysis.setDomainIds([domainPk]);
             
             // update the metrics
-            var domain = squid_api.utils.find(squid_api.model.project.get("domains"), "oid", domainPk.domainId);
+            var domain = squid_api.utils.find(squid_api.model.project.get("domains"), "oid", domainPk.domainId, "Domain");
             if (domain) {
                 var domainMetrics = domain.metrics;
                 if (domainMetrics && (domainMetrics.length>0)) {
