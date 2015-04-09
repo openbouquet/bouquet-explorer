@@ -11,29 +11,11 @@ $navBarAndButtonColour: #e7e7e7;
     color: $primary-color;
     -webkit-font-smoothing: antialiased;
 
-    .typed-cursor{
-        display: none;
-    }
-
-    // Reduce spacing between each Horizontal Rule
-    hr {
-        margin: 0px 0px 15px 0px;
-        
-        &.flat {
-            margin: 0px;
-            padding: 0px;
-        }
-    }
-
     #admin {
         position: relative;
         #adminDisplay {
             margin-top: 20px;
         }
-    }
-
-    .squid-api-data-widgets-displaytype-selector {
-        display: none;
     }
 
     .navbar {
@@ -138,566 +120,547 @@ $navBarAndButtonColour: #e7e7e7;
             font-size: 50px;
         }
     }
-    #main {
-        position: relative;
-        .configuration {
-            #filters {
-                dt {
-                    margin-top: 8px;
-                }
-            }
-            .squid_api_filters_categorical_filter_panel  {
-                #filter-selection {
-                    .btn-group {
-                        button {
-                            text-shadow: 0 1px 2px rgba(0,0,0,0.25);
-                            background: #3498db;
-                            border-bottom: 2px solid #2980b9;
-                            cursor: pointer;
-                            -webkit-box-shadow: inset 0 -2px #2980b9;
-                            box-shadow: inset 0 -2px #2980b9;
-                        }
-                    }
-                }
-                .no-items {
-                      color: #b9b9b9;
-                }
-            }
-            .export-container {
-                padding: 0px;
-                .squid-api-data-widgets-export-widget {
-                    padding: 0px;
-                    .filter-panel {
-                        border-radius: 0px;
+    #app-export { 
+	    #main {
+	        position: relative;
+	        .configuration {
+	            #filters {
+	                dt {
+	                    margin-top: 8px;
+	                }
+	            }
+	            .squid_api_filters_categorical_filter_panel  {
+	                #filter-selection {
+	                    .btn-group {
+	                        button {
+	                            text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+	                            background: #3498db;
+	                            border-bottom: 2px solid #2980b9;
+	                            cursor: pointer;
+	                            -webkit-box-shadow: inset 0 -2px #2980b9;
+	                            box-shadow: inset 0 -2px #2980b9;
+	                        }
+	                    }
+	                }
+	                #filter-display-results {
+	                	ul {
+	                		li {
+	                			min-height: 25px;
+	                		}
+	                	}
+	                }
+	                .no-items {
+	                      color: #b9b9b9;
+	                }
+	            }
+	            .export-container {
+	                padding: 0px;
+	                .squid-api-data-widgets-export-widget {
+	                    padding: 0px;
+	                    .filter-panel {
+	                        border-radius: 0px;
+	
+	                        .panel-heading {
+	                            display: none;
+	                        }
+	                        .panel-body {
+	                            padding: 15px;
+	                            background: #f3f3f3;
+	                            border: none;
+	                            hr {
+	                                border-color: #d9d9d9;
+	                                margin-top: 15px;
+	                            }
+	                            pre {
+	                                background-color: #fff;
+	                            }
+	                            .btn-default {
+	                                cursor: pointer;
+	                                color: #777;
+	                                border-radius: 4px;
+	                                border: 1px solid #e7e7e7;
+	                                position: relative;
+	                                padding-top: 8px;
+	                                vertical-align: top;
+	                                height: 41px;
+	                                font-size: 14px;
+	                                text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+	                                color: #fff;
+	                                text-align: center;
+	                                background: #3498db;
+	                                border-bottom: 2px solid #2980b9;
+	                                cursor: pointer;
+	                                -webkit-box-shadow: inset 0 -2px #2980b9;
+	                                box-shadow: inset 0 -2px #2980b9;
+	                            }
+	                            .download-formats {
+	                                label {
+	                                    margin-right: 5px;
+	                                    margin-left: 15px;
+	                                }
+	                                background: #fff;
+	                                border-radius: 10px;
+	                                display: inline-block;
+	                                padding: 5px 16px 5px 0px;
+	                                padding-top: 10px;
+	                            }
+	                        }
+	                    }
+	                }
+	            }
+	            .caret {
+	                position: absolute;
+	                right: 10px;
+	                top: 15px;
+	            }
+	            .squid-api-data-widgets-dimension-widget li, .squid-api-data-widgets-metric-widget li {
+	                border: 1px solid #95a5a6;
+	                font-size: 14px;
+	            }
+	            .squid-api-data-widgets-dimension-widget li .fa {
+	                color: #bdc3c7;
+	            }
+	            .squid-api-data-widgets-dimension-widget li {
+	                margin: 0px 20px 10px 0px;
+	            }
+	            background: #fff;
+	            #date, #selection, #origin, #metric {
+	                .btn-group {
+	                    width: 100%;
+	                }
+	                button, .multiselect {
+	                    position: relative;
+	                    vertical-align: top;
+	                    height: 40px;
+	                    width: 100%;
+	                    font-size: 14px;
+	                    color: #777;
+	                    text-align: center;
+	                    /* text-shadow: 0 1px 2px rgba(0,0,0,0.25); */
+	                    background: #ecf0f1;
+	                    border: 0;
+	                    border-bottom: 2px solid #bdc3c7;
+	                    cursor: pointer;
+	                    -webkit-box-shadow: inset 0 -2px #bdc3c7;
+	                    box-shadow: inset 0 -2px #bdc3c7;
+	                }
+	            }
+	            #date {
+	                .col-md-6 {
+	                    margin-top: 20px;
+	                    display: inline-block;
+	                }
+	                height: 30px;
+	                #date-picker {
+	                    display: inline-block;
+	                    float: left;
+	                    margin-top: 20px;
+	                    width: 100%;
+	                    height: 50px;
+	                }
+	                .date-wrap {
+	                    font-size: 14px;
+	                    top: 8px;
+	                    position: relative;
+	                    #sq-startDate, #sq-endDate {
+	                        font-family: $primary-font-stack;
+	                    }
+	                }
+	            }
+	            #selection {
+	                .col-md-9 {
+	                    display: inline-block;
+	                }
+	                .information {
+	                    padding-top: 9px;
+	                    font-size: 14px;
+	                    margin-bottom: 23px;
+	                    color: #b9b9b9;
+	                    font-family: $primary-font-stack;
+	                }
+	                .item {
+	                    background: #fff;
+	                    min-width: 150px;
+	                    border-radius: 4px;
+	                    border: 1px solid #95a5a6;
+	                    margin: 0px 20px 10px 0px;
+	                    padding: 5px !important;
+	                }
+	                table {
+	                    border: none !important;
+	                    width: 100%;
+	                    .name {
+	                        font-family: $primary-font-stack;
+	                        font-size: 1.1em;
+	                    }
+	                    .value, a {
+	                        color: $primary-color !important;
+	                    }
+	                }
+	            }
+	            #origin .multiselect:active, #metric .multiselect:active, #selection button:active, #date-picker button:first-of-type:active {
+	                top: 1px;
+	                outline: none;
+	                -webkit-box-shadow: none;
+	                border-bottom: 1px solid;
+	                box-shadow: none;
+	            }
+	            .squid-api-data-widgets-dimension-widget, .squid-api-data-widgets-metric-widget {
+	                .information {
+	                    padding-top: 10px;
+	                    font-size: 14px;
+	                    color: #b9b9b9;
+	                    margin-bottom: 21px;
+	                    font-family: $primary-font-stack;
+	                }
+	            }
+	            #metric {
+	                margin-bottom: 10px;
+	            }
+	            #filters {
+	                .caret {
+	                    position: absolute;
+	                    top: 0px;
+	                    right: 0px;
+	                }
+	            }
+	        }
+	        .main-container {
+	            margin-top: 20px;
+	            padding-right: 0px;
+	            .orderby-col {
+	                padding-left: 0px;
+	                display: inline-block;
+	            }
+	            #tableView {
+	                position: relative;
+	                top: 10px;
+	                z-index: 0;
+					
+					.data
+	                .refreshNeeded {
+	                    opacity: 0.5;
+	                }
+	            }
+	            #export button, button.refresh-analysis {
+	            	color: white;
+	            	font-size: 18px;
+	            	vertical-align: top;
+	            	cursor: pointer;
+	            	border: 0;
+	            	position: relative;
+	                text-align: center;
+	                z-index: 1;
+	                padding: 0;
+	                margin-bottom: 15px;
+	                width: 100%;
+	                height: 40px;
+	            }
+	            button.refresh-analysis {
+	                min-width: 210px;
+	                text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+	                background: #2ecc71;
+	                border-bottom: 2px solid #27ae60;
+	                -webkit-box-shadow: inset 0 -2px #27ae60;
+	                box-shadow: inset 0 -2px #27ae60;
+	
+	                .glyphicon {
+	                    top: 3px;
+	                    right: -15px;
+	
+	                    &.loading {
+	                        -moz-animation: spin .7s infinite linear;
+	                        -webkit-animation: spin .7s infinite linear;
+	                    }
+	                }
+	            }
+	            #export {
+	                position: relative;
+	                right: -15px;
+	                button {
+	                    min-width: 135px;
+	                    text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+	                    background: #3498db;
+	                    border-bottom: 2px solid #2980b9;
+	                    -webkit-box-shadow: inset 0 -2px #2980b9;
+	                    box-shadow: inset 0 -2px #2980b9;
+	
+	                    .glyphicon {
+	                        top: 2px;
+	                        right: -25px;
+	                    }
+	                }
+	            }
+	            .squid-api-data-widgets-data-table {
+	                margin-top: 0px !important;
+	                a {
+	                    cursor: pointer;
+	                }
+	                thead .sorting_asc {
+	                    background: url('../bower_components/data_tables/media/images/sort_asc.png') no-repeat center right;
+	                    -webkit-filter: grayscale(100%);
+	                    filter: grayscale(100%);
+	                }
+	                thead .sorting {
+	                    background: url('../bower_components/data_tables/media/images/sort_both.png') #fff no-repeat center right;
+	                    -webkit-filter: grayscale(100%);
+	                    filter: grayscale(100%);
+	                }
+	                thead .sorting_desc {
+	                    background: url('../bower_components/data_tables/media/images/sort_desc.png') no-repeat center right;
+	                    -webkit-filter: grayscale(100%);
+	                    filter: grayscale(100%);
+	                }
+	                .dataTable {
+	                    .NUMBER {
+	                        text-align: center;
+	                    }
+	                }
+	            }
+	            .squid-api-data-widgets-data-table td label {
+	                padding-right: 20px;
+	                font-weight: inherit;
+	            }
+	            .squid-api-data-widgets-orderby-widget button.multiselect {
+	                font-size: 14px;
+	                font-weight: bold;
+	                top: 4px;
+	                max-width: 235px;
+	            }
+	            .squid-api-data-widgets-orderby-widget {
+	                position: relative;
+	                top: -2px;
+	                z-index: 2;
+	            }
+	            .squid-api-data-widgets-data-table a:active, .squid-api-data-widgets-data-table a:hover {
+	                color: #bd5a35;
+	                text-decoration:underline;
+	                background: #f01967;
+	            }
+	            .squid-api-data-widgets-orderby-widget .onoffswitch-inner:before, .squid-api-data-widgets-orderby-widget .onoffswitch-inner:after {
+	                background-color: #fff;
+	                color: #777;
+	                position: relative;
+	                top: -1px;
+	            }
+	            .squid-api-data-widgets-data-table {
+	                color:#666;
+	                background:#eaebec;
+	                border: 1px solid #ccc;
+	
+	                -moz-border-radius:3px;
+	                -webkit-border-radius:3px;
+	                border-radius:3px;
+	
+	                -moz-box-shadow: 0 1px 2px #d1d1d1;
+	                -webkit-box-shadow: 0 1px 2px #d1d1d1;
+	                box-shadow: 0 1px 2px #d1d1d1;
+	
+	                tr {
+	                    text-align: center;
+	                    padding-left:20px;
+	                }
+	
+	                &.setHeaders {
+	                    tr {
+	                        background:#eaebec;
+	                    }
+	                }
+	
+	                .reactiveMessage {
+	                    top: 98px;
+	                }
+	            }
+	            // container when data table analysis has not yet been run
+	            .noDataInTable {
+	                  border: 1px solid #ecf0f1;
+					  display: inline-block;
+					  padding: 20px;
+					  width: 325px;
+					  height: 200px;
+					  border-radius: 10px;
+					  position: relative;
+					  line-height: 25px;
+	                i {
+	                    font-size: 60px;
+	                    margin-top: 60px;
+	                }
+	            }
+	            .squid-api-data-widgets-data-table th {
+	                padding:21px 25px 22px 25px;
+	                border-top:1px solid #fafafa;
+	                border-bottom:1px solid #e0e0e0;
+	                font-weight: inherit;
+	                background: #fff;
+	                text-align: center;
+	            }
+	            .squid-api-data-widgets-data-table th:first-child {
+	                text-align: center;
+	                padding-left:20px;
+	            }
+	            .squid-api-data-widgets-data-table tr:first-child th:first-child {
+	                -moz-border-radius-topleft:3px;
+	                -webkit-border-top-left-radius:3px;
+	                border-top-left-radius:3px;
+	            }
+	            .squid-api-data-widgets-data-table tr:first-child th:last-child {
+	                -moz-border-radius-topright:3px;
+	                -webkit-border-top-right-radius:3px;
+	                border-top-right-radius:3px;
+	            }
+	            .squid-api-data-widgets-data-table td:first-child {
+	                text-align: center;
+	                padding-left:20px;
+	                border-left: 0;
+	            }
+	            .squid-api-data-widgets-data-table td {
+	                border-top: 1px solid #ffffff;
+	                border-bottom:1px solid #e0e0e0;
+	                border-left: 1px solid #e0e0e0;
+	            }
+	            .squid-api-data-widgets-data-table tr.even td {
+	                background: #f6f6f6;
+	                background: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#f6f6f6));
+	                background: -moz-linear-gradient(top,  #f8f8f8,  #f6f6f6);
+	            }
+	            .squid-api-data-widgets-data-table tr:last-child td {
+	                border-bottom:0;
+	            }
+	            .squid-api-data-widgets-data-table tr:last-child td:last-child {
+	                -moz-border-radius-bottomright:3px;
+	                -webkit-border-bottom-right-radius:3px;
+	                border-bottom-right-radius:3px;
+	            }
+	            .squid-api-data-widgets-data-table th {
+	                min-width: 170px;
+	                padding: 10px 0px 10px 3px;
+	            }
+	            .squid-api-data-widgets-data-table {
+	                .filtered-by {
+	                    background-color: $navBarAndButtonColour;
+	                }
+	            }
+	            .sq-loading {
+	                position:absolute;
+	                width:100%;
+	                top: 25% !important;
+	                left: 0px;
+	                top:0% !important;
+	            }
+	            .spinner {
+	                margin: 100px auto;
+	                width: 400px;
+	                height: 100px;
+	                text-align: center;
+	                font-size: 10px;
+	            }
+	            .spinner > div {
+	                margin-left:10px;
+	                background-color: rgba(102, 102, 102, .5);
+	                height: 100%;
+	                width: 10px;
+	                display: inline-block;
+	                -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
+	                animation: stretchdelay 1.2s infinite ease-in-out;
+	            }
+	            .spinner .rect2 {
+	                -webkit-animation-delay: -1.1s;
+	                animation-delay: -1.1s;
+	            }
+	            .spinner .rect3 {
+	                -webkit-animation-delay: -1.0s;
+	                animation-delay: -1.0s;
+	            }
+	            .spinner .rect4 {
+	                -webkit-animation-delay: -0.9s;
+	                animation-delay: -0.9s;
+	            }
+	            .spinner .rect5 {
+	                -webkit-animation-delay: -0.8s;
+	                animation-delay: -0.8s;
+	            }
+	            @-webkit-keyframes stretchdelay {
+	                0%, 40%, 100% { 
+	                    -webkit-transform: scaleY(0.0) 
+	                }
+	                20% { 
+	                    -webkit-transform: scaleY(1.0) 
+	                }
+	            }
+	            @keyframes stretchdelay {
+	                0%, 40%, 100% {
+	                    transform: scaleY(0.0);
+	                    -webkit-transform: scaleY(0.0);
+	                }
+	                20% {
+	                    transform: scaleY(1.0);
+	                    -webkit-transform: scaleY(1.0);
+	                }
+	            }
+	            @-moz-keyframes spin {
+	                0% {
+	                    -moz-transform: rotate(0deg);
+	                }
+	                100% {
+	                    -moz-transform: rotate(360deg);
+	                };
+	            }
+	            @-moz-keyframes spinoff {
+	                0% {
+	                    -moz-transform: rotate(0deg);
+	                }
+	                100% {
+	                    -moz-transform: rotate(-360deg);
+	                };
+	            }
+	
+	            @-webkit-keyframes spin {
+	                0% {
+	                    -webkit-transform: rotate(0deg);
+	                }
+	                100% {
+	                    -webkit-transform: rotate(360deg);
+	                };
+	            }
+	        }
+	    }
+	}
+	// DropDown Menu to the right of the dropdowns
+	.open > {
+		.multiselect-container {
+			display: block;
+			left: 173px;
+			top: 0px;
+			min-width: 600px;
+			z-index: 3;
 
-                        .panel-heading {
-                            display: none;
-                        }
-                        .panel-body {
-                            padding: 15px;
-                            background: #f3f3f3;
-                            border: none;
-                            hr {
-                                border-color: #d9d9d9;
-                                margin-top: 15px;
-                            }
-                            pre {
-                                background-color: #fff;
-                            }
-                            .btn-default {
-                                cursor: pointer;
-                                color: #777;
-                                border-radius: 4px;
-                                border: 1px solid #e7e7e7;
-                                position: relative;
-                                padding-top: 8px;
-                                vertical-align: top;
-                                height: 41px;
-                                font-size: 14px;
-                                text-shadow: 0 1px 2px rgba(0,0,0,0.25);
-                                color: #fff;
-                                text-align: center;
-                                background: #3498db;
-                                border-bottom: 2px solid #2980b9;
-                                cursor: pointer;
-                                -webkit-box-shadow: inset 0 -2px #2980b9;
-                                box-shadow: inset 0 -2px #2980b9;
-                            }
-                            .download-formats {
-                                label {
-                                    margin-right: 5px;
-                                    margin-left: 15px;
-                                }
-                                background: #fff;
-                                border-radius: 10px;
-                                display: inline-block;
-                                padding: 5px 16px 5px 0px;
-                                padding-top: 10px;
-                            }
-                        }
-                    }
-                }
-            }
-            .caret {
-                position: absolute;
-                right: 10px;
-                top: 15px;
-            }
-            .squid-api-data-widgets-dimension-widget li, .squid-api-data-widgets-metric-widget li {
-                border: 1px solid #95a5a6;
-                font-size: 14px;
-            }
-            .squid-api-data-widgets-dimension-widget li .fa {
-                color: #bdc3c7;
-            }
-            .squid-api-data-widgets-dimension-widget li {
-                margin: 0px 20px 10px 0px;
-            }
-            background: #fff;
-            #date, #selection, #origin, #metric {
-                .btn-group {
-                    width: 100%;
-                }
-                button, .multiselect {
-                    position: relative;
-                    vertical-align: top;
-                    height: 40px;
-                    width: 100%;
-                    font-size: 14px;
-                    color: #777;
-                    text-align: center;
-                    /* text-shadow: 0 1px 2px rgba(0,0,0,0.25); */
-                    background: #ecf0f1;
-                    border: 0;
-                    border-bottom: 2px solid #bdc3c7;
-                    cursor: pointer;
-                    -webkit-box-shadow: inset 0 -2px #bdc3c7;
-                    box-shadow: inset 0 -2px #bdc3c7;
-                }
-            }
-            #date {
-                .col-md-6 {
-                    margin-top: 20px;
-                    display: inline-block;
-                }
-                height: 30px;
-                #date-picker {
-                    display: inline-block;
-                    float: left;
-                    margin-top: 20px;
-                    width: 100%;
-                    height: 50px;
-                }
-                .date-wrap {
-                    font-size: 14px;
-                    top: 8px;
-                    position: relative;
-                    #sq-startDate, #sq-endDate {
-                        font-family: $primary-font-stack;
-                    }
-                }
-            }
-            #selection {
-                .col-md-9 {
-                    display: inline-block;
-                }
-                .information {
-                    padding-top: 9px;
-                    font-size: 14px;
-                    margin-bottom: 23px;
-                    color: #b9b9b9;
-                    font-family: $primary-font-stack;
-                }
-                .item {
-                    background: #fff;
-                    min-width: 150px;
-                    border-radius: 4px;
-                    border: 1px solid #95a5a6;
-                    margin: 0px 20px 10px 0px;
-                    padding: 5px !important;
-                }
-                table {
-                    border: none !important;
-                    width: 100%;
-                    .name {
-                        font-family: $primary-font-stack;
-                        font-size: 1.1em;
-                    }
-                    .value, a {
-                        color: $primary-color !important;
-                    }
-                }
-            }
-            #origin .multiselect:active, #metric .multiselect:active, #selection button:active, #date-picker button:first-of-type:active {
-                top: 1px;
-                outline: none;
-                -webkit-box-shadow: none;
-                border-bottom: 1px solid;
-                box-shadow: none;
-            }
-            .squid-api-data-widgets-dimension-widget, .squid-api-data-widgets-metric-widget {
-                .information {
-                    padding-top: 10px;
-                    font-size: 14px;
-                    color: #b9b9b9;
-                    margin-bottom: 21px;
-                    font-family: $primary-font-stack;
-                }
-            }
-            #metric {
-                margin-bottom: 10px;
-            }
-            #filters {
-                .caret {
-                    position: absolute;
-                    top: 0px;
-                    right: 0px;
-                }
-            }
-        }
-        .main-container {
-            margin-top: 20px;
-            padding-right: 0px;
-            .orderby-col {
-                z-index: 1;
-                padding-left: 0px;
-                display: inline-block;
-            }
-            #tableView {
-                position: relative;
-                top: 10px;
+			label {
+				max-width: 230px;
+				text-overflow: ellipsis;
+				overflow: hidden;
+			}
 
-                .refreshNeeded {
-                    opacity: 0.5;
-                }
-            }
-            button.refresh-analysis {
-                position: relative;
-                vertical-align: top;
-                margin-bottom: 15px;
-                min-width: 210px;
-                width: 100%;
-                height: 40px;
-                padding: 0;
-                z-index: 1;
-                position: relative;
-                font-size: 18px;
-                color: white;
-                text-align: center;
-                text-shadow: 0 1px 2px rgba(0,0,0,0.25);
-                background: #2ecc71;
-                border: 0;
-                border-bottom: 2px solid #27ae60;
-                cursor: pointer;
-                -webkit-box-shadow: inset 0 -2px #27ae60;
-                box-shadow: inset 0 -2px #27ae60;
+			li {
+				min-width: 50%;
+				display: inline-block;
+			}
 
-                .glyphicon {
-                    top: 3px;
-                    right: -15px;
+			input[type="checkbox"], input[type="radio"] {
+				display: none;
+			}
+		}
+	}
 
-                    &.loading {
-                        -moz-animation: spin .7s infinite linear;
-                        -webkit-animation: spin .7s infinite linear;
-                    }
-                }
-            }
-            #export {
-                position: relative;
-                right: -15px;
-                button {
-                    position: relative;
-                    vertical-align: top;
-                    margin-bottom: 15px;
-                    width: 100%;
-                    min-width: 135px;
-                    height: 40px;
-                    z-index: 1;
-                    position: relative;
-                    padding: 0;
-                    font-size: 18px;
-                    color: white;
-                    text-align: center;
-                    text-shadow: 0 1px 2px rgba(0,0,0,0.25);
-                    background: #3498db;
-                    border: 0;
-                    border-bottom: 2px solid #2980b9;
-                    cursor: pointer;
-                    -webkit-box-shadow: inset 0 -2px #2980b9;
-                    box-shadow: inset 0 -2px #2980b9;
-
-                    .glyphicon {
-                        top: 2px;
-                        right: -25px;
-                    }
-                }
-            }
-            .squid-api-data-widgets-data-table {
-                margin-top: 0px !important;
-                a {
-                    cursor: pointer;
-                }
-                thead .sorting_asc {
-                    background: url('../bower_components/data_tables/media/images/sort_asc.png') no-repeat center right;
-                    -webkit-filter: grayscale(100%);
-                    filter: grayscale(100%);
-                }
-                thead .sorting {
-                    background: url('../bower_components/data_tables/media/images/sort_both.png') #fff no-repeat center right;
-                    -webkit-filter: grayscale(100%);
-                    filter: grayscale(100%);
-                }
-                thead .sorting_desc {
-                    background: url('../bower_components/data_tables/media/images/sort_desc.png') no-repeat center right;
-                    -webkit-filter: grayscale(100%);
-                    filter: grayscale(100%);
-                }
-                .dataTable {
-                    .NUMBER {
-                        text-align: center;
-                    }
-                }
-            }
-            .squid-api-data-widgets-data-table td label {
-                padding-right: 20px;
-                font-weight: inherit;
-            }
-            .squid-api-data-widgets-orderby-widget button.multiselect {
-                font-size: 14px;
-                font-weight: bold;
-                top: 4px;
-            }
-            .squid-api-data-widgets-orderby-widget {
-                position: relative;
-                top: -2px;
-            }
-            .squid-api-data-widgets-data-table a:active, .squid-api-data-widgets-data-table a:hover {
-                color: #bd5a35;
-                text-decoration:underline;
-                background: #f01967;
-            }
-            .squid-api-data-widgets-orderby-widget .onoffswitch-inner:before, .squid-api-data-widgets-orderby-widget .onoffswitch-inner:after {
-                background-color: #fff;
-                color: #777;
-                position: relative;
-                top: -1px;
-            }
-            .squid-api-data-widgets-data-table {
-                color:#666;
-                background:#eaebec;
-                border: 1px solid #ccc;
-
-                -moz-border-radius:3px;
-                -webkit-border-radius:3px;
-                border-radius:3px;
-
-                -moz-box-shadow: 0 1px 2px #d1d1d1;
-                -webkit-box-shadow: 0 1px 2px #d1d1d1;
-                box-shadow: 0 1px 2px #d1d1d1;
-
-                tr {
-                    text-align: center;
-                    padding-left:20px;
-                }
-
-                &.setHeaders {
-                    tr {
-                        background:#eaebec;
-                    }
-                }
-
-                .reactiveMessage {
-                    top: 98px;
-                }
-            }
-            .noDataInTable {
-                min-width: 330px;
-                background: #ecf0f1;
-                display: inline-block;
-                min-height: 192px;
-                color: #777;
-                padding: 20px;
-                border-radius: 10px;
-                position: relative;
-                left: -15px;
-                line-height: 25px;
-                margin-top: 39px;
-                i {
-                    font-size: 60px;
-                    margin-top: 60px;
-                }
-            }
-            .squid-api-data-widgets-data-table th {
-                padding:21px 25px 22px 25px;
-                border-top:1px solid #fafafa;
-                border-bottom:1px solid #e0e0e0;
-                font-weight: inherit;
-                background: #fff;
-                text-align: center;
-            }
-            .squid-api-data-widgets-data-table th:first-child {
-                text-align: center;
-                padding-left:20px;
-            }
-            .squid-api-data-widgets-data-table tr:first-child th:first-child {
-                -moz-border-radius-topleft:3px;
-                -webkit-border-top-left-radius:3px;
-                border-top-left-radius:3px;
-            }
-            .squid-api-data-widgets-data-table tr:first-child th:last-child {
-                -moz-border-radius-topright:3px;
-                -webkit-border-top-right-radius:3px;
-                border-top-right-radius:3px;
-            }
-            .squid-api-data-widgets-data-table td:first-child {
-                text-align: center;
-                padding-left:20px;
-                border-left: 0;
-            }
-            .squid-api-data-widgets-data-table td {
-                border-top: 1px solid #ffffff;
-                border-bottom:1px solid #e0e0e0;
-                border-left: 1px solid #e0e0e0;
-            }
-            .squid-api-data-widgets-data-table tr.even td {
-                background: #f6f6f6;
-                background: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#f6f6f6));
-                background: -moz-linear-gradient(top,  #f8f8f8,  #f6f6f6);
-            }
-            .squid-api-data-widgets-data-table tr:last-child td {
-                border-bottom:0;
-            }
-            .squid-api-data-widgets-data-table tr:last-child td:last-child {
-                -moz-border-radius-bottomright:3px;
-                -webkit-border-bottom-right-radius:3px;
-                border-bottom-right-radius:3px;
-            }
-            .squid-api-data-widgets-data-table th {
-                min-width: 170px;
-                padding: 10px 0px 10px 3px;
-            }
-            .squid-api-data-widgets-data-table {
-                .filtered-by {
-                    background-color: $navBarAndButtonColour;
-                }
-            }
-            .squid-api-data-widgets-timeseries-widget {
-                .ui-slider-range {
-                    background: $navBarAndButtonColour;
-                }
-            }
-            .squid-api-data-widgets-displaytype-selector {
-                color: $primary-color;
-            }
-            .sq-loading {
-                position:absolute;
-                width:100%;
-                top: 25% !important;
-                left: 0px;
-                top:0% !important;
-            }
-            .spinner {
-                margin: 100px auto;
-                width: 400px;
-                height: 100px;
-                text-align: center;
-                font-size: 10px;
-            }
-            .spinner > div {
-                margin-left:10px;
-                background-color: rgba(102, 102, 102, .5);
-                height: 100%;
-                width: 10px;
-                display: inline-block;
-                -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
-                animation: stretchdelay 1.2s infinite ease-in-out;
-            }
-            .spinner .rect2 {
-                -webkit-animation-delay: -1.1s;
-                animation-delay: -1.1s;
-            }
-            .spinner .rect3 {
-                -webkit-animation-delay: -1.0s;
-                animation-delay: -1.0s;
-            }
-            .spinner .rect4 {
-                -webkit-animation-delay: -0.9s;
-                animation-delay: -0.9s;
-            }
-            .spinner .rect5 {
-                -webkit-animation-delay: -0.8s;
-                animation-delay: -0.8s;
-            }
-            @-webkit-keyframes stretchdelay {
-                0%, 40%, 100% { 
-                    -webkit-transform: scaleY(0.0) 
-                }
-                20% { 
-                    -webkit-transform: scaleY(1.0) 
-                }
-            }
-            @keyframes stretchdelay {
-                0%, 40%, 100% {
-                    transform: scaleY(0.0);
-                    -webkit-transform: scaleY(0.0);
-                }
-                20% {
-                    transform: scaleY(1.0);
-                    -webkit-transform: scaleY(1.0);
-                }
-            }
-            @-moz-keyframes spin {
-                0% {
-                    -moz-transform: rotate(0deg);
-                }
-                100% {
-                    -moz-transform: rotate(360deg);
-                };
-            }
-
-            @-moz-keyframes spinoff {
-                0% {
-                    -moz-transform: rotate(0deg);
-                }
-                100% {
-                    -moz-transform: rotate(-360deg);
-                };
-            }
-
-            @-webkit-keyframes spin {
-                0% {
-                    -webkit-transform: rotate(0deg);
-                }
-                100% {
-                    -webkit-transform: rotate(360deg);
-                };
-            }
-
-            @-webkit-keyframes spinoff {
-                0% {
-                    -webkit-transform: rotate(0deg);
-                }
-                100% {
-                    -webkit-transform: rotate(-360deg);
-                };
-            }
-            @-webkit-keyframes greenPulse {
-                from { 
-                    background-color: #2ecc71; 
-                    -webkit-box-shadow: 0 0 2px #999; 
-                }
-                50% { 
-                    background-color: #27ae60; 
-                    -webkit-box-shadow: 0 0 5px #2ecc71; 
-                }
-                to { 
-                    background-color: #2ecc71; 
-                    -webkit-box-shadow: 0 0 2px #999; 
-                }
-            }
-            @-moz-keyframes greenPulse {
-                from { 
-                    background-color: #2ecc71; 
-                    -webkit-box-shadow: 0 0 2px #999; 
-                }
-                50% { 
-                    background-color: #27ae60; 
-                    -webkit-box-shadow: 0 0 5px #2ecc71; 
-                }
-                to { 
-                    background-color: #2ecc71; 
-                    -webkit-box-shadow: 0 0 2px #999; 
-                }
-            }
+    // Reduce spacing between each Horizontal Rule
+    hr {
+        margin: 0px 0px 15px 0px;
+        // HR class to expand to edges
+        &.flat {
+            margin: 0px;
+            padding: 0px;
         }
     }
-}
-
-@media
-only screen and (-webkit-min-device-pixel-ratio: 1.25),
-only screen and ( min-device-pixel-ratio: 1.25),
-only screen and ( min-resolution: 200dpi),
-only screen and ( min-resolution: 1.25dppx)
-{
-    -webkit-font-smoothing: subpixel-antialiased;
+    .typed-cursor{
+        display: none;
+    }
 }

@@ -4,8 +4,14 @@ var me = this;
 
 api.setup({
     "clientId" : "dashboard",
-    "filtersDefaultEvents" : false
+    "filtersDefaultEvents" : false,
+    "config" : {
+        "orderByDirection" : "DESC",
+        "limit" : 1000
+    }
 });
+
+config = api.model.config;
 
 new api.view.LoginView({
     el : '#login',
@@ -20,11 +26,30 @@ var projects = new api.model.ProjectCollection();
 
 new api.view.ProjectSelector({
     el : '#project',
-    model : projects
+    model : config,
+    projects : projects,
+    onChangeHandler : function(event) {
+        var selectedOid = event.target.value || null;
+        config.set({
+            "project" : selectedOid,
+            "domain" : null
+        });
+    }
 });
 
 new api.view.DomainSelector({
-    el : '#domain'
+    el : '#domain',
+    model : config,
+    onChangeHandler : function(event) {
+        var selectedOid = event.target.value || null;
+        config.set({
+            "domain" : selectedOid,
+            "chosenDimensions" : null,
+            "selectedDimension" : null,
+            "chosenMetrics" : null,
+            "selectedMetric" : null
+        });
+    }
 });
 
 new api.view.ShortcutsAdminView({
@@ -48,12 +73,11 @@ api.model.login.on('change:login', function(model) {
         projects.fetch({
             success : function(model, response) {
                 $("#loading").addClass("hidden");
-                $("#selectProject").removeClass("hidden");
+                $("#app-export").removeClass("hidden");
                 console.log(model);
             },
             error : function(model, response) {
                 $("#loading").addClass("hidden");
-                $("#selectProject").addClass("hidden");
                 console.log(model);
             }
         });
@@ -70,67 +94,31 @@ var mainModel = new Backbone.Model({
     "tableAnalysis" : tableAnalysis,
     "exportAnalysis" : exportAnalysis,
     "analysisRefreshNeeded" : false,
-    "refreshButtonPressed" : false,
-    "chosenDimensions" : null,
-    "selectedDimension" :  null,
-    "chosenMetrics" : null,
-    "selectedMetric" : null,
-    "limit" : null,
-    "orderByDirection" : "DESC",
+    "refreshButtonPressed" : false
 });
 
-mainModel.on("change:selectedDimension", function() {
-    me.saveState();
-    refreshExportAnalysis();
-    refreshTableAnalysis();
-});
-
-mainModel.on("change:chosenDimensions", function() {
-    me.saveState();
-    refreshExportAnalysis();
-    refreshTableAnalysis();
-});
-
-mainModel.on("change:chosenMetrics", function() {
-    me.saveState();
-    refreshExportAnalysis();
-    refreshTableAnalysis();
-});
-
-mainModel.on("change:orderByDirection", function() {
-    me.saveState();
-    refreshExportAnalysis();
-    refreshTableAnalysis();
-});
-
-mainModel.on("change:limit", function() {
-    me.saveState();
-    refreshExportAnalysis();
-    refreshTableAnalysis();
-});
-
-mainModel.on("change:selectedMetric", function() {
+config.on("change", function() {
     me.saveState();
     refreshExportAnalysis();
     refreshTableAnalysis();
 });
 
 tableAnalysis.on("change", function() {
-    if (tableAnalysis.get("status") == "DONE") {
-        $("button.refresh-analysis .text").html("Preview up to date");
-        $("button.refresh-analysis .glyphicon").hide();
-        $("button.refresh-analysis .glyphicon").removeClass("loading");
-    } else if (tableAnalysis.get("status") == "RUNNING") {
-        $("button.refresh-analysis .glyphicon").show();
-        $("button.refresh-analysis .text").html("Refreshing...");
-        $("button.refresh-analysis .glyphicon").addClass("loading");
+    if (!me.mainModel.get("analysisRefreshNeeded")) {
+        if (tableAnalysis.get("status") == "DONE") {
+            $("button.refresh-analysis .text").html("Preview up to date");
+            $("button.refresh-analysis .glyphicon").hide();
+            $("button.refresh-analysis .glyphicon").removeClass("loading");
+        } else if (tableAnalysis.get("status") == "RUNNING") {
+            $("button.refresh-analysis .glyphicon").show();
+            $("button.refresh-analysis .text").html("Refreshing...");
+            $("button.refresh-analysis .glyphicon").addClass("loading");
+        }
     }
 });
 
 mainModel.on("change:analysisRefreshNeeded", function() {
-    var analysisRefreshNeeded = me.mainModel.get("analysisRefreshNeeded");
-    // Bind click event and tell the model a refresh is needed
-    if (analysisRefreshNeeded) {
+    if (me.mainModel.get("analysisRefreshNeeded")) {
         // Dom manipulations
         $("button.refresh-analysis .glyphicon").show();
         $("button.refresh-analysis .glyphicon").removeClass("loading");
@@ -159,18 +147,18 @@ userAdminView = new api.view.UsersAdminView({
 
 new api.view.DimensionSelector({
     el : '#origin',
-    model : mainModel,
+    model : config,
     dimensionIndex: null
 });
 
 new api.view.OrderByView({
     el : '#orderby',
-    model : mainModel
+    model : config
 });
 
 new api.view.DimensionView({
     el : '#dimension',
-    model : mainModel,
+    model : config,
     selectDimension : false,
 });
 
@@ -178,6 +166,7 @@ var tableView = new squid_api.view.DataTableView ({
     el : '#tableView',
     model : tableAnalysis,
     mainModel : mainModel,
+    config : config,
     selectMetricHeader : false,
     searching : true,
     noDataMessage : " ",
@@ -206,13 +195,13 @@ new api.view.PeriodSelectionView({
 
 new api.view.MetricSelectorView({
     el : '#metric',
-    model : mainModel,
+    model : config,
     metricIndex: null
 });
 
 new api.view.MetricView({
     el : '#total',
-    model : mainModel,
+    model : config,
     displayMetricValue : false,
     selectMetric : false,
 });
@@ -239,12 +228,12 @@ var compute = function(analysis) {
 
 var refreshExportAnalysis = function() {
     var a = mainModel.get("exportAnalysis");
-    if (a) {
+    if (a.get("domains")) {
         var silent = true;
         var changed = false;
-        a.setFacets(mainModel.get("chosenDimensions"), silent);
+        a.setFacets(config.get("chosenDimensions"), silent);
         changed = changed || a.hasChanged();
-        a.setMetricIds(mainModel.get("chosenMetrics"), silent);
+        a.setMetricIds(config.get("chosenMetrics"), silent);
         changed = changed || a.hasChanged();
         a.set({"orderBy" : null}, {"silent" : silent});
         changed = changed || a.hasChanged();
@@ -261,25 +250,23 @@ var refreshExportAnalysis = function() {
 
 var refreshTableAnalysis = function() {
     var a = mainModel.get("tableAnalysis");
-    var chosenDimensions = mainModel.get("chosenDimensions");
-    var chosenMetrics = mainModel.get("chosenMetrics");
+    var chosenDimensions = config.get("chosenDimensions");
+    var chosenMetrics = config.get("chosenMetrics");
     if ((!chosenDimensions || chosenDimensions.length === 0) && (!chosenMetrics || chosenMetrics.length === 0)) {
         $("button.refresh-analysis").prop('disabled', true);
     } else {
         $("button.refresh-analysis").prop('disabled', false);
     }
-    if (a) {
-        // apply the settings depending on the type of analysis
+    if (a.get("domains")) {
         var silent = true;
         var changed = false;
-        
         a.setFacets(chosenDimensions, silent);
         changed = changed || a.hasChanged();
         a.setMetricIds(chosenMetrics, silent);
         changed = changed || a.hasChanged();
-        a.set({"orderBy" : [{"col" : getOrderByIndex() , "direction" : mainModel.get("orderByDirection")}]}, {"silent" : silent});
+        a.set({"orderBy" : [{"col" : getOrderByIndex() , "direction" : config.get("orderByDirection")}]}, {"silent" : silent});
         changed = changed || a.hasChanged();
-        a.set({"limit": 1000}, {"silent" : silent});
+        a.set({"limit": config.get("limit")}, {"silent" : silent});
         changed = changed || a.hasChanged();
         a.setSelection(api.model.filters.get("selection"), silent);
         changed = changed || a.hasChanged();
@@ -291,30 +278,27 @@ var refreshTableAnalysis = function() {
 };
 
 var getOrderByIndex = function() {
-    var index = mainModel.get("chosenDimensions").length;
-    var selectedMetric = mainModel.get("selectedMetric");
-    var metrics = mainModel.get("chosenMetrics");
-    if (metrics) {
-        for (i=0; i<metrics.length; i++) {
-            if (metrics[i] === selectedMetric) {
-                index += i;
+    var index;
+    if (config.get("chosenDimensions")) {
+        index = config.get("chosenDimensions").length;
+        var selectedMetric = config.get("selectedMetric");
+        var metrics = config.get("chosenMetrics");
+        if (metrics) {
+            for (i=0; i<metrics.length; i++) {
+                if (metrics[i] === selectedMetric) {
+                    index += i;
+                }
             }
         }
+    } else {
+        index = 0;
     }
     return index;
 };
 
-mainModel.on("change:chosenDimensions", function(chosen) {
-    if (mainModel.get("chosenDimensions").length === 0) {
-        mainModel.set("selectedDimension", null);
-    }
-});
-
-api.model.status.on('change:project', function(model) {
+config.on('change:project', function(model) {
     if (model.get("project")) {
-        preAppState.selectProject = true;
         $("#selectProject").addClass("hidden");
-        $("#selectDomain").removeClass("hidden");
         // Make sure loading icon doesn't appear
         $("button.refresh-analysis .glyphicon").removeClass("loading");
         var projectId = model.get("project").projectId;
@@ -322,6 +306,7 @@ api.model.status.on('change:project', function(model) {
         exportAnalysis.setProjectId(projectId);
     } else {
         $("#selectProject").removeClass("hidden");
+        $("#selectDomain").addClass("hidden");
         // Make sure loading icon doesn't appear
         $("button.refresh-analysis .glyphicon").removeClass("loading");
         tableAnalysis.setProjectId(null);
@@ -330,14 +315,7 @@ api.model.status.on('change:project', function(model) {
 });
 
 var saveState = function() {
-    var config = [];
-    config.push({"chosenDimensions" : me.mainModel.get("chosenDimensions")});
-    config.push({"selectedDimensions" : me.mainModel.get("selectedDimensions")});
-    config.push({"chosenMetrics" : me.mainModel.get("chosenMetrics")});
-    config.push({"selectedMetric" : me.mainModel.get("selectedMetric")});
-    config.push({"limit" : me.mainModel.get("limit")});
-    config.push({"orderByDirection" : me.mainModel.get("orderByDirection")});
-    api.saveState(config);
+    api.saveState();
 };
 
 api.model.filters.on('change:selection', function() {
@@ -363,8 +341,22 @@ var updateFilters = function(filters, timeFacet) {
     api.controller.facetjob.compute(api.model.filters, filters.get("selection"));
 };
 
-api.model.status.on('change:domain', function(model) {
+config.on('change:domain', function(model) {
+    var domainId = model.get("domain");
+    var projectId = model.get("project");
+    
     if (model.get("domain")) {
+        $("#selectDomain").addClass("hidden");
+    } else {
+        $("#selectDomain").removeClass("hidden");
+    }
+    
+    if (projectId && domainId) {
+        $('#main').removeClass("hidden");
+        var domainPk = {
+                "projectId" : projectId,
+                "domainId" : domainId
+        };
         setTimeout(function() {
         if ($(".noDataInTable").length > 0) {
             $(".noDataInTable").typed({
@@ -373,32 +365,20 @@ api.model.status.on('change:domain', function(model) {
             });
         }
         }, 2000);
-        preAppState.selectDomain = true;
-        $("#main").removeClass("hidden");
-        $("#selectDomain").addClass("hidden");
-        var domainId = model.get("domain").domainId;
-        api.model.filters.setDomainIds([model.get("domain")]);
 
-        // Set Table Analysis Limit
-        mainModel.get("tableAnalysis").set({"limit" : 1000}, {silent : true});
-        mainModel.get("tableAnalysis").set({"direction" : "DESC"}, {silent : true});
+        api.model.filters.setDomainIds([domainPk]);
        
         // launch the default filters computation
         var filters = new api.model.FiltersJob();
         filters.set("id", {
-            "projectId": model.get("domain").projectId
+            "projectId": model.get("project")
         });
         filters.set("engineVersion", "2");
 
-        filters.setDomainIds([model.get("domain")]);
-        var state = api.model.status.get("state");
-        var config;
-        if (state) {
-            config = state.get("config");
-        }
+        filters.setDomainIds([domainPk]);
         var defaultFilters;
-        if (config && (config.domain.domainId == domainId)) {
-            defaultFilters = config.selection;
+        if (config.get("domain")) {
+            defaultFilters = config.get("selection");
         } else {
             defaultFilters = null;
         }
@@ -433,11 +413,13 @@ api.model.status.on('change:domain', function(model) {
             }
 
             // update the analyses
-            tableAnalysis.setDomainIds([domainId]);
-            exportAnalysis.setDomainIds([domainId]);
+            tableAnalysis.setProjectId(projectId);
+            tableAnalysis.setDomainIds([domainPk]);
+            exportAnalysis.setProjectId(projectId);
+            exportAnalysis.setDomainIds([domainPk]);
             
             // update the metrics
-            var domain = squid_api.utils.find(squid_api.model.project.get("domains"), "oid", domainId);
+            var domain = squid_api.utils.find(squid_api.model.project.get("domains"), "oid", domainPk.domainId, "Domain");
             if (domain) {
                 var domainMetrics = domain.metrics;
                 if (domainMetrics && (domainMetrics.length>0)) {
@@ -448,26 +430,6 @@ api.model.status.on('change:domain', function(model) {
                     }
                 }
             }
-
-            // manage app state
-            if ((!config) || (config.domain.domainId != domainId)) {
-                // reset the settings
-                mainModel.set({"chosenDimensions": []});
-                mainModel.set({"selectedDimension": null});
-                mainModel.set({"chosenMetrics": []});
-                mainModel.set({"selectedMetric": null});
-            } else {
-                if (config.domain.domainId == domainId) {
-                    mainModel.set({
-                        "chosenDimensions" : (config.chosenDimensions || mainModel.get("chosenDimensions")),
-                        "selectedDimension" :  (config.selectedDimension ||  mainModel.get("selectedDimension")),
-                        "chosenMetrics" : (config.chosenMetrics || mainModel.get("chosenMetrics")),
-                        "selectedMetric" : (config.selectedMetric || mainModel.get("selectedMetric")),
-                        "limit" : (config.limit || mainModel.get("limit")),
-                        "orderByDirection" : (config.orderByDirection || mainModel.get("orderByDirection"))
-                    });
-                }
-            }
         });
 
         // Fade in main
@@ -476,8 +438,7 @@ api.model.status.on('change:domain', function(model) {
         }, 1000);
        
     } else {
-        $("#selectDomain").removeClass("hidden");
-        $("#main").addClass("hidden");
+        $('#main').addClass("hidden");
         tableAnalysis.setDomainIds(null);
         exportAnalysis.setDomainIds(null);
     }
@@ -488,38 +449,18 @@ api.model.filters.on('change:userSelection', function(filters) {
     squid_api.controller.facetjob.compute(filters, filters.get("userSelection"));
 });
 
-// Allow admin panel to be accessed when project / domain have not been chosen
-var preAppState = {};
-preAppState.selectProject = false;
-preAppState.selectDomain = false;
+// Menu State management
 
 $("#app #menu #export-app").click(function() {
-    if (! preAppState.selectProject) {
-        $("#selectProject").show();
-    } else if (! preAppState.selectDomain) {
-        $("#selectDomain").show();
-    }
-    $('#admin').fadeOut(200, function() {
-        userAdminView.remove();
-      $('#main').fadeIn(200, function () {
-          
-      });
-   });
+    $('#admin').addClass("hidden");
+    userAdminView.remove();
+    $('#app-export').removeClass("hidden");
 });
 
 $("#app #menu #user-management").click(function() {
-    if (! preAppState.selectProject) {
-        $("#selectProject").hide();
-    } else if (! preAppState.selectDomain) {
-        $("#selectDomain").hide();
-    }
     userAdminView.fetchModels();
     $('#admin').removeClass("hidden");
-    $('#main').fadeOut(200, function() {
-      $('#admin').fadeIn(200, function () {
-          
-      });
-   });
+    $('#app-export').addClass("hidden");
 });
 
 $("#app #menu #shortcut-management").click(function() {
@@ -528,9 +469,6 @@ $("#app #menu #shortcut-management").click(function() {
 
 // Trigger Sliding Nav
 $('.menu-link').bigSlide();
-
-// Hide Main and unhide domain is selected
-$('#main').hide();
 
 /*
 * Start the App
