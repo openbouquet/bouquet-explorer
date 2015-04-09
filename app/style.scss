@@ -15,6 +15,31 @@ $navBarAndButtonColour: #e7e7e7;
         display: none;
     }
 
+    // DropDown Menu
+	.open > {
+		.multiselect-container {
+			display: block;
+			left: 173px;
+			top: 0px;
+			min-width: 600px;
+
+			label {
+				max-width: 230px;
+				text-overflow: ellipsis;
+				overflow: hidden;
+			}
+
+			li {
+				min-width: 50%;
+				display: inline-block;
+			}
+
+			input[type="checkbox"], input[type="radio"] {
+				display: none;
+			}
+		}
+	}
+
     // Reduce spacing between each Horizontal Rule
     hr {
         margin: 0px 0px 15px 0px;
