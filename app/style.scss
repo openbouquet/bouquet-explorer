@@ -186,6 +186,13 @@ $navBarAndButtonColour: #e7e7e7;
 	                        }
 	                    }
 	                }
+	                #filter-display-results {
+	                	ul {
+	                		li {
+	                			min-height: 25px;
+	                		}
+	                	}
+	                }
 	                .no-items {
 	                      color: #b9b9b9;
 	                }
