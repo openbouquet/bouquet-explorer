@@ -328,7 +328,6 @@ api.model.filters.on('change:selection', function() {
 var updateFilters = function(filters, timeFacet) {
     if (timeFacet && (timeFacet.selectedItems.length === 0)) {
         // set date range to -30 days
-        var endDate = moment.utc(timeFacet.items[0].upperBound);
         var startDate = moment.utc(timeFacet.items[0].upperBound);
         startDate = moment(startDate).subtract(30, 'days');
         timeFacet.selectedItems = [ {
