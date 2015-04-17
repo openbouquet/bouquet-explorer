@@ -348,6 +348,10 @@ $navBarAndButtonColour: #e7e7e7;
 					.dataTables_wrapper .col-xs-12 {
 						overflow-x: auto;
 					}
+
+                	.dataTables_wrapper.no-footer .dataTables_scrollBody {
+                    	border: 0px solid;
+                	}
 					
 					.data
 	                .refreshNeeded {
