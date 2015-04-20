@@ -103,6 +103,12 @@ config.on("change", function() {
     refreshTableAnalysis();
 });
 
+config.on("change:selection", function() {
+    if (squid_api.model.filters.get("id") && squid_api.model.filters.get("id").projectId) {
+        squid_api.controller.facetjob.compute(squid_api.model.filters, config.get("selection"));
+    }
+});
+
 tableAnalysis.on("change", function() {
     if (!me.mainModel.get("analysisRefreshNeeded")) {
         if (tableAnalysis.get("status") == "DONE") {
@@ -219,7 +225,7 @@ var compute = function(analysis) {
     // get rid of previous errors
     api.model.status.set("error", null);
     // compute if the analysis is correct
-    if ((analysis.get("facets") && analysis.get("facets").length>0) || (analysis.get("metrics") && analysis.get("metrics").length>0)) {
+    if ((analysis.get("facets") && analysis.get("facets").length>0) || (analysis.get("metricList") && analysis.get("metricList").length>0)) {
         api.compute(analysis);
     } else {
         api.model.status.set({"error" : {"reason" : "Please select at least a dimension or a metric"}});
@@ -228,23 +234,25 @@ var compute = function(analysis) {
 
 var refreshExportAnalysis = function() {
     var a = mainModel.get("exportAnalysis");
-    if (a.get("domains")) {
         var silent = true;
         var changed = false;
-        a.setFacets(config.get("chosenDimensions"), silent);
-        changed = changed || a.hasChanged();
-        a.setMetricIds(config.get("chosenMetrics"), silent);
-        changed = changed || a.hasChanged();
-        a.set({"orderBy" : null}, {"silent" : silent});
-        changed = changed || a.hasChanged();
-        a.set({"limit": null}, {"silent" : silent});
-        changed = changed || a.hasChanged();
-        a.setSelection(api.model.filters.get("selection"), silent);
-        changed = changed || a.hasChanged();
-        // only trigger change if the analysis has changed
-        if (changed) {    
-            a.trigger("change");
-        }
+    a.setProjectId(config.get("project"));
+    changed = changed || a.hasChanged();
+    a.setDomain(config.get("domain"));
+    changed = changed || a.hasChanged();
+    a.setFacets(config.get("chosenDimensions"), silent);
+    changed = changed || a.hasChanged();
+    a.setMetrics(config.get("chosenMetrics"), silent);
+    changed = changed || a.hasChanged();
+    a.set({"orderBy" : null}, {"silent" : silent});
+    changed = changed || a.hasChanged();
+    a.set({"limit": null}, {"silent" : silent});
+    changed = changed || a.hasChanged();
+    a.setSelection(api.model.filters.get("selection"), silent);
+    changed = changed || a.hasChanged();
+    // only trigger change if the analysis has changed
+    if (changed) {    
+        a.trigger("change");
     }
 };
 
@@ -257,23 +265,27 @@ var refreshTableAnalysis = function() {
     } else {
         $("button.refresh-analysis").prop('disabled', false);
     }
-    if (a.get("domains")) {
-        var silent = true;
-        var changed = false;
-        a.setFacets(chosenDimensions, silent);
-        changed = changed || a.hasChanged();
-        a.setMetricIds(chosenMetrics, silent);
-        changed = changed || a.hasChanged();
-        a.set({"orderBy" : [{"col" : getOrderByIndex() , "direction" : config.get("orderByDirection")}]}, {"silent" : silent});
-        changed = changed || a.hasChanged();
-        a.set({"limit": config.get("limit")}, {"silent" : silent});
-        changed = changed || a.hasChanged();
-        a.setSelection(api.model.filters.get("selection"), silent);
-        changed = changed || a.hasChanged();
-        // only trigger change if the analysis has changed
-        if (changed) {
-            me.mainModel.set("analysisRefreshNeeded", true);
-        }
+    var silent = true;
+    var changed = false;
+    a.setProjectId(config.get("project"));
+    changed = changed || a.hasChanged();
+    a.setDomain(config.get("domain"));
+    changed = changed || a.hasChanged();
+    a.setFacets(chosenDimensions, silent);
+    changed = changed || a.hasChanged();
+    a.setMetrics(config.get("chosenMetrics"), silent);
+    changed = changed || a.hasChanged();
+    a.set({"orderBy" : [{"col" : getOrderByIndex() , "direction" : config.get("orderByDirection")}]}, {"silent" : silent});
+    changed = changed || a.hasChanged();
+    a.set({"limit": config.get("limit")}, {"silent" : silent});
+    changed = changed || a.hasChanged();
+    a.set({"rollups": config.get("rollups")}, {"silent" : silent});
+    changed = changed || a.hasChanged();
+    a.setSelection(api.model.filters.get("selection"), silent);
+    changed = changed || a.hasChanged();
+    // only trigger change if the analysis has changed
+    if (changed) {
+        me.mainModel.set("analysisRefreshNeeded", true);
     }
 };
 
@@ -301,16 +313,11 @@ config.on('change:project', function(model) {
         $("#selectProject").addClass("hidden");
         // Make sure loading icon doesn't appear
         $("button.refresh-analysis .glyphicon").removeClass("loading");
-        var projectId = model.get("project").projectId;
-        tableAnalysis.setProjectId(projectId);
-        exportAnalysis.setProjectId(projectId);
     } else {
         $("#selectProject").removeClass("hidden");
         $("#selectDomain").addClass("hidden");
         // Make sure loading icon doesn't appear
         $("button.refresh-analysis .glyphicon").removeClass("loading");
-        tableAnalysis.setProjectId(null);
-        exportAnalysis.setProjectId(null);
     }
 });
 
@@ -318,16 +325,14 @@ var saveState = function() {
     api.saveState();
 };
 
-api.model.filters.on('change:selection', function() {
-    me.saveState();
-    refreshExportAnalysis();
+api.model.filters.on('change:selection', function(filters) {
+config.set("selection", api.controller.facetjob.buildCleanSelection(filters.get("selection")));    refreshExportAnalysis();
     refreshTableAnalysis();
 });
 
 var updateFilters = function(filters, timeFacet) {
     if (timeFacet && (timeFacet.selectedItems.length === 0)) {
         // set date range to -30 days
-        var endDate = moment.utc(timeFacet.items[0].upperBound);
         var startDate = moment.utc(timeFacet.items[0].upperBound);
         startDate = moment(startDate).subtract(30, 'days');
         timeFacet.selectedItems = [ {
@@ -411,25 +416,6 @@ config.on('change:domain', function(model) {
                 console.log("WARN: cannot use any time dimension to use for datepicker");
                 me.updateFilters(filters, null);
             }
-
-            // update the analyses
-            tableAnalysis.setProjectId(projectId);
-            tableAnalysis.setDomainIds([domainPk]);
-            exportAnalysis.setProjectId(projectId);
-            exportAnalysis.setDomainIds([domainPk]);
-            
-            // update the metrics
-            var domain = squid_api.utils.find(squid_api.model.project.get("domains"), "oid", domainPk.domainId, "Domain");
-            if (domain) {
-                var domainMetrics = domain.metrics;
-                if (domainMetrics && (domainMetrics.length>0)) {
-                    // total metrics
-                    var totalMetricIds = [];
-                    for (var dmIdx=0; (dmIdx<domainMetrics.length && (dmIdx<5)); dmIdx++) {
-                        totalMetricIds.push(domainMetrics[dmIdx].oid);
-                    }
-                }
-            }
         });
 
         // Fade in main
@@ -439,8 +425,6 @@ config.on('change:domain', function(model) {
        
     } else {
         $('#main').addClass("hidden");
-        tableAnalysis.setDomainIds(null);
-        exportAnalysis.setDomainIds(null);
     }
 });
 
