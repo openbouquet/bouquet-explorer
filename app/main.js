@@ -103,6 +103,12 @@ config.on("change", function() {
     refreshTableAnalysis();
 });
 
+config.on("change:selection", function() {
+    if (squid_api.model.filters.get("id") && squid_api.model.filters.get("id").projectId) {
+        squid_api.controller.facetjob.compute(squid_api.model.filters, config.get("selection"));
+    }
+});
+
 tableAnalysis.on("change", function() {
     if (!me.mainModel.get("analysisRefreshNeeded")) {
         if (tableAnalysis.get("status") == "DONE") {
@@ -232,22 +238,22 @@ var refreshExportAnalysis = function() {
         var changed = false;
     a.setProjectId(config.get("project"));
     changed = changed || a.hasChanged();
-    a.setDomainIds([config.get("domain")]);
+    a.setDomain(config.get("domain"));
     changed = changed || a.hasChanged();
-        a.setFacets(config.get("chosenDimensions"), silent);
-        changed = changed || a.hasChanged();
+    a.setFacets(config.get("chosenDimensions"), silent);
+    changed = changed || a.hasChanged();
     a.setMetrics(config.get("chosenMetrics"), silent);
-        changed = changed || a.hasChanged();
-        a.set({"orderBy" : null}, {"silent" : silent});
-        changed = changed || a.hasChanged();
-        a.set({"limit": null}, {"silent" : silent});
-        changed = changed || a.hasChanged();
-        a.setSelection(api.model.filters.get("selection"), silent);
-        changed = changed || a.hasChanged();
-        // only trigger change if the analysis has changed
-        if (changed) {    
-            a.trigger("change");
-        }
+    changed = changed || a.hasChanged();
+    a.set({"orderBy" : null}, {"silent" : silent});
+    changed = changed || a.hasChanged();
+    a.set({"limit": null}, {"silent" : silent});
+    changed = changed || a.hasChanged();
+    a.setSelection(api.model.filters.get("selection"), silent);
+    changed = changed || a.hasChanged();
+    // only trigger change if the analysis has changed
+    if (changed) {    
+        a.trigger("change");
+    }
 };
 
 var refreshTableAnalysis = function() {
@@ -259,28 +265,28 @@ var refreshTableAnalysis = function() {
     } else {
         $("button.refresh-analysis").prop('disabled', false);
     }
-        var silent = true;
-        var changed = false;
+    var silent = true;
+    var changed = false;
     a.setProjectId(config.get("project"));
     changed = changed || a.hasChanged();
-    a.setDomainIds([config.get("domain")]);
+    a.setDomain(config.get("domain"));
     changed = changed || a.hasChanged();
-        a.setFacets(chosenDimensions, silent);
-        changed = changed || a.hasChanged();
+    a.setFacets(chosenDimensions, silent);
+    changed = changed || a.hasChanged();
     a.setMetrics(config.get("chosenMetrics"), silent);
-        changed = changed || a.hasChanged();
-        a.set({"orderBy" : [{"col" : getOrderByIndex() , "direction" : config.get("orderByDirection")}]}, {"silent" : silent});
-        changed = changed || a.hasChanged();
-        a.set({"limit": config.get("limit")}, {"silent" : silent});
-        changed = changed || a.hasChanged();
+    changed = changed || a.hasChanged();
+    a.set({"orderBy" : [{"col" : getOrderByIndex() , "direction" : config.get("orderByDirection")}]}, {"silent" : silent});
+    changed = changed || a.hasChanged();
+    a.set({"limit": config.get("limit")}, {"silent" : silent});
+    changed = changed || a.hasChanged();
     a.set({"rollups": config.get("rollups")}, {"silent" : silent});
     changed = changed || a.hasChanged();
-        a.setSelection(api.model.filters.get("selection"), silent);
-        changed = changed || a.hasChanged();
-        // only trigger change if the analysis has changed
-        if (changed) {
-            me.mainModel.set("analysisRefreshNeeded", true);
-        }
+    a.setSelection(api.model.filters.get("selection"), silent);
+    changed = changed || a.hasChanged();
+    // only trigger change if the analysis has changed
+    if (changed) {
+        me.mainModel.set("analysisRefreshNeeded", true);
+    }
 };
 
 var getOrderByIndex = function() {
@@ -319,9 +325,8 @@ var saveState = function() {
     api.saveState();
 };
 
-api.model.filters.on('change:selection', function() {
-    me.saveState();
-    refreshExportAnalysis();
+api.model.filters.on('change:selection', function(filters) {
+config.set("selection", api.controller.facetjob.buildCleanSelection(filters.get("selection")));    refreshExportAnalysis();
     refreshTableAnalysis();
 });
 
