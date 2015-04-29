@@ -275,7 +275,12 @@ var refreshTableAnalysis = function() {
     changed = changed || a.hasChanged();
     a.setMetrics(config.get("chosenMetrics"), silent);
     changed = changed || a.hasChanged();
-    a.set({"orderBy" : [{"col" : getOrderByIndex() , "direction" : config.get("orderByDirection")}]}, {"silent" : silent});
+    // Only set an OrderBy if a metric is present
+    if (config.get("chosenMetrics") && config.get("chosenMetrics").length > 0) {
+        a.set({"orderBy" : [{"col" : getOrderByIndex() , "direction" : config.get("orderByDirection")}]}, {"silent" : silent});
+    } else {
+        a.set({"orderBy" : []}, {"silent" : silent});
+    }
     changed = changed || a.hasChanged();
     a.set({"limit": config.get("limit")}, {"silent" : silent});
     changed = changed || a.hasChanged();
