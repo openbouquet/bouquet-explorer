@@ -276,7 +276,7 @@ var refreshTableAnalysis = function() {
     a.setMetrics(config.get("chosenMetrics"), silent);
     changed = changed || a.hasChanged();
     // Only set an OrderBy if a metric is present
-    if (config.get("chosenMetrics").length > 0) {
+    if (config.get("chosenMetrics") && config.get("chosenMetrics").length > 0) {
         a.set({"orderBy" : [{"col" : getOrderByIndex() , "direction" : config.get("orderByDirection")}]}, {"silent" : silent});
     } else {
         a.set({"orderBy" : []}, {"silent" : silent});
