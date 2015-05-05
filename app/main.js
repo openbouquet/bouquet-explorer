@@ -216,23 +216,38 @@ var compute = function(analysis) {
     }
 };
 
-var refreshExportAnalysis = function() {
-    var a = mainModel.get("exportAnalysis");
-    var silent = true;
+var refreshAnalysis = function(a, silent) {
     var changed = false;
-    a.setProjectId(config.get("project"));
+    a.set({"id": {
+        "projectId" : config.get("project"),
+        "analysisJobId" : a.get("id").analysisJobId
+    }}, {
+            "silent" : silent
+        });
     changed = changed || a.hasChanged();
-    a.setDomain(config.get("domain"));
+    a.set({"domains": [{
+        "projectId": config.get("project"),
+        "domainId": config.get("domain")
+    }]}, {
+            "silent" : silent
+        });
     changed = changed || a.hasChanged();
     a.setFacets(config.get("chosenDimensions"), silent);
     changed = changed || a.hasChanged();
     a.setMetrics(config.get("chosenMetrics"), silent);
     changed = changed || a.hasChanged();
+    a.setSelection(api.model.filters.get("selection"), silent);
+    changed = changed || a.hasChanged();
+    return changed;
+};
+
+var refreshExportAnalysis = function() {
+    var a = mainModel.get("exportAnalysis");
+    var silent = true;
+    var changed = refreshAnalysis(a, silent);
     a.set({"orderBy" : null}, {"silent" : silent});
     changed = changed || a.hasChanged();
     a.set({"limit": null}, {"silent" : silent});
-    changed = changed || a.hasChanged();
-    a.setSelection(api.model.filters.get("selection"), silent);
     changed = changed || a.hasChanged();
     // only trigger change if the analysis has changed
     if (changed) {    
@@ -250,23 +265,13 @@ var refreshTableAnalysis = function() {
         $("button.refresh-analysis").prop('disabled', false);
     }
     var silent = false;
-    var changed = false;
     var recompute = false;
-    a.setProjectId(config.get("project"));
-    changed = changed || a.hasChanged();
-    a.setDomain(config.get("domain"));
-    changed = changed || a.hasChanged();
-    a.setFacets(chosenDimensions, silent);
-    changed = changed || a.hasChanged();
-    a.setMetrics(config.get("chosenMetrics"), silent);
-    changed = changed || a.hasChanged();
+    var changed = refreshAnalysis(a, silent);
     a.set({"orderBy" : [{"col" : getOrderByIndex() , "direction" : config.get("orderByDirection")}]}, {"silent" : silent});
     changed = changed || a.hasChanged();
     a.set({"limit": config.get("limit")}, {"silent" : silent});
     changed = changed || a.hasChanged();
     a.set({"rollups": config.get("rollups")}, {"silent" : silent});
-    changed = changed || a.hasChanged();
-    a.setSelection(api.model.filters.get("selection"), silent);
     changed = changed || a.hasChanged();
     // handle the pagination parameters
     var startIndex = a.getParameter("startIndex");
@@ -276,11 +281,11 @@ var refreshTableAnalysis = function() {
     }
     a.setParameter("startIndex", config.get("startIndex"));
     a.setParameter("maxResults", config.get("maxResults"));
-    // only trigger change if the analysis has changed
-    if (changed) {
-        if (recompute) {
-            compute(a);
-        } else {
+    if (recompute) {
+        compute(a);
+    } else {
+        // only trigger change if the analysis has changed
+        if (changed) {
             a.set("status", "PENDING");
         }
     }
