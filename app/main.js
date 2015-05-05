@@ -251,6 +251,7 @@ var refreshTableAnalysis = function() {
     }
     var silent = false;
     var changed = false;
+    var recompute = false;
     a.setProjectId(config.get("project"));
     changed = changed || a.hasChanged();
     a.setDomain(config.get("domain"));
@@ -267,13 +268,21 @@ var refreshTableAnalysis = function() {
     changed = changed || a.hasChanged();
     a.setSelection(api.model.filters.get("selection"), silent);
     changed = changed || a.hasChanged();
+    // handle the pagination parameters
+    var startIndex = a.getParameter("startIndex");
+    if ((startIndex || startIndex === 0) && (startIndex !== config.get("startIndex"))) {      
+        // force analysis recompute if pagination
+        recompute = true;
+    }
     a.setParameter("startIndex", config.get("startIndex"));
-    changed = changed || a.hasChanged();
     a.setParameter("maxResults", config.get("maxResults"));
-    changed = changed || a.hasChanged();
     // only trigger change if the analysis has changed
     if (changed) {
-        a.set("status", "PENDING");
+        if (recompute) {
+            compute(a);
+        } else {
+            a.set("status", "PENDING");
+        }
     }
 };
 
