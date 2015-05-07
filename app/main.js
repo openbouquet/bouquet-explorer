@@ -7,7 +7,9 @@ api.setup({
     "filtersDefaultEvents" : false,
     "config" : {
         "orderByDirection" : "DESC",
-        "limit" : 1000
+        "limit" : 1000,
+        "startIndex" : 0,
+        "maxResults" : 10
     }
 });
 
@@ -92,9 +94,7 @@ var exportAnalysis = new api.model.AnalysisJob();
 var mainModel = new Backbone.Model({
     "timeDimension": null,
     "tableAnalysis" : tableAnalysis,
-    "exportAnalysis" : exportAnalysis,
-    "analysisRefreshNeeded" : false,
-    "refreshButtonPressed" : false
+    "exportAnalysis" : exportAnalysis
 });
 
 config.on("change", function() {
@@ -109,38 +109,25 @@ config.on("change:selection", function() {
     }
 });
 
-tableAnalysis.on("change", function() {
-    if (!me.mainModel.get("analysisRefreshNeeded")) {
-        if (tableAnalysis.get("status") == "DONE") {
-            $("button.refresh-analysis .text").html("Preview up to date");
-            $("button.refresh-analysis .glyphicon").hide();
-            $("button.refresh-analysis .glyphicon").removeClass("loading");
-        } else if (tableAnalysis.get("status") == "RUNNING") {
-            $("button.refresh-analysis .glyphicon").show();
-            $("button.refresh-analysis .text").html("Refreshing...");
-            $("button.refresh-analysis .glyphicon").addClass("loading");
-        }
-    }
-});
-
-mainModel.on("change:analysisRefreshNeeded", function() {
-    if (me.mainModel.get("analysisRefreshNeeded")) {
-        // Dom manipulations
+tableAnalysis.on("change:status", function() {
+    if (tableAnalysis.get("status") == "DONE") {
+        $("button.refresh-analysis .text").html("Preview up to date");
+        $("button.refresh-analysis .glyphicon").hide();
+        $("button.refresh-analysis .glyphicon").removeClass("loading");
+    } else if (tableAnalysis.get("status") == "RUNNING") {
+        $("button.refresh-analysis .glyphicon").show();
+        $("button.refresh-analysis .text").html("Refreshing...");
+        $("button.refresh-analysis .glyphicon").addClass("loading");
+    } else if (tableAnalysis.get("status") == "PENDING") {
         $("button.refresh-analysis .glyphicon").show();
         $("button.refresh-analysis .glyphicon").removeClass("loading");
         $("button.refresh-analysis").removeClass("dataUpdated");
         $("button.refresh-analysis .text").html("Refresh Preview");
-    } else {
-        // Dom manipulations
-        $("button.refresh-analysis").addClass("dataUpdated");
-        $("button.refresh-analysis .glyphicon").removeClass("loading");
     }
 });
 
 $("button.refresh-analysis").click(function(event) {
     event.preventDefault();
-    me.mainModel.set("refreshButtonPressed", true);
-    me.mainModel.set("analysisRefreshNeeded", false);
     compute(tableAnalysis);
 });
 
@@ -171,15 +158,12 @@ new api.view.DimensionView({
 var tableView = new squid_api.view.DataTableView ({
     el : '#tableView',
     model : tableAnalysis,
-    mainModel : mainModel,
     config : config,
     selectMetricHeader : false,
     searching : true,
     noDataMessage : " ",
     paging : true,
-    ordering : true,
-    reactiveState : true,
-    reactiveMessage : "<i class='fa fa-table'></i><br>Click refresh to update",
+    ordering : true
 });
 
 new api.view.CategoricalView({
@@ -232,23 +216,38 @@ var compute = function(analysis) {
     }
 };
 
-var refreshExportAnalysis = function() {
-    var a = mainModel.get("exportAnalysis");
-        var silent = true;
-        var changed = false;
-    a.setProjectId(config.get("project"));
+var refreshAnalysis = function(a, silent) {
+    var changed = false;
+    a.set({"id": {
+        "projectId" : config.get("project"),
+        "analysisJobId" : a.get("id").analysisJobId
+    }}, {
+            "silent" : silent
+        });
     changed = changed || a.hasChanged();
-    a.setDomain(config.get("domain"));
+    a.set({"domains": [{
+        "projectId": config.get("project"),
+        "domainId": config.get("domain")
+    }]}, {
+            "silent" : silent
+        });
     changed = changed || a.hasChanged();
     a.setFacets(config.get("chosenDimensions"), silent);
     changed = changed || a.hasChanged();
     a.setMetrics(config.get("chosenMetrics"), silent);
     changed = changed || a.hasChanged();
+    a.setSelection(api.model.filters.get("selection"), silent);
+    changed = changed || a.hasChanged();
+    return changed;
+};
+
+var refreshExportAnalysis = function() {
+    var a = mainModel.get("exportAnalysis");
+    var silent = true;
+    var changed = refreshAnalysis(a, silent);
     a.set({"orderBy" : null}, {"silent" : silent});
     changed = changed || a.hasChanged();
     a.set({"limit": null}, {"silent" : silent});
-    changed = changed || a.hasChanged();
-    a.setSelection(api.model.filters.get("selection"), silent);
     changed = changed || a.hasChanged();
     // only trigger change if the analysis has changed
     if (changed) {    
@@ -265,32 +264,30 @@ var refreshTableAnalysis = function() {
     } else {
         $("button.refresh-analysis").prop('disabled', false);
     }
-    var silent = true;
-    var changed = false;
-    a.setProjectId(config.get("project"));
-    changed = changed || a.hasChanged();
-    a.setDomain(config.get("domain"));
-    changed = changed || a.hasChanged();
-    a.setFacets(chosenDimensions, silent);
-    changed = changed || a.hasChanged();
-    a.setMetrics(config.get("chosenMetrics"), silent);
-    changed = changed || a.hasChanged();
-    // Only set an OrderBy if a metric is present
-    if (config.get("chosenMetrics") && config.get("chosenMetrics").length > 0) {
-        a.set({"orderBy" : [{"col" : getOrderByIndex() , "direction" : config.get("orderByDirection")}]}, {"silent" : silent});
-    } else {
-        a.set({"orderBy" : []}, {"silent" : silent});
-    }
+    var silent = false;
+    var recompute = false;
+    var changed = refreshAnalysis(a, silent);
+    a.set({"orderBy" : [{"col" : getOrderByIndex() , "direction" : config.get("orderByDirection")}]}, {"silent" : silent});
     changed = changed || a.hasChanged();
     a.set({"limit": config.get("limit")}, {"silent" : silent});
     changed = changed || a.hasChanged();
     a.set({"rollups": config.get("rollups")}, {"silent" : silent});
     changed = changed || a.hasChanged();
-    a.setSelection(api.model.filters.get("selection"), silent);
-    changed = changed || a.hasChanged();
-    // only trigger change if the analysis has changed
-    if (changed) {
-        me.mainModel.set("analysisRefreshNeeded", true);
+    // handle the pagination parameters
+    var startIndex = a.getParameter("startIndex");
+    if ((startIndex || startIndex === 0) && (startIndex !== config.get("startIndex"))) {      
+        // force analysis recompute if pagination
+        recompute = true;
+    }
+    a.setParameter("startIndex", config.get("startIndex"));
+    a.setParameter("maxResults", config.get("maxResults"));
+    if (recompute) {
+        compute(a);
+    } else {
+        // only trigger change if the analysis has changed
+        if (changed) {
+            a.set("status", "PENDING");
+        }
     }
 };
 
