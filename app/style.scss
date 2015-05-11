@@ -337,26 +337,9 @@ $navBarAndButtonColour: #e7e7e7;
 	                top: 10px;
 	                z-index: 0;
 
-	                .dataTables_wrapper {
-						overflow: hidden;
+	                #squid-api-data-widgets-data-table table tr:nth-child(even) {
+						background: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#f6f6f6));
 					}
-
-					.dataTable .NUMBER {
-    					text-align: right;
-					}
-
-					.dataTables_wrapper .col-xs-12 {
-						overflow-x: auto;
-					}
-
-                	.dataTables_wrapper.no-footer .dataTables_scrollBody {
-                    	border: 0px solid;
-                	}
-					
-					.data
-	                .refreshNeeded {
-	                    opacity: 0.5;
-	                }
 	            }
 	            #export button, button.refresh-analysis {
 	            	color: white;
@@ -407,36 +390,6 @@ $navBarAndButtonColour: #e7e7e7;
 	                    }
 	                }
 	            }
-	            .squid-api-data-widgets-data-table {
-	                margin-top: 0px !important;
-	                a {
-	                    cursor: pointer;
-	                }
-	                thead .sorting_asc {
-	                    background: url('../bower_components/data_tables/media/images/sort_asc.png') no-repeat center right;
-	                    -webkit-filter: grayscale(100%);
-	                    filter: grayscale(100%);
-	                }
-	                thead .sorting {
-	                    background: url('../bower_components/data_tables/media/images/sort_both.png') #fff no-repeat center right;
-	                    -webkit-filter: grayscale(100%);
-	                    filter: grayscale(100%);
-	                }
-	                thead .sorting_desc {
-	                    background: url('../bower_components/data_tables/media/images/sort_desc.png') no-repeat center right;
-	                    -webkit-filter: grayscale(100%);
-	                    filter: grayscale(100%);
-	                }
-	                .dataTable {
-	                    .NUMBER {
-	                        text-align: center;
-	                    }
-	                }
-	            }
-	            .squid-api-data-widgets-data-table td label {
-	                padding-right: 20px;
-	                font-weight: inherit;
-	            }
 	            .squid-api-data-widgets-orderby-widget button.multiselect {
 	                font-size: 14px;
 	                font-weight: bold;
@@ -447,45 +400,6 @@ $navBarAndButtonColour: #e7e7e7;
 	                position: relative;
 	                top: -2px;
 	                z-index: 2;
-	            }
-	            .squid-api-data-widgets-data-table a:active, .squid-api-data-widgets-data-table a:hover {
-	                color: #bd5a35;
-	                text-decoration:underline;
-	                background: #f01967;
-	            }
-	            .squid-api-data-widgets-orderby-widget .onoffswitch-inner:before, .squid-api-data-widgets-orderby-widget .onoffswitch-inner:after {
-	                background-color: #fff;
-	                color: #777;
-	                position: relative;
-	                top: -1px;
-	            }
-	            .squid-api-data-widgets-data-table {
-	                color:#666;
-	                background:#eaebec;
-	                border: 1px solid #ccc;
-	
-	                -moz-border-radius:3px;
-	                -webkit-border-radius:3px;
-	                border-radius:3px;
-	
-	                -moz-box-shadow: 0 1px 2px #d1d1d1;
-	                -webkit-box-shadow: 0 1px 2px #d1d1d1;
-	                box-shadow: 0 1px 2px #d1d1d1;
-	
-	                tr {
-	                    text-align: center;
-	                    padding-left:20px;
-	                }
-	
-	                &.setHeaders {
-	                    tr {
-	                        background:#eaebec;
-	                    }
-	                }
-	
-	                .reactiveMessage {
-	                    top: 98px;
-	                }
 	            }
 	            // container when data table analysis has not yet been run
 	            .noDataInTable {
@@ -500,60 +414,6 @@ $navBarAndButtonColour: #e7e7e7;
 	                i {
 	                    font-size: 60px;
 	                    margin-top: 60px;
-	                }
-	            }
-	            .squid-api-data-widgets-data-table th {
-	                padding:21px 25px 22px 25px;
-	                border-top:1px solid #fafafa;
-	                border-bottom:1px solid #e0e0e0;
-	                font-weight: inherit;
-	                background: #fff;
-	                text-align: center;
-	            }
-	            .squid-api-data-widgets-data-table th:first-child {
-	                text-align: center;
-	                padding-left:20px;
-	            }
-	            .squid-api-data-widgets-data-table tr:first-child th:first-child {
-	                -moz-border-radius-topleft:3px;
-	                -webkit-border-top-left-radius:3px;
-	                border-top-left-radius:3px;
-	            }
-	            .squid-api-data-widgets-data-table tr:first-child th:last-child {
-	                -moz-border-radius-topright:3px;
-	                -webkit-border-top-right-radius:3px;
-	                border-top-right-radius:3px;
-	            }
-	            .squid-api-data-widgets-data-table td:first-child {
-	                text-align: center;
-	                padding-left:20px;
-	                border-left: 0;
-	            }
-	            .squid-api-data-widgets-data-table td {
-	                border-top: 1px solid #ffffff;
-	                border-bottom:1px solid #e0e0e0;
-	                border-left: 1px solid #e0e0e0;
-	            }
-	            .squid-api-data-widgets-data-table tr.even td {
-	                background: #f6f6f6;
-	                background: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#f6f6f6));
-	                background: -moz-linear-gradient(top,  #f8f8f8,  #f6f6f6);
-	            }
-	            .squid-api-data-widgets-data-table tr:last-child td {
-	                border-bottom:0;
-	            }
-	            .squid-api-data-widgets-data-table tr:last-child td:last-child {
-	                -moz-border-radius-bottomright:3px;
-	                -webkit-border-bottom-right-radius:3px;
-	                border-bottom-right-radius:3px;
-	            }
-	            .squid-api-data-widgets-data-table th {
-	                min-width: 170px;
-	                padding: 10px 0px 10px 3px;
-	            }
-	            .squid-api-data-widgets-data-table {
-	                .filtered-by {
-	                    background-color: $navBarAndButtonColour;
 	                }
 	            }
 	            .sq-loading {
