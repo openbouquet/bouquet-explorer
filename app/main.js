@@ -163,7 +163,7 @@ var tableView = new squid_api.view.DataTableView ({
     searching : false,
     noDataMessage : " ",
     paging : true,
-    ordering : true
+    ordering : false
 });
 
 new api.view.CategoricalView({
