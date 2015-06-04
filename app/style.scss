@@ -106,6 +106,7 @@ $navBarAndButtonColour: #e7e7e7;
     #selected {
         .noData {
             padding-top: 10px;
+            font-weight: normal;
             font-size: 14px;
             color: #b9b9b9;
             margin-bottom: 21px;
@@ -335,6 +336,7 @@ $navBarAndButtonColour: #e7e7e7;
 	                display: inline-block;
 	            }
 	            #tableView {
+	            	float: left;
 	                position: relative;
 	                top: 10px;
 	                z-index: 0;
