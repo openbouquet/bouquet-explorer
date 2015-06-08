@@ -106,6 +106,7 @@ $navBarAndButtonColour: #e7e7e7;
     #selected {
         .noData {
             padding-top: 10px;
+            font-weight: normal;
             font-size: 14px;
             color: #b9b9b9;
             margin-bottom: 21px;
@@ -255,12 +256,14 @@ $navBarAndButtonColour: #e7e7e7;
 	                    display: inline-block;
 	                    float: left;
 	                    margin-top: 20px;
-	                    width: 100%;
+	                    width: 165px;
+                        margin-left: 15px;
 	                    height: 50px;
 	                }
 	                .date-wrap {
 	                    font-size: 14px;
-	                    top: 8px;
+                        top: 19px;
+                        left: 30px;
 	                    position: relative;
 	                    #sq-startDate, #sq-endDate {
 	                        font-family: $primary-font-stack;
@@ -333,6 +336,7 @@ $navBarAndButtonColour: #e7e7e7;
 	                display: inline-block;
 	            }
 	            #tableView {
+	            	float: left;
 	                position: relative;
 	                top: 10px;
 	                z-index: 0;
