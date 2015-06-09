@@ -18,6 +18,24 @@ $navBarAndButtonColour: #e7e7e7;
         }
     }
 
+    .squid-api-admin-widgets-Project, .squid-api-admin-widgets-Domain {
+    	button {
+		  	position: relative;
+			vertical-align: top;
+			height: 60px;
+			width: 100%;
+			font-size: 17px;
+			color: #777;
+			text-align: center;
+			background: #ecf0f1;
+			border: 0;
+			border-bottom: 2px solid #bdc3c7;
+			cursor: pointer;
+			-webkit-box-shadow: inset 0 -2px #bdc3c7;
+			box-shadow: inset 0 -2px #bdc3c7;
+    	}
+    }
+
     .navbar {
         margin-bottom: 0px;
         position: relative;
