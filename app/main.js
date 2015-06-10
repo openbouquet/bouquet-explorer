@@ -31,6 +31,7 @@ var domainModel = new squid_api.model.DomainModel();
 new api.view.ProjectSelector({
     el : '#project',
     model : config,
+    multiSelectView : true,
     projects : projects,
     projectEditEl : '#project-edit',
     onChangeHandler : function(event) {
@@ -47,7 +48,11 @@ new api.view.ModelManagementView({
     model : projectModel,
     buttonLabel : "create project",
     successHandler : function() {
-        console.log("project save success");
+        var selectedOid = event.target.value || null;
+        config.set({
+            "project" : selectedOid,
+            "domain" : null
+        });
     }
 });
 
@@ -81,6 +86,7 @@ domainModel.on('change:id', function() {
 new api.view.DomainSelector({
     el : '#domain',
     model : config,
+    multiSelectView : true,
     onChangeHandler : function(event) {
         var selectedOid = event.target.value || null;
         config.set({
