@@ -11,6 +11,10 @@
 	<!-- bower:js -->
 	<!-- endbower -->
 
+	<script src="bower_components/backbone-forms/distribution/backbone-forms.min.js"></script>
+	<script src="bower_components/backbone.bootstrap-modal/src/backbone.bootstrap-modal.js"></script>
+	<script src="bower_components/backbone-forms/distribution/editors/list.js"></script>
+
     <link rel="stylesheet" type="text/css" href="app/style.css">
 </head>
 <body id="app">
@@ -26,6 +30,7 @@
                 <ul class="nav navbar-nav navbar-left">
                     <li class="project">
                         <div id="project"></div>
+                        <div id="project-edit"></div>
                     </li>
                     <li class="domain">
                         <div id="domain"></div>
@@ -82,13 +87,25 @@
     </div>
     <div class="hidden push" id="app-export">
         <div class="push" id="selectProject">
-	    	<div class="col-md-12 splash-container">
-	    		<span class="splash-message">Please select your project</span>
+	    	<div class="splash-container">
+
+	    	</div>
+	    	<div class="col-md-5">
+	    		
+	    	</div>
+	    	<div class="col-md-4">
+	    		<div id="create-project"></div>
 	    	</div>
 	    </div>
 	    <div class="hidden push" id="selectDomain">
 	    	<div class="col-md-12 splash-container">
-	    		<div class="splash-message">Please select your domain</div>
+
+	    	</div>
+	    	<div class="col-md-5">
+	    		
+	    	</div>
+	    	<div class="col-md-4">
+	    		<div id="create-domain"></div>
 	    	</div>
 	    </div>
 	    <div class="hidden push" id="main">

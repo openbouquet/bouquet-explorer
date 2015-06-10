@@ -25,11 +25,15 @@ new api.view.StatusView({
 });
 
 var projects = new api.model.ProjectCollection();
+var projectModel = new squid_api.model.ProjectModel();
+var domainModel = new squid_api.model.DomainModel();
 
 new api.view.ProjectSelector({
     el : '#project',
     model : config,
+    multiSelectView : true,
     projects : projects,
+    projectEditEl : '#project-edit',
     onChangeHandler : function(event) {
         var selectedOid = event.target.value || null;
         config.set({
@@ -39,9 +43,50 @@ new api.view.ProjectSelector({
     }
 });
 
+new api.view.ModelManagementView({
+    el : '#create-project',
+    model : projectModel,
+    buttonLabel : "create project",
+    successHandler : function() {
+        var selectedOid = event.target.value || null;
+        config.set({
+            "project" : selectedOid,
+            "domain" : null
+        });
+    }
+});
+
+new api.view.ModelManagementView({
+    el : '#create-domain',
+    model : domainModel,
+    buttonLabel : "create domain",
+    successHandler : function() {
+        console.log("project save success");
+    }
+});
+
+projectModel.on('change:id', function() {
+    var a = this.get("id");
+    squid_api.model.config.set({
+        "project" : a.projectId,
+        "domain" : null
+    });
+});
+
+domainModel.on('change:id', function() {
+    config.set({
+        "domain" : domainModel.get("id").domainId,
+        "chosenDimensions" : null,
+        "selectedDimension" : null,
+        "chosenMetrics" : null,
+        "selectedMetric" : null
+    });
+});
+
 new api.view.DomainSelector({
     el : '#domain',
     model : config,
+    multiSelectView : true,
     onChangeHandler : function(event) {
         var selectedOid = event.target.value || null;
         config.set({
@@ -101,6 +146,20 @@ config.on("change", function() {
     me.saveState();
     refreshExportAnalysis();
     refreshTableAnalysis();
+
+    if (config.get("project") && config.get("domain")) {
+        $("#selectProject").addClass("hidden");
+        $("#selectDomain").addClass("hidden");
+        $("#main").removeClass("hidden");
+    } else if(config.get("project")) {
+        $("#selectProject").addClass("hidden");
+        $("#selectDomain").removeClass("hidden");
+        $("#main").addClass("hidden");
+    } else {
+        $("#selectProject").removeClass("hidden");
+        $("#selectDomain").addClass("hidden");
+        $("#main").addClass("hidden");
+    }
 });
 
 config.on("change:selection", function() {
@@ -170,7 +229,9 @@ new api.view.CategoricalView({
     el : '#selection',
     filterPanel : '#filters',
     filterSelected : '#selected',
-    panelButtons : false
+    panelButtons : false,
+    config : config,
+    popup : false
 });
 
 new api.view.PeriodSelectionView({
@@ -312,12 +373,9 @@ var getOrderByIndex = function() {
 
 config.on('change:project', function(model) {
     if (model.get("project")) {
-        $("#selectProject").addClass("hidden");
         // Make sure loading icon doesn't appear
         $("button.refresh-analysis .glyphicon").removeClass("loading");
     } else {
-        $("#selectProject").removeClass("hidden");
-        $("#selectDomain").addClass("hidden");
         // Make sure loading icon doesn't appear
         $("button.refresh-analysis .glyphicon").removeClass("loading");
     }
@@ -352,12 +410,6 @@ var updateFilters = function(filters, timeFacet) {
 config.on('change:domain', function(model) {
     var domainId = model.get("domain");
     var projectId = model.get("project");
-    
-    if (model.get("domain")) {
-        $("#selectDomain").addClass("hidden");
-    } else {
-        $("#selectDomain").removeClass("hidden");
-    }
     
     if (projectId && domainId) {
         $('#main').removeClass("hidden");
@@ -426,8 +478,6 @@ config.on('change:domain', function(model) {
             $('#main').fadeIn();
         }, 1000);
        
-    } else {
-        $('#main').addClass("hidden");
     }
 });
 
@@ -440,12 +490,21 @@ api.model.filters.on('change:userSelection', function(filters) {
 
 $("#app #menu #export-app").click(function() {
     $('#admin').addClass("hidden");
+    $('#project').removeClass("hidden");
     userAdminView.remove();
     $('#app-export').removeClass("hidden");
 });
 
 $("#app #menu #user-management").click(function() {
     userAdminView.fetchModels();
+    $('#admin').removeClass("hidden");
+    $('#project').addClass("hidden");
+    $('#app-export').addClass("hidden");
+});
+
+$("#app #menu #user-management").click(function() {
+    userAdminView.fetchModels();
+    $('#project').removeClass("hidden");
     $('#admin').removeClass("hidden");
     $('#app-export').addClass("hidden");
 });
