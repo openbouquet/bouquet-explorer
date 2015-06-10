@@ -328,7 +328,8 @@ var saveState = function() {
 };
 
 api.model.filters.on('change:selection', function(filters) {
-config.set("selection", api.controller.facetjob.buildCleanSelection(filters.get("selection")));    refreshExportAnalysis();
+    config.set("selection", api.controller.facetjob.buildCleanSelection(filters.get("selection")));    
+    refreshExportAnalysis();
     refreshTableAnalysis();
 });
 
