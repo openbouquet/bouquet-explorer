@@ -17,8 +17,27 @@ $navBarAndButtonColour: #e7e7e7;
             margin-top: 20px;
         }
     }
+    #project, #domain {
+    	float: left;
+    	.open>.multiselect-container {
+    		left: auto;
+   			top: 33px;
+    	}
+    	button {
+    		border-top-right-radius: 0px;
+    		border-bottom-right-radius: 0px;
+    	}
+   	}
+   	#project-edit {
+   		float: left;
+   		margin-left: -4px;
 
-    .squid-api-admin-widgets-Project, .squid-api-admin-widgets-Domain {
+   		button {
+   			border-left: 0px;
+   		}
+   	}
+    #create-project .squid-api-admin-widgets-Project, #create-domain .squid-api-admin-widgets-Domain {
+    	float: left;
     	button {
 		  	position: relative;
 			vertical-align: top;
@@ -61,6 +80,7 @@ $navBarAndButtonColour: #e7e7e7;
             .project, .domain {
                 padding-right: 20px;
                 margin-top: 10px;
+                min-width: 150px;
             }
         }
         #status {

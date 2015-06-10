@@ -32,6 +32,7 @@ new api.view.ProjectSelector({
     el : '#project',
     model : config,
     projects : projects,
+    projectEditEl : '#project-edit',
     onChangeHandler : function(event) {
         var selectedOid = event.target.value || null;
         config.set({
@@ -482,7 +483,7 @@ api.model.filters.on('change:userSelection', function(filters) {
 
 $("#app #menu #export-app").click(function() {
     $('#admin').addClass("hidden");
-    $('#project').addClass("hidden");
+    $('#project').removeClass("hidden");
     userAdminView.remove();
     $('#app-export').removeClass("hidden");
 });
