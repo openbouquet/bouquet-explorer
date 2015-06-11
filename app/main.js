@@ -33,7 +33,8 @@ new api.view.ProjectSelector({
     model : config,
     multiSelectView : true,
     projects : projects,
-    projectEditEl : '#project-edit',
+    projectManipulateRender : '#project-edit',
+    projectAutomaticLogin : true,
     onChangeHandler : function(event) {
         var selectedOid = event.target.value || null;
         config.set({
@@ -46,7 +47,7 @@ new api.view.ProjectSelector({
 new api.view.ModelManagementView({
     el : '#create-project',
     model : projectModel,
-    buttonLabel : "create project",
+    buttonLabel : "create a new one",
     successHandler : function() {
         var selectedOid = event.target.value || null;
         config.set({
@@ -59,18 +60,10 @@ new api.view.ModelManagementView({
 new api.view.ModelManagementView({
     el : '#create-domain',
     model : domainModel,
-    buttonLabel : "create domain",
+    buttonLabel : "create a new one",
     successHandler : function() {
         console.log("project save success");
     }
-});
-
-projectModel.on('change:id', function() {
-    var a = this.get("id");
-    squid_api.model.config.set({
-        "project" : a.projectId,
-        "domain" : null
-    });
 });
 
 domainModel.on('change:id', function() {
