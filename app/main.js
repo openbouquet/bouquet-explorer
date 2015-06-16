@@ -25,71 +25,29 @@ new api.view.StatusView({
 });
 
 var projects = new api.model.ProjectCollection();
-var projectModel = new squid_api.model.ProjectModel();
-var domainModel = new squid_api.model.DomainModel();
 
-new api.view.ProjectSelector({
+var projectSelect = new api.view.CollectionManagementWidget({
     el : '#project',
-    model : config,
-    multiSelectView : true,
-    projects : projects,
-    projectManipulateRender : '#project-edit',
-    projectAutomaticLogin : true,
-    onChangeHandler : function(event) {
-        var selectedOid = event.target.value || null;
+    type : "Project",
+    changeEventHandler : function(value){
+        value = value || null;
         config.set({
-            "project" : selectedOid,
+            "project" : value,
             "domain" : null
         });
     }
 });
 
-new api.view.ModelManagementView({
-    el : '#create-project',
-    model : projectModel,
-    buttonLabel : "create a new one",
-    successHandler : function() {
-        var selectedOid = event.target.value || null;
-        config.set({
-            "project" : selectedOid,
-            "domain" : null
-        });
-    }
-});
-
-new api.view.ModelManagementView({
-    el : '#create-domain',
-    model : domainModel,
-    buttonLabel : "create a new one",
-    successHandler : function() {
-        console.log("project save success");
-    }
-});
-
-domainModel.on('change:id', function() {
-    config.set({
-        "domain" : domainModel.get("id").domainId,
-        "chosenDimensions" : null,
-        "selectedDimension" : null,
-        "chosenMetrics" : null,
-        "selectedMetric" : null
-    });
-});
-
-new api.view.DomainSelector({
+var domainSelect = new api.view.CollectionManagementWidget({
     el : '#domain',
-    model : config,
-    multiSelectView : true,
-    onChangeHandler : function(event) {
-        var selectedOid = event.target.value || null;
+    type : "Domain",
+    changeEventHandler : function(value){
+        value = value || null;
         config.set({
-            "domain" : selectedOid,
-            "chosenDimensions" : null,
-            "selectedDimension" : null,
-            "chosenMetrics" : null,
-            "selectedMetric" : null
+            "domain" : value
         });
-    }
+    },
+    parent : projectSelect.model
 });
 
 new api.view.ShortcutsAdminView({
