@@ -35,7 +35,9 @@ var projectSelect = new api.view.CollectionManagementWidget({
             "project" : value,
             "domain" : null
         });
-    }
+    },
+    model : squid_api.model.project,
+    parent : squid_api.model.login
 });
 
 var domainSelect = new api.view.CollectionManagementWidget({
@@ -47,7 +49,7 @@ var domainSelect = new api.view.CollectionManagementWidget({
             "domain" : value
         });
     },
-    parent : projectSelect.model
+    parent : squid_api.model.project
 });
 
 new api.view.ShortcutsAdminView({
