@@ -41,7 +41,7 @@ new api.view.ShortcutsAdminView({
 // filters controller
 new api.controller.FiltersContoller({
     onChangeHandler : function(selection, timeFacet) {
-        if (timeFacet && (timeFacet.selectedItems.length === 0)) {
+        if (timeFacet && (timeFacet.selectedItems.length === 0) && (timeFacet.items.length > 0)) {
             // set date range to -30 days
             var startDate = moment.utc(timeFacet.items[0].upperBound);
             startDate = moment(startDate).subtract(30, 'days');
