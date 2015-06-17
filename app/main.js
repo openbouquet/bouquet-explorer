@@ -26,30 +26,12 @@ new api.view.StatusView({
 
 var projects = new api.model.ProjectCollection();
 
-var projectSelect = new api.view.CollectionManagementWidget({
-    el : '#project',
-    type : "Project",
-    changeEventHandler : function(value){
-        value = value || null;
-        config.set({
-            "project" : value,
-            "domain" : null
-        });
-    },
-    model : squid_api.model.project,
-    parent : squid_api.model.login
+var projectSelect = new api.view.ProjectManagementWidget({
+    el : '#project'
 });
 
-var domainSelect = new api.view.CollectionManagementWidget({
-    el : '#domain',
-    type : "Domain",
-    changeEventHandler : function(value){
-        value = value || null;
-        config.set({
-            "domain" : value
-        });
-    },
-    parent : squid_api.model.project
+var domainSelect = new api.view.DomainManagementWidget({
+    el : '#domain'
 });
 
 new api.view.ShortcutsAdminView({
