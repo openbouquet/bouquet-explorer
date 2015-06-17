@@ -17,6 +17,43 @@ $navBarAndButtonColour: #e7e7e7;
             margin-top: 20px;
         }
     }
+    #project, #domain {
+    	float: left;
+    	.open>.multiselect-container {
+    		left: auto;
+   			top: 33px;
+    	}
+    	button {
+    		border-radius: 4px;
+    		min-width: 130px;
+    	}
+   	}
+   	#project-edit {
+   		float: left;
+   		margin-left: -4px;
+
+   		button {
+   			border-left: 0px;
+   		}
+   	}
+    #create-project .squid-api-admin-widgets-Project, #create-domain .squid-api-admin-widgets-Domain {
+    	float: left;
+    	button {
+		  	position: relative;
+			vertical-align: top;
+			height: 60px;
+			width: 100%;
+			font-size: 17px;
+			color: #777;
+			text-align: center;
+			background: #ecf0f1;
+			border: 0;
+			border-bottom: 2px solid #bdc3c7;
+			cursor: pointer;
+			-webkit-box-shadow: inset 0 -2px #bdc3c7;
+			box-shadow: inset 0 -2px #bdc3c7;
+    	}
+    }
 
     .navbar {
         margin-bottom: 0px;
@@ -43,6 +80,7 @@ $navBarAndButtonColour: #e7e7e7;
             .project, .domain {
                 padding-right: 20px;
                 margin-top: 10px;
+                min-width: 150px;
             }
         }
         #status {
@@ -119,6 +157,9 @@ $navBarAndButtonColour: #e7e7e7;
             text-align: center;
             margin-top: 20%;
             font-size: 50px;
+        }
+        .splash-container {
+        	padding-bottom: 20px;
         }
     }
     #app-export { 
