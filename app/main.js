@@ -15,16 +15,9 @@ api.setup({
 
 config = api.model.config;
 
-new api.view.LoginView({
-    el : '#login',
-    autoShow : true
-});
+new api.view.LoginView();
 
-new api.view.StatusView({
-    el : '#status'
-});
-
-var projects = new api.model.ProjectCollection();
+new api.view.StatusView();
 
 var projectSelect = new api.view.ProjectManagementWidget({
     el : '#project'
@@ -45,24 +38,30 @@ new api.view.ShortcutsAdminView({
  * Controllers
  */
 
+// filters controller
+new api.controller.FiltersContoller({
+    onChangeHandler : function(selection, timeFacet) {
+        if (timeFacet && (timeFacet.selectedItems.length === 0)) {
+            // set date range to -30 days
+            var startDate = moment.utc(timeFacet.items[0].upperBound);
+            startDate = moment(startDate).subtract(30, 'days');
+            timeFacet.selectedItems = [ {
+                        "type" : "i",
+                        "lowerBound" : startDate.format("YYYY-MM-DDTHH:mm:ss.SSSZZ"),
+                        "upperBound" : timeFacet.items[0].upperBound
+                    }];
+        }
+        // apply to main filters
+        api.controller.facetjob.compute(api.model.filters, selection);
+    }
+});
+
 api.model.login.on('change:login', function(model) {
     // performed when login is updated
     if (model.get("login")) {
         $(".navbar").removeClass("hidden");
-        
-        //init the projects
-        projects.addParameter("deepread","1");
-        projects.fetch({
-            success : function(model, response) {
-                $("#loading").addClass("hidden");
-                $("#app-export").removeClass("hidden");
-                console.log(model);
-            },
-            error : function(model, response) {
-                $("#loading").addClass("hidden");
-                console.log(model);
-            }
-        });
+        $("#loading").addClass("hidden");
+        $("#app-export").removeClass("hidden");
     }
 });
 
@@ -94,12 +93,6 @@ config.on("change", function() {
         $("#selectProject").removeClass("hidden");
         $("#selectDomain").addClass("hidden");
         $("#main").addClass("hidden");
-    }
-});
-
-config.on("change:selection", function() {
-    if (squid_api.model.filters.get("id") && squid_api.model.filters.get("id").projectId) {
-        squid_api.controller.facetjob.compute(squid_api.model.filters, config.get("selection"));
     }
 });
 
@@ -312,7 +305,7 @@ config.on('change:project', function(model) {
         $("button.refresh-analysis .glyphicon").removeClass("loading");
     } else {
         // Make sure loading icon doesn't appear
-        $("button.refresh-analysis .glyphicon").removeClass("loading");
+        $("#loading").addClass("hidden");
     }
 });
 
@@ -321,37 +314,15 @@ var saveState = function() {
 };
 
 api.model.filters.on('change:selection', function(filters) {
-    config.set("selection", api.controller.facetjob.buildCleanSelection(filters.get("selection")));    
     refreshExportAnalysis();
     refreshTableAnalysis();
 });
 
-var updateFilters = function(filters, timeFacet) {
-    if (timeFacet && (timeFacet.selectedItems.length === 0)) {
-        // set date range to -30 days
-        var startDate = moment.utc(timeFacet.items[0].upperBound);
-        startDate = moment(startDate).subtract(30, 'days');
-        timeFacet.selectedItems = [ {
-                    "type" : "i",
-                    "lowerBound" : startDate.format("YYYY-MM-DDTHH:mm:ss.SSSZZ"),
-                    "upperBound" : timeFacet.items[0].upperBound
-                }];
-    }
-    // apply to main filters
-    api.model.filters.set("id", filters.get("id"));
-    api.controller.facetjob.compute(api.model.filters, filters.get("selection"));
-};
-
 config.on('change:domain', function(model) {
     var domainId = model.get("domain");
     var projectId = model.get("project");
-    
     if (projectId && domainId) {
         $('#main').removeClass("hidden");
-        var domainPk = {
-                "projectId" : projectId,
-                "domainId" : domainId
-        };
         setTimeout(function() {
         if ($(".noDataInTable").length > 0) {
             $(".noDataInTable").typed({
@@ -361,64 +332,12 @@ config.on('change:domain', function(model) {
         }
         }, 2000);
 
-        api.model.filters.setDomainIds([domainPk]);
-       
-        // launch the default filters computation
-        var filters = new api.model.FiltersJob();
-        filters.set("id", {
-            "projectId": model.get("project")
-        });
-        filters.set("engineVersion", "2");
-
-        filters.setDomainIds([domainPk]);
-        var defaultFilters;
-        if (config.get("domain")) {
-            defaultFilters = config.get("selection");
-        } else {
-            defaultFilters = null;
-        }
-        $.when(api.controller.facetjob.compute(filters,defaultFilters))
-        .then(function() {
-            // search for a time facet
-            var timeFacet;
-            var sel = filters.get("selection");
-            if (sel && sel.facets) {
-                var facets = sel.facets;
-                for (var i = 0; i < facets.length; i++) {
-                    var facet = facets[i];
-                    if (facet.dimension.type == "CONTINUOUS") {
-                        timeFacet = facet;
-                    }
-                }
-            }
-            if (timeFacet) {
-                if (timeFacet.done === false) {
-                    // retrieve time facet's members
-                    $.when(api.controller.facetjob.getFacetMembers(filters, timeFacet.id))
-                    .always(function() {
-                            console.log("selected time dimension = "+timeFacet.dimension.name);
-                            me.updateFilters(filters, timeFacet);
-                        });
-                } else {
-                    me.updateFilters(filters, timeFacet);
-                }
-            } else {
-                console.log("WARN: cannot use any time dimension to use for datepicker");
-                me.updateFilters(filters, null);
-            }
-        });
-
         // Fade in main
         setTimeout(function() {
             $('#main').fadeIn();
         }, 1000);
        
     }
-});
-
-// check for new filter selection
-api.model.filters.on('change:userSelection', function(filters) {
-    squid_api.controller.facetjob.compute(filters, filters.get("userSelection"));
 });
 
 // Menu State management
