@@ -6,7 +6,7 @@ api.setup({
     "clientId" : "dashboard",
     "filtersDefaultEvents" : false,
     "config" : {
-        "orderByDirection" : "DESC",
+        "orderBy" : [{"col":0, "direction":"DESC"}],
         "limit" : 1000,
         "startIndex" : 0,
         "maxResults" : 10
@@ -77,7 +77,7 @@ var mainModel = new Backbone.Model({
 });
 
 config.on("change", function() {
-    me.saveState();
+    api.saveState();
     refreshExportAnalysis();
     refreshTableAnalysis();
 
@@ -256,7 +256,7 @@ var refreshTableAnalysis = function() {
     var silent = false;
     var recompute = false;
     var changed = refreshAnalysis(a, silent);
-    a.set({"orderBy" : [{"col" : getOrderByIndex() , "direction" : config.get("orderByDirection")}]}, {"silent" : silent});
+    a.set({"orderBy" : config.get("orderBy")}, {"silent" : silent});
     changed = changed || a.hasChanged();
     a.set({"limit": config.get("limit")}, {"silent" : silent});
     changed = changed || a.hasChanged();
@@ -299,6 +299,22 @@ var getOrderByIndex = function() {
     return index;
 };
 
+// listen to orderBy widget
+config.on("change:selectedMetric", function(config) {
+    var orderBy = config.get("orderBy")[0];
+    config.set("orderBy", [{"col" : getOrderByIndex(), "direction" : orderBy.direction}]);
+});
+
+config.on("change:chosenDimensions", function(config) {
+    var orderBy = config.get("orderBy")[0];
+    config.set("orderBy", [{"col" : getOrderByIndex(), "direction" : orderBy.direction}]);
+});
+
+config.on("change:chosenMetrics", function(config) {
+    var orderBy = config.get("orderBy")[0];
+    config.set("orderBy", [{"col" : getOrderByIndex(), "direction" : orderBy.direction}]);
+});
+
 config.on('change:project', function(model) {
     if (model.get("project")) {
         // Make sure loading icon doesn't appear
@@ -309,16 +325,13 @@ config.on('change:project', function(model) {
     }
 });
 
-var saveState = function() {
-    api.saveState();
-};
-
 api.model.filters.on('change:selection', function(filters) {
     refreshExportAnalysis();
     refreshTableAnalysis();
 });
 
 config.on('change:domain', function(model) {
+    // manage the workflow guide display
     var domainId = model.get("domain");
     var projectId = model.get("project");
     if (projectId && domainId) {
