@@ -4,7 +4,6 @@ var me = this;
 
 api.setup({
     "clientId" : "dashboard",
-    "filtersDefaultEvents" : false,
     "config" : {
         "orderBy" : [{"col":0, "direction":"DESC"}],
         "limit" : 1000,
