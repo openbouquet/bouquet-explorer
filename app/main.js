@@ -158,7 +158,7 @@ new api.view.CategoricalView({
     filterSelected : '#selected',
     panelButtons : false,
     config : config,
-    popup : false
+    popup : true
 });
 
 new api.view.PeriodSelectionView({
