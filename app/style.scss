@@ -161,6 +161,19 @@ $navBarAndButtonColour: #e7e7e7;
         	padding-bottom: 20px;
         }
     }
+    .squid-api-model-widget-popup {
+		&:before {
+			border-bottom-color: #eaebec;
+			top: -8px;
+		}
+		table {
+			tr {
+				&.selected {
+					background-color: #eaebec;
+				}
+			}
+		}
+	}
     #app-export { 
 	    #main {
 	        position: relative;
