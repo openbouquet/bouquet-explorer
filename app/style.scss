@@ -54,11 +54,6 @@ $navBarAndButtonColour: #e7e7e7;
 			box-shadow: inset 0 -2px #bdc3c7;
     	}
     }
-    .squid_api_filters_categorical_filter_panel {
-    	.popup {
-    		z-index: 2;
-    	}
-    }
     .navbar {
         margin-bottom: 0px;
         position: relative;
@@ -448,7 +443,6 @@ $navBarAndButtonColour: #e7e7e7;
 	            .squid-api-data-widgets-orderby-widget {
 	                position: relative;
 	                top: -2px;
-	                z-index: 2;
 	            }
 	            // container when data table analysis has not yet been run
 	            .noDataInTable {
