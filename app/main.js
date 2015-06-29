@@ -31,6 +31,12 @@ var domainSelect = new api.view.DomainManagementWidget({
     el : '#domain'
 });
 
+var domainCreate = new api.view.DomainManagementWidget({
+    el : '#domain-create',
+    createOnlyView : true
+});
+
+
 new api.view.ShortcutsAdminView({
     el : '#shortcuts',
     onSave : function() {
