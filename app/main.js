@@ -22,6 +22,11 @@ var projectSelect = new api.view.ProjectManagementWidget({
     el : '#project'
 });
 
+var projectCreate = new api.view.ProjectManagementWidget({
+    el : '#project-create',
+    createOnlyView : true
+});
+
 var domainSelect = new api.view.DomainManagementWidget({
     el : '#domain'
 });
@@ -120,7 +125,7 @@ $("button.refresh-analysis").click(function(event) {
 // Views
 
 userAdminView = new api.view.UsersAdminView({
-    el : '#adminDisplay', 
+    el : '#adminDisplay',
     status : api.model.status
 });
 
@@ -238,7 +243,7 @@ var refreshExportAnalysis = function() {
     a.set({"limit": null}, {"silent" : silent});
     changed = changed || a.hasChanged();
     // only trigger change if the analysis has changed
-    if (changed) {    
+    if (changed) {
         a.trigger("change");
     }
 };
@@ -263,7 +268,7 @@ var refreshTableAnalysis = function() {
     changed = changed || a.hasChanged();
     // handle the pagination parameters
     var startIndex = a.getParameter("startIndex");
-    if ((startIndex || startIndex === 0) && (startIndex !== config.get("startIndex"))) {      
+    if ((startIndex || startIndex === 0) && (startIndex !== config.get("startIndex"))) {
         // force analysis recompute if pagination
         recompute = true;
     }
@@ -348,7 +353,7 @@ config.on('change:domain', function(model) {
         setTimeout(function() {
             $('#main').fadeIn();
         }, 1000);
-       
+
     }
 });
 
