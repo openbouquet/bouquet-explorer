@@ -569,6 +569,34 @@ $navBarAndButtonColour: #e7e7e7;
 	        }
 	    }
 	}
+    // DropDown Menu to the right of the dropdowns
+    #origin, #metric {
+        .open > {
+            .multiselect-container {
+                display: block;
+                left: 173px;
+                top: 0px;
+                min-width: 600px;
+                z-index: 3;
+
+                label {
+                    max-width: 295px;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                }
+
+                li {
+                    min-width: 50%;
+                    display: inline-block;
+                }
+
+                input[type="checkbox"], input[type="radio"] {
+                    display: none;
+                }
+            }
+        }
+    }
+
 
     // Reduce spacing between each Horizontal Rule
     hr {
