@@ -409,6 +409,9 @@ $navBarAndButtonColour: #e7e7e7;
 	                #squid-api-data-widgets-data-table table tr:nth-child(even) {
 						background: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#f6f6f6));
 					}
+                    #squid-api-data-widgets-data-table table thead th {
+                        cursor: pointer;
+                    }
 	            }
 	            #export button, button.refresh-analysis {
 	            	color: white;

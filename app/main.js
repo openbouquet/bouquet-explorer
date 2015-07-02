@@ -156,11 +156,9 @@ var tableView = new squid_api.view.DataTableView ({
     el : '#tableView',
     model : tableAnalysis,
     config : config,
-    selectMetricHeader : false,
-    searching : true,
     noDataMessage : " ",
     paging : true,
-    ordering : false
+    ordering : true
 });
 
 new api.view.CategoricalView({
@@ -258,6 +256,7 @@ var refreshTableAnalysis = function() {
     var a = mainModel.get("tableAnalysis");
     var chosenDimensions = config.get("chosenDimensions");
     var chosenMetrics = config.get("chosenMetrics");
+    var orderBy = config.get("orderBy");
     if ((!chosenDimensions || chosenDimensions.length === 0) && (!chosenMetrics || chosenMetrics.length === 0)) {
         $("button.refresh-analysis").prop('disabled', true);
     } else {
@@ -269,8 +268,6 @@ var refreshTableAnalysis = function() {
     a.set({"orderBy" : config.get("orderBy")}, {"silent" : silent});
     changed = changed || a.hasChanged();
     a.set({"limit": config.get("limit")}, {"silent" : silent});
-    changed = changed || a.hasChanged();
-    a.set({"rollups": config.get("rollups")}, {"silent" : silent});
     changed = changed || a.hasChanged();
     // handle the pagination parameters
     var startIndex = a.getParameter("startIndex");
