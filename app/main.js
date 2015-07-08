@@ -263,29 +263,30 @@ var refreshTableAnalysis = function() {
         $("button.refresh-analysis").prop('disabled', false);
     }
     var silent = false;
-    var recompute = false;
     var changed = refreshAnalysis(a, silent);
     a.set({"orderBy" : config.get("orderBy")}, {"silent" : silent});
     changed = changed || a.hasChanged();
     a.set({"limit": config.get("limit")}, {"silent" : silent});
     changed = changed || a.hasChanged();
-    // handle the pagination parameters
-    var startIndex = a.getParameter("startIndex");
-    if ((startIndex || startIndex === 0) && (startIndex !== config.get("startIndex"))) {
-        // force analysis recompute if pagination
-        recompute = true;
-    }
     a.setParameter("startIndex", config.get("startIndex"));
     a.setParameter("maxResults", config.get("maxResults"));
-    if (recompute) {
-        compute(a);
-    } else {
-        // only trigger change if the analysis has changed
-        if (changed) {
-            a.set("status", "PENDING");
-        }
+    // only trigger change if the analysis has changed
+    if (changed) {
+        a.set("status", "PENDING");
     }
 };
+
+config.on("change:startIndex", function(config) {
+    // refresh the tableAnalysis with paginated results
+    var a = mainModel.get("tableAnalysis");
+    var startIndex = a.getParameter("startIndex");
+    if ((startIndex || startIndex === 0) && (startIndex !== config.get("startIndex"))) {
+        // update if pagination changed
+        a.setParameter("startIndex", config.get("startIndex"));
+        a.set("status", "RUNNING");
+    	squid_api.controller.analysisjob.getAnalysisJobResults(null, a);
+    }
+});
 
 var getOrderByIndex = function() {
     var index;
