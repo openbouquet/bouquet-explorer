@@ -294,12 +294,14 @@ var getOrderByIndex = function() {
         index = config.get("chosenDimensions").length;
         var selectedMetric = config.get("selectedMetric");
         var metrics = config.get("chosenMetrics");
-        if (metrics) {
+        if (metrics && metrics.length > 0) {
             for (i=0; i<metrics.length; i++) {
                 if (metrics[i] === selectedMetric) {
                     index += i;
                 }
             }
+        } else {
+            index = index - 1;
         }
     } else {
         index = 0;
