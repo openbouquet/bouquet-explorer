@@ -242,7 +242,7 @@ var refreshExportAnalysis = function() {
     var a = mainModel.get("exportAnalysis");
     var silent = true;
     var changed = refreshAnalysis(a, silent);
-    a.set({"orderBy" : null}, {"silent" : silent});
+    a.set({"orderBy" : config.get("orderBy")}, {"silent" : silent});
     changed = changed || a.hasChanged();
     a.set({"limit": null}, {"silent" : silent});
     changed = changed || a.hasChanged();
