@@ -244,6 +244,8 @@ var refreshExportAnalysis = function() {
     var changed = refreshAnalysis(a, silent);
     a.set({"orderBy" : null}, {"silent" : silent});
     changed = changed || a.hasChanged();
+    a.set({"rollups": config.get("rollups")}, {"silent" : silent});
+    changed = changed || a.hasChanged();
     a.set({"limit": null}, {"silent" : silent});
     changed = changed || a.hasChanged();
     // only trigger change if the analysis has changed
@@ -265,6 +267,8 @@ var refreshTableAnalysis = function() {
     var silent = false;
     var changed = refreshAnalysis(a, silent);
     a.set({"orderBy" : config.get("orderBy")}, {"silent" : silent});
+    changed = changed || a.hasChanged();
+    a.set({"rollups": config.get("rollups")}, {"silent" : silent});
     changed = changed || a.hasChanged();
     a.set({"limit": config.get("limit")}, {"silent" : silent});
     changed = changed || a.hasChanged();
