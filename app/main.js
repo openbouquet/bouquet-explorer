@@ -1,5 +1,6 @@
-var api = squid_api, loginView, statusView, config;
+(function (api) {
 
+var loginView, statusView, config;
 var me = this;
 
 api.setup({
@@ -401,3 +402,6 @@ $('.menu-link').bigSlide();
 * Start the App
 */
 api.init();
+
+})(squid_api);
+
