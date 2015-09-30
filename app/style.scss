@@ -172,6 +172,13 @@ $navBarAndButtonColour: #e7e7e7;
         .splash-container {
         	padding-bottom: 20px;
         }
+        .glyphicon-refresh {
+            position: relative;
+            top: 8px;
+            right: 28px;
+            -moz-animation: spin .7s infinite linear;
+            -webkit-animation: spin .7s infinite linear;
+        }
     }
     .squid-api-model-widget-popup {
 		&:before {
