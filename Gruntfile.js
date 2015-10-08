@@ -40,14 +40,14 @@ module.exports = function(grunt) {
             },
             all : {
                 src : [ 'dist/templates.js', 'app/config/base-setup.js', 'app/config/api-setup.js', 'app/models/*.js', 'app/views/*.js', 'app/controllers/*.js', 'app/*.js' ],
-                dest : 'dist/main.js',
+                dest : 'dist/app.js',
             }
         },
         copy : {
             main : {
                 files : [ {
                     expand : true,
-                    src : [ "app/main.js", "*.html", "app/fonts/**",  "bower_components/font-awesome/fonts/*", "bower_components/data_tables/media/images/*", "bower_components/bootstrap/dist/fonts/*","bower_components/backbone-forms/**", "bower_components/backbone.bootstrap-modal/**" ],
+                    src : [ "app/app.js", "*.html", "app/fonts/**", "app/img/**", "bower_components/font-awesome/fonts/*", "bower_components/data_tables/media/images/*", "bower_components/bootstrap/dist/fonts/*","bower_components/backbone-forms/distribution/**", "bower_components/backbone.bootstrap-modal/**" ],
                     dest : 'dist/',
                     rename : function(dest, src) {
                         return dest + src.replace(/\.template.html$/, ".html");
@@ -63,7 +63,7 @@ module.exports = function(grunt) {
         },
         cachebreaker: {
             options: {
-                match: ['js', 'css'],
+                match: ['js', 'css']
             },
             files: {
                 src: ['dist/index.html']
@@ -89,10 +89,11 @@ module.exports = function(grunt) {
         },
         cacheBust: {
             options: {
-              encoding: 'utf8',
-              algorithm: 'md5',
-              length: 8,
-              deleteOriginals: true
+                encoding: 'utf8',
+                algorithm: 'md5',
+                length: 8,
+                deleteOriginals: true,
+                ignorePatterns: ["main.js"]
             },
             assets: {
               files: [{

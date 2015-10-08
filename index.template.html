@@ -11,8 +11,6 @@
 	<!-- bower:js -->
 	<!-- endbower -->
 
-	<script src="bower_components/backbone-forms/distribution/editors/list.js"></script>
-
     <link rel="stylesheet" type="text/css" href="app/style.css">
 </head>
 <body id="app">
@@ -22,7 +20,7 @@
             <div class="navbar-header">
                 <ul class="nav navbar-nav navbar-left">
                     <li><a href="#menu" class="menu-link">&#9776;</a></li>
-                    <li><a class="navbar-brand" href="#">Export App</a></li>
+                    <li><a class="navbar-brand" href="#"><img src="app/img/bouquet_logo_white.png" width="97" height="23.5"/></a></li>
                 </ul>
             </div>
             <div class="navbar-collapse collapse">
@@ -97,9 +95,11 @@
 	    	</div>
 	    </div>
 	    <div class="hidden push" id="main">
-	    <div class="container configuration">
+	    <div class="configuration">
 	    	<div class="row">
-	    		<div id="date"></div>
+				<div class="col-sm-3 col-xs-3 col-md-2">
+					<div id="date"></div>
+				</div>
 	    	</div>
 	    	<hr>
 	    	<div class="row">
@@ -138,7 +138,7 @@
                 <div class="collapse" id="export-content"></div>
             </div>
 		</div>
-		   <div class="push container main-container">
+		   <div class="push main-container">
 	            <div class="col-md-5 orderby-col">
 	                <div id="orderby"></div>
 	            </div>
@@ -154,8 +154,10 @@
 		   </div>
 		</div>
 	</div>
-
-	<script src="main.js"></script>
+	<!-- Start of bouquet Zendesk Widget script -->
+	<script>/*<![CDATA[*/window.zEmbed||function(e,t){var n,o,d,i,s,a=[],r=document.createElement("iframe");window.zEmbed=function(){a.push(arguments)},window.zE=window.zE||window.zEmbed,r.src="javascript:false",r.title="",r.role="presentation",(r.frameElement||r).style.cssText="display: none",d=document.getElementsByTagName("script"),d=d[d.length-1],d.parentNode.insertBefore(r,d),i=r.contentWindow,s=i.document;try{o=s}catch(c){n=document.domain,r.src='javascript:var d=document.open();d.domain="'+n+'";void(0);',o=s}o.open()._l=function(){var o=this.createElement("script");n&&(this.domain=n),o.id="js-iframe-async",o.src=e,this.t=+new Date,this.zendeskHost=t,this.zEQueue=a,this.body.appendChild(o)},o.write('<body onload="document._l();">'),o.close()}("https://assets.zendesk.com/embeddable_framework/main.js","bouquet.zendesk.com");/*]]>*/</script>
+	<!-- End of bouquet Zendesk Widget script -->
+	<script src="app.js"></script>
 
 </body>
 </html>

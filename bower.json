@@ -27,7 +27,6 @@
   },
   "resolutions": {
     "squid_api": "develop",
-    "jquery": "~2.0.3",
-    "backbone-forms": "master"
+    "jquery": "~2.0.3"
   }
 }
