@@ -5,13 +5,14 @@
 
 // Variables
 $primary-font-stack: 'Candara Bold';
-$primary-color: #5f5d5f;
+$primary-font-color: #5f5d5f;
+$primary-background-color: #ffc008;
 $navBarAndButtonColour: #e7e7e7;
 
 /* Application */
 #app {
     font-family: $primary-font-stack;
-    color: $primary-color;
+    color: $primary-font-color;
     -webkit-font-smoothing: antialiased;
   	background: #fff;
 
@@ -73,7 +74,7 @@ $navBarAndButtonColour: #e7e7e7;
     .navbar {
         margin-bottom: 0px;
         position: relative;
-	  	background: #ffc008;
+	  	background: $primary-background-color;
 	  	height: 55px;
         a.navbar-brand {
 			font-size: 14px;
@@ -377,7 +378,7 @@ $navBarAndButtonColour: #e7e7e7;
 	                        font-size: 1.1em;
 	                    }
 	                    .value, a {
-	                        color: $primary-color !important;
+	                        color: $primary-font-color !important;
 	                    }
 	                }
 	            }
@@ -631,7 +632,7 @@ $navBarAndButtonColour: #e7e7e7;
 		color: #fff;
 		min-width: 135px;
 		text-shadow: 0 1px 2px rgba(0,0,0,0.25);
-		background: #ffc008;
+		background: $primary-background-color;
 	  	border-bottom: 0px;
 	}
 }
