@@ -166,13 +166,17 @@ new api.view.CategoricalView({
 });
 
 new api.view.PeriodSelectionView({
-    el : '#date',
+    el : '#date-picker',
     datePickerPosition : "right",
     refreshOnChange : false,
     ranges : {
         "First Month" : "first-month",
         'Last Month': function(min, max) { return [moment(max).startOf('month'), moment(max).endOf('month')]; }
     }
+});
+
+new squid_api.view.ContinuousFilterSelectorView({
+    el : "#date-selector"
 });
 
 new api.view.MetricSelectorView({

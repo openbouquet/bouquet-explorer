@@ -120,8 +120,8 @@ $navBarAndButtonColour: #e7e7e7;
         }
     }
     #menu {
-        background: #34495e;
-        margin-top: 49px;
+	  	background: #5f5d5f;
+	  	margin-top: 57px;
         border-radius: 0px;
         a {
             color: #fff;
@@ -311,7 +311,7 @@ $navBarAndButtonColour: #e7e7e7;
 	                margin: 0px 20px 10px 0px;
 	            }
 	            background: #fff;
-	            #date, #selection, #origin, #metric {
+	            #date-selector, #selection, #origin, #metric {
 	                .btn-group {
 	                    width: 100%;
 	                }
@@ -320,6 +320,7 @@ $navBarAndButtonColour: #e7e7e7;
 					  vertical-align: top;
 					  height: 40px;
 					  width: 100%;
+					  margin-bottom: 13px;
 					  font-size: 14px;
 					  background-color: #fff;
 					  color: #777;
@@ -328,29 +329,11 @@ $navBarAndButtonColour: #e7e7e7;
 					  border-color: #ccc;
 	                }
 	            }
-	            #date {
-	                .col-md-6 {
-	                    margin-top: 20px;
-	                    display: inline-block;
-	                }
-	                height: 30px;
-	                #date-picker {
-						display: inline-block;
-					  	float: left;
-					  	width: 100%;
-					  	height: 50px;
-	                }
-	                .date-wrap {
-					  	font-size: 14px;
-					  	position: absolute;
-					  	width: 100%;
-					  	margin-left: 30px;
-					  	margin-top: 13px;
-	                    #sq-startDate, #sq-endDate {
-	                        font-family: $primary-font-stack;
-	                    }
-	                }
-	            }
+			  #date-picker {
+				.squid-api-continuous-widget {
+				  margin-top: 11px;
+				}
+			  }
 	            #selection {
 	                .col-md-9 {
 	                    display: inline-block;
