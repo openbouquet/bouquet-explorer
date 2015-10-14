@@ -165,17 +165,16 @@ new api.view.CategoricalView({
     popup : true
 });
 
-new api.view.PeriodSelectionView({
+new api.view.DateSelectionWidget({
     el : '#date-picker',
     datePickerPosition : "right",
-    refreshOnChange : false,
     ranges : {
         "First Month" : "first-month",
         'Last Month': function(min, max) { return [moment(max).startOf('month'), moment(max).endOf('month')]; }
     }
 });
 
-new squid_api.view.ContinuousFilterSelectorView({
+new squid_api.view.DateFilterSelectionWidget({
     el : "#date-selector"
 });
 
