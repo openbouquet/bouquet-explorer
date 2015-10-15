@@ -39,7 +39,7 @@ module.exports = function(grunt) {
                 stripBanners : true,
             },
             all : {
-                src : [ 'dist/templates.js', 'app/config/base-setup.js', 'app/config/api-setup.js', 'app/models/*.js', 'app/views/*.js', 'app/controllers/*.js', 'app/*.js' ],
+                src : [ 'dist/templates.js', 'app/config/base-setup.js', 'app/config/api-setup.js', 'app/models/*.js', 'app/views/*.js', 'app/controllers/*.js', 'app/conf/*.js', 'app/*.js' ],
                 dest : 'dist/app.js',
             }
         },
@@ -47,7 +47,7 @@ module.exports = function(grunt) {
             main : {
                 files : [ {
                     expand : true,
-                    src : [ "app/app.js", "*.html", "app/fonts/**", "app/img/**", "bower_components/font-awesome/fonts/*", "bower_components/data_tables/media/images/*", "bower_components/bootstrap/dist/fonts/*","bower_components/backbone-forms/distribution/**", "bower_components/backbone.bootstrap-modal/**" ],
+                    src : [ "app/app.js", "*.html", "app/conf/*.js", "app/fonts/**", "app/img/**", "bower_components/font-awesome/fonts/*", "bower_components/data_tables/media/images/*", "bower_components/bootstrap/dist/fonts/*","bower_components/backbone-forms/distribution/**", "bower_components/backbone.bootstrap-modal/**" ],
                     dest : 'dist/',
                     rename : function(dest, src) {
                         return dest + src.replace(/\.template.html$/, ".html");
