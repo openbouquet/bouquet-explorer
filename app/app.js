@@ -71,20 +71,23 @@ api.model.login.on('change:login', function(model) {
 });
 
 var tableAnalysis = new api.model.AnalysisJob();
+var timeAnalysis = new api.model.AnalysisJob();
 var exportAnalysis = new api.model.AnalysisJob();
 
 // the main app model
 // note model objects references contain oids
 var mainModel = new Backbone.Model({
     "timeDimension": null,
+    "currentAnalysis" : tableAnalysis,
     "tableAnalysis" : tableAnalysis,
+    "timeAnalysis" : timeAnalysis,
     "exportAnalysis" : exportAnalysis
 });
 
 config.on("change", function() {
     api.saveState();
+    refreshCurrentAnalysis();
     refreshExportAnalysis();
-    refreshTableAnalysis();
 
     if (config.get("project") && config.get("domain")) {
         $("#selectProject").addClass("hidden");
@@ -101,26 +104,35 @@ config.on("change", function() {
     }
 });
 
-tableAnalysis.on("change:status", function() {
-    if (tableAnalysis.get("status") == "DONE") {
-        $("button.refresh-analysis .text").html("Preview up to date");
+var updateRefreshButton = function(analysis) {
+    if (analysis.get("status") === "DONE") {
+        $("button.refresh-analysis .text").html("Refresh");
         $("button.refresh-analysis .glyphicon").hide();
         $("button.refresh-analysis .glyphicon").removeClass("loading");
-    } else if (tableAnalysis.get("status") == "RUNNING") {
+    } else if (analysis.get("status") === "RUNNING") {
         $("button.refresh-analysis .glyphicon").show();
         $("button.refresh-analysis .text").html("Refreshing...");
         $("button.refresh-analysis .glyphicon").addClass("loading");
-    } else if (tableAnalysis.get("status") == "PENDING") {
+    } else if (analysis.get("status") === "PENDING") {
         $("button.refresh-analysis .glyphicon").show();
         $("button.refresh-analysis .glyphicon").removeClass("loading");
         $("button.refresh-analysis").removeClass("dataUpdated");
-        $("button.refresh-analysis .text").html("Refresh Preview");
+        $("button.refresh-analysis .text").html("Preview");
     }
+};
+
+tableAnalysis.on("change:status", function() {
+    updateRefreshButton(tableAnalysis);
+});
+
+timeAnalysis.on("change:status", function() {
+    updateRefreshButton(timeAnalysis);
 });
 
 $("button.refresh-analysis").click(function(event) {
     event.preventDefault();
-    compute(tableAnalysis);
+    var a = mainModel.get("currentAnalysis");
+    compute(a);
 });
 
 // Views
@@ -154,6 +166,35 @@ var tableView = new squid_api.view.DataTableView ({
     noDataMessage : " ",
     paging : true,
     ordering : true
+});
+
+var timeView = new squid_api.view.TimeSeriesView ({
+    el : '#timeView',
+    model : timeAnalysis,
+    interpolationRange : 'months',
+    staleMessage : "Click preview to update"
+});
+
+new api.view.DisplayTypeSelectorView({
+    el : '#display-selector',
+    model : mainModel,
+    tableView : tableView,
+    timeView : timeView
+});
+
+mainModel.on("change:currentAnalysis", function() {
+    var a = mainModel.get("currentAnalysis");
+    refreshCurrentAnalysis(a);
+    if (a == tableAnalysis) {
+        tableView.$el.show();
+    } else {
+        tableView.$el.hide();
+    }
+    if (a == timeAnalysis) {
+        timeView.$el.show();
+    } else {
+        timeView.$el.hide();
+    }
 });
 
 new api.view.CategoricalView({
@@ -236,24 +277,18 @@ var refreshAnalysis = function(a, silent) {
     return changed;
 };
 
-var refreshExportAnalysis = function() {
-    var a = mainModel.get("exportAnalysis");
+refreshExportAnalysis = function() {
+    var a = exportAnalysis;
     var silent = true;
     var changed = refreshAnalysis(a, silent);
-    a.set({"orderBy" : config.get("orderBy")}, {"silent" : silent});
-    changed = changed || a.hasChanged();
-    a.set({"rollups": config.get("rollups")}, {"silent" : silent});
-    changed = changed || a.hasChanged();
-    a.set({"limit": null}, {"silent" : silent});
-    changed = changed || a.hasChanged();
     // only trigger change if the analysis has changed
     if (changed) {
         a.trigger("change");
     }
 };
 
-var refreshTableAnalysis = function() {
-    var a = mainModel.get("tableAnalysis");
+var refreshCurrentAnalysis = function() {
+    var a = mainModel.get("currentAnalysis");
     var chosenDimensions = config.get("chosenDimensions");
     var chosenMetrics = config.get("chosenMetrics");
     var orderBy = config.get("orderBy");
@@ -268,13 +303,19 @@ var refreshTableAnalysis = function() {
     changed = changed || a.hasChanged();
     a.set({"rollups": config.get("rollups")}, {"silent" : silent});
     changed = changed || a.hasChanged();
-    a.set({"limit": config.get("limit")}, {"silent" : silent});
+    if (a == exportAnalysis) {
+        a.set({"limit": null}, {"silent" : silent});
+    } else {
+        a.set({"limit": config.get("limit")}, {"silent" : silent});
+    }
     changed = changed || a.hasChanged();
-    a.setParameter("startIndex", config.get("startIndex"));
-    a.setParameter("maxResults", config.get("maxResults"));
     // only trigger change if the analysis has changed
     if (changed) {
-        a.set("status", "PENDING");
+        if (a == exportAnalysis) {
+            a.trigger("change");
+        } else {
+            a.set("status", "PENDING");
+        }
     }
 };
 
@@ -286,7 +327,7 @@ config.on("change:startIndex", function(config) {
         // update if pagination changed
         a.setParameter("startIndex", config.get("startIndex"));
         a.set("status", "RUNNING");
-    	squid_api.controller.analysisjob.getAnalysisJobResults(null, a);
+        squid_api.controller.analysisjob.getAnalysisJobResults(null, a);
     }
 });
 
@@ -338,8 +379,8 @@ config.on('change:project', function(model) {
 });
 
 api.model.filters.on('change:selection', function(filters) {
+    refreshCurrentAnalysis();
     refreshExportAnalysis();
-    refreshTableAnalysis();
 });
 
 config.on('change:domain', function(model) {
