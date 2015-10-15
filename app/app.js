@@ -165,6 +165,7 @@ var tableView = new squid_api.view.DataTableView ({
     config : config,
     noDataMessage : " ",
     paging : true,
+    maxRowsPerPage : 10,
     ordering : true
 });
 
