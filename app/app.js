@@ -165,7 +165,6 @@ var tableView = new squid_api.view.DataTableView ({
     config : config,
     noDataMessage : " ",
     paging : true,
-    maxRowsPerPage : 10,
     ordering : true
 });
 
@@ -276,6 +275,10 @@ var refreshAnalysis = function(a, silent) {
     changed = changed || a.hasChanged();
     a.setSelection(api.model.filters.get("selection"), silent);
     changed = changed || a.hasChanged();
+    if (a == tableAnalysis) {
+    	a.setParameter("startIndex", config.get("startIndex"));
+    	a.setParameter("maxResults", config.get("maxResults"));
+    }
     return changed;
 };
 
