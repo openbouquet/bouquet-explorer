@@ -46,16 +46,6 @@ new api.view.ShortcutsAdminView({
 // filters controller
 new api.controller.FiltersContoller({
     onChangeHandler : function(selection, timeFacet) {
-        if (timeFacet && (timeFacet.selectedItems.length === 0) && (timeFacet.items.length > 0)) {
-            // set date range to -30 days
-            var startDate = moment.utc(timeFacet.items[0].upperBound);
-            startDate = moment(startDate).subtract(30, 'days');
-            timeFacet.selectedItems = [ {
-                        "type" : "i",
-                        "lowerBound" : startDate.format("YYYY-MM-DDTHH:mm:ss.SSSZZ"),
-                        "upperBound" : timeFacet.items[0].upperBound
-                    }];
-        }
         // apply to main filters
         api.controller.facetjob.compute(api.model.filters, selection);
     }
@@ -269,7 +259,19 @@ var refreshAnalysis = function(a, silent) {
             "silent" : silent
         });
     changed = changed || a.hasChanged();
-    a.setFacets(config.get("chosenDimensions"), silent);
+    
+    // if timeAnalysis, use the date as the default dimension if non already set
+    if (a == timeAnalysis && config.get("chosenDimensions").length === 0) {
+    	var selection = config.get("selection");
+    	for (i=0; i<selection.facets.length; i++) {
+    		if (selection.facets[i].dimension.type == "CONTINUOUS" && selection.facets[i].dimension.valueType == "DATE") {
+    			a.setFacets([selection.facets[i].id], silent);
+    			break;
+    		}
+    	}
+    } else {
+    	a.setFacets(config.get("chosenDimensions"), silent);
+    }
     changed = changed || a.hasChanged();
     a.setMetrics(config.get("chosenMetrics"), silent);
     changed = changed || a.hasChanged();
