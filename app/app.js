@@ -300,8 +300,12 @@ var timeAnalysisOrder = function(a) {
 	var metrics = config.get("chosenMetrics");
 	
 	for (var i=0; i<metrics.length; i++) {
-		if (metrics[i] == config.get("selectedMetric")) {
-			obj.col = i + 1;
+		if (config.get("selectedMetric")) {
+			if (metrics[i] == config.get("selectedMetric")) {
+				obj.col = i + 1;
+			}
+		} else {
+			obj.col = 1;
 		}
 	}
 	
