@@ -444,6 +444,38 @@ $("#app #menu #shortcut-management").click(function() {
 // Trigger Sliding Nav
 $('.menu-link').bigSlide();
 
+// Configuration accordion
+
+$(".configuration-hider").click(function() {
+	var configDisplay = api.model.config.get("configDisplay");
+	var obj = {};
+	if (configDisplay) {
+		obj.originalHeight = configDisplay.originalHeight;
+		if (configDisplay.visible) {
+			obj.visible = false;
+		} else {
+			obj.visible = true;
+		}
+	} else {
+		obj.visible = false;
+		obj.originalHeight = $(".configuration").height();
+	}
+	api.model.config.set("configDisplay", obj);
+});
+
+config.on("change:configDisplay", function(model, attribute) {
+	if (attribute.visible) {
+		$(".configuration-hider").removeClass("closed");
+		$(".configuration").animate({opacity: 1});
+		$(".configuration").animate({height:attribute.originalHeight + "px"});
+	} else {
+		$(".configuration-hider").addClass("closed");
+		$(".configuration").animate({opacity: 0});
+		$(".configuration").animate({height:"50px"});
+	}
+});
+
+
 /*
 * Start the App
 */
