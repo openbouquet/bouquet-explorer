@@ -262,7 +262,7 @@ var refreshAnalysis = function(a, silent) {
     changed = changed || a.hasChanged();
     
     // if timeAnalysis, use the date as the default dimension if non already set
-    if (a == timeAnalysis && config.get("chosenDimensions").length === 0) {
+    if (a == timeAnalysis) {
     	var selection = config.get("selection");
     	for (i=0; i<selection.facets.length; i++) {
     		if (selection.facets[i].dimension.type == "CONTINUOUS" && selection.facets[i].dimension.valueType == "DATE") {
@@ -295,6 +295,19 @@ refreshExportAnalysis = function() {
     }
 };
 
+var timeAnalysisOrder = function(a) {
+	var obj = {direction : config.get("orderBy")[0].direction};
+	var metrics = config.get("chosenMetrics");
+	
+	for (var i=0; i<metrics.length; i++) {
+		if (metrics[i] == config.get("selectedMetric")) {
+			obj.col = i + 1;
+		}
+	}
+	
+	return obj;
+};
+
 var refreshCurrentAnalysis = function() {
     var a = mainModel.get("currentAnalysis");
     var chosenDimensions = config.get("chosenDimensions");
@@ -315,6 +328,9 @@ var refreshCurrentAnalysis = function() {
         a.set({"limit": null}, {"silent" : silent});
     } else {
         a.set({"limit": config.get("limit")}, {"silent" : silent});
+    }
+    if (a == timeAnalysis) {
+    	a.set("orderBy", [timeAnalysisOrder(a)]);
     }
     changed = changed || a.hasChanged();
     // only trigger change if the analysis has changed
