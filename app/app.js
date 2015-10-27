@@ -46,16 +46,6 @@ new api.view.ShortcutsAdminView({
 // filters controller
 new api.controller.FiltersContoller({
     onChangeHandler : function(selection, timeFacet) {
-        if (timeFacet && (timeFacet.selectedItems.length === 0) && (timeFacet.items.length > 0)) {
-            // set date range to -30 days
-            var startDate = moment.utc(timeFacet.items[0].upperBound);
-            startDate = moment(startDate).subtract(30, 'days');
-            timeFacet.selectedItems = [ {
-                        "type" : "i",
-                        "lowerBound" : startDate.format("YYYY-MM-DDTHH:mm:ss.SSSZZ"),
-                        "upperBound" : timeFacet.items[0].upperBound
-                    }];
-        }
         // apply to main filters
         api.controller.facetjob.compute(api.model.filters, selection);
     }
@@ -171,6 +161,7 @@ var tableView = new squid_api.view.DataTableView ({
 var timeView = new squid_api.view.TimeSeriesView ({
     el : '#timeView',
     model : timeAnalysis,
+    multiSeries : true,
     colorPalette : squid_api.view.metadata,
     interpolationRange : 'months',
     staleMessage : "Click preview to update"
@@ -269,7 +260,19 @@ var refreshAnalysis = function(a, silent) {
             "silent" : silent
         });
     changed = changed || a.hasChanged();
-    a.setFacets(config.get("chosenDimensions"), silent);
+    
+    // if timeAnalysis, use the date as the default dimension if non already set
+    if (a == timeAnalysis) {
+    	var selection = config.get("selection");
+    	for (i=0; i<selection.facets.length; i++) {
+    		if (selection.facets[i].dimension.type == "CONTINUOUS" && selection.facets[i].dimension.valueType == "DATE") {
+    			a.setFacets([selection.facets[i].id], silent);
+    			break;
+    		}
+    	}
+    } else {
+    	a.setFacets(config.get("chosenDimensions"), silent);
+    }
     changed = changed || a.hasChanged();
     a.setMetrics(config.get("chosenMetrics"), silent);
     changed = changed || a.hasChanged();
@@ -292,6 +295,23 @@ refreshExportAnalysis = function() {
     }
 };
 
+var timeAnalysisOrder = function(a) {
+	var obj = {direction : config.get("orderBy")[0].direction};
+	var metrics = config.get("chosenMetrics");
+	
+	for (var i=0; i<metrics.length; i++) {
+		if (config.get("selectedMetric")) {
+			if (metrics[i] == config.get("selectedMetric")) {
+				obj.col = i + 1;
+			}
+		} else {
+			obj.col = 1;
+		}
+	}
+	
+	return obj;
+};
+
 var refreshCurrentAnalysis = function() {
     var a = mainModel.get("currentAnalysis");
     var chosenDimensions = config.get("chosenDimensions");
@@ -312,6 +332,9 @@ var refreshCurrentAnalysis = function() {
         a.set({"limit": null}, {"silent" : silent});
     } else {
         a.set({"limit": config.get("limit")}, {"silent" : silent});
+    }
+    if (a == timeAnalysis) {
+    	a.set("orderBy", [timeAnalysisOrder(a)]);
     }
     changed = changed || a.hasChanged();
     // only trigger change if the analysis has changed

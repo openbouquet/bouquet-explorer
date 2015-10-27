@@ -108,15 +108,27 @@ $navBarAndButtonColour: #e7e7e7;
         #status {
             margin-top: 12px;
         }
-        #login {
-            position: relative;
-            top: 7px;
-		  	color: #465966;
-            padding-top: 10px;
-            a {
-                text-decoration: underline;
-			  	color: #465966;
-            }
+        .navbar-right {
+        	margin-top: 16px;
+        	li {
+        		margin-left: 20px;
+        		
+        		#medium, #zendesk {
+        			a {
+						color: #fff;
+						font-size: 20px;
+						position: relative;
+						top: -2px;
+        				
+        				:hover {
+        					color: $primary-font-color;
+        				}
+        			}
+        		}
+        	}
+        	#login {
+				text-decoration: underline;
+        	}
         }
     }
     #menu {
@@ -210,7 +222,8 @@ $navBarAndButtonColour: #e7e7e7;
 	    #main {
 	        position: relative;
 	        .configuration {
-			  margin: 20px;
+			  	margin: 0px 20px;
+    			padding-top: 15px;
 	            #filters {
 	                dt {
 	                    margin-top: 8px;
@@ -300,15 +313,35 @@ $navBarAndButtonColour: #e7e7e7;
 	                right: 10px;
 	                top: 15px;
 	            }
+	            .squid-api-data-widgets-dimension-widget, .squid-api-data-widgets-metric-widget {
+	            	margin-top: 3px;
+	            }
 	            .squid-api-data-widgets-dimension-widget li, .squid-api-data-widgets-metric-widget li {
-	                border: 1px solid #ccc;
-	                font-size: 14px;
+					border: 1px solid #ccc;
+    				font-size: 12px;
+					box-shadow: 3px 3px 3px -4px;
+					padding: 8px;
+    				min-height: 30px;
+	            }
+	            #squid_api_filters_categorical_selected_view, #squid_api_filters-categorical-panel-view {
+	            	li {
+	           			box-shadow: 3px 3px 3px -4px;
+	           			padding: 3px 3px 3px 8px !important;
+	           			font-size: 12px;
+	           		}
+	           		.facet-remove {
+	           			top: 5px;
+	           			font-size: 8px;
+	           		}
 	            }
 	            .squid-api-data-widgets-dimension-widget li .fa {
 	                color: #bdc3c7;
+	                top: 9px;
 	            }
 	            .squid-api-data-widgets-dimension-widget li {
 	                margin: 0px 20px 10px 0px;
+	                min-height: 30px;
+	                padding: 8px;
 	            }
 	            background: #fff;
 	            #date-selector, #selection, #origin, #metric {
@@ -416,7 +449,6 @@ $navBarAndButtonColour: #e7e7e7;
 				}
 			  	#timeView {
 				  	position: relative;
-				  	top: -10px;
 				  	clear: both;
 				  	z-index: 0;
 				  	.squid-api-data-widgets-data-table {
