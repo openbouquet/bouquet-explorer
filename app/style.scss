@@ -127,7 +127,10 @@ $navBarAndButtonColour: #e7e7e7;
         		}
         	}
         	#login {
-				text-decoration: underline;
+				a {
+					color: $primary-font-color;
+					text-decoration: underline;
+				}
         	}
         }
     }
