@@ -228,7 +228,8 @@ var exportView = new api.view.DataExport({
     el : '#export',
     renderTo : '#export-content',
     model : exportAnalysis,
-    displayInAccordion : true,
+    displayInPopup : true,
+    sqlView : true
 });
 
 // Controllers
