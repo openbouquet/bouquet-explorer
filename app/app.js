@@ -183,7 +183,7 @@ var timeView = new squid_api.view.TimeSeriesView ({
     staleMessage : "Click preview to update"
 });
 
-new api.view.DisplayTypeSelectorView({
+var displayTypeView = new api.view.DisplayTypeSelectorView({
     el : '#display-selector',
     model : mainModel,
     tableView : tableView,
@@ -214,7 +214,7 @@ new api.view.CategoricalView({
     popup : true
 });
 
-new api.view.DateSelectionWidget({
+var dateSelectionView = new api.view.DateSelectionWidget({
     el : '#date-picker',
     datePickerPosition : "right",
     ranges : {
@@ -449,6 +449,11 @@ config.on('change:domain', function(model) {
         }, 1000);
 
     }
+});
+
+new api.view.UIoverlayWidget({
+    dateArea : dateSelectionView,
+    displayTypeArea : displayTypeView
 });
 
 // Menu State management
