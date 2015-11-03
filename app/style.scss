@@ -685,15 +685,14 @@ $navBarAndButtonColour: #e7e7e7;
 		}
 	}
 	#no-connection {
-		.splash-container {
-			background: #ffc008;
-		}
 		.message {
-			color: #fff;
+			color: #4d4d4d;
     		position: absolute;
-    		left: 40%;
-    		top: 30px;
-    		font-size: 30px;
+			background: #f9f9f9;
+			padding: 12px;
+			left: 40%;
+			top: 30px;
+			font-size: 30px;
 		}
 		.pot {
 	  		background: #d0631e;

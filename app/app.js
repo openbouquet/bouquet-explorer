@@ -103,7 +103,7 @@ config.on("change", function() {
         $("#selectProject").addClass("hidden");
         $("#selectDomain").removeClass("hidden");
         $("#main").addClass("hidden");
-    } else {
+    } else if (! api.model.status.get("error")) {
         $("#selectProject").removeClass("hidden");
         $("#selectDomain").addClass("hidden");
         $("#main").addClass("hidden");
