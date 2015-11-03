@@ -60,6 +60,22 @@ api.model.login.on('change:login', function(model) {
     }
 });
 
+api.model.status.on('change', function(model) {
+	var error = model.get("error");
+	if (error) {
+		if (error.canStart) {
+			$("#no-connection").addClass("hidden");
+			$("#loading").show();
+		} else {
+			$("#no-connection").removeClass("hidden");
+			$("#selectProject").addClass("hidden");
+			$("#loading").hide();
+		}
+	} else {
+		$("#no-connection").addClass("hidden");
+	}
+});
+
 var tableAnalysis = new api.model.AnalysisJob();
 var timeAnalysis = new api.model.AnalysisJob();
 var exportAnalysis = new api.model.AnalysisJob();
@@ -76,8 +92,10 @@ var mainModel = new Backbone.Model({
 
 config.on("change", function() {
     api.saveState();
-    refreshCurrentAnalysis();
-    refreshExportAnalysis();
+    if (! this.hasChanged("configDisplay")) {
+    	refreshCurrentAnalysis();
+        refreshExportAnalysis();
+    }
 
     if (config.get("project") && config.get("domain")) {
         $("#selectProject").addClass("hidden");
@@ -87,7 +105,7 @@ config.on("change", function() {
         $("#selectProject").addClass("hidden");
         $("#selectDomain").removeClass("hidden");
         $("#main").addClass("hidden");
-    } else {
+    } else if (! api.model.status.get("error")) {
         $("#selectProject").removeClass("hidden");
         $("#selectDomain").addClass("hidden");
         $("#main").addClass("hidden");
@@ -228,7 +246,8 @@ var exportView = new api.view.DataExport({
     el : '#export',
     renderTo : '#export-content',
     model : exportAnalysis,
-    displayInAccordion : true,
+    displayInPopup : true,
+    sqlView : true
 });
 
 // Controllers
@@ -262,7 +281,7 @@ var refreshAnalysis = function(a, silent) {
     changed = changed || a.hasChanged();
     
     // if timeAnalysis, use the date as the default dimension if non already set
-    if (a == timeAnalysis && config.get("chosenDimensions").length === 0) {
+    if (a == timeAnalysis) {
     	var selection = config.get("selection");
     	for (i=0; i<selection.facets.length; i++) {
     		if (selection.facets[i].dimension.type == "CONTINUOUS" && selection.facets[i].dimension.valueType == "DATE") {
@@ -295,6 +314,23 @@ refreshExportAnalysis = function() {
     }
 };
 
+var timeAnalysisOrder = function(a) {
+	var obj = {direction : config.get("orderBy")[0].direction};
+	var metrics = config.get("chosenMetrics");
+	
+	for (var i=0; i<metrics.length; i++) {
+		if (config.get("selectedMetric")) {
+			if (metrics[i] == config.get("selectedMetric")) {
+				obj.col = i + 1;
+			}
+		} else {
+			obj.col = 1;
+		}
+	}
+	
+	return obj;
+};
+
 var refreshCurrentAnalysis = function() {
     var a = mainModel.get("currentAnalysis");
     var chosenDimensions = config.get("chosenDimensions");
@@ -315,6 +351,9 @@ var refreshCurrentAnalysis = function() {
         a.set({"limit": null}, {"silent" : silent});
     } else {
         a.set({"limit": config.get("limit")}, {"silent" : silent});
+    }
+    if (a == timeAnalysis) {
+    	a.set("orderBy", [timeAnalysisOrder(a)]);
     }
     changed = changed || a.hasChanged();
     // only trigger change if the analysis has changed

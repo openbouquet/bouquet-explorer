@@ -108,15 +108,30 @@ $navBarAndButtonColour: #e7e7e7;
         #status {
             margin-top: 12px;
         }
-        #login {
-            position: relative;
-            top: 7px;
-		  	color: #465966;
-            padding-top: 10px;
-            a {
-                text-decoration: underline;
-			  	color: #465966;
-            }
+        .navbar-right {
+        	margin-top: 16px;
+        	li {
+        		margin-left: 20px;
+        		
+        		#medium, #zendesk {
+        			a {
+						color: #fff;
+						font-size: 20px;
+						position: relative;
+						top: -2px;
+        				
+        				:hover {
+        					color: $primary-font-color;
+        				}
+        			}
+        		}
+        	}
+        	#login {
+				a {
+					color: $primary-font-color;
+					text-decoration: underline;
+				}
+        	}
         }
     }
     #menu {
@@ -175,7 +190,7 @@ $navBarAndButtonColour: #e7e7e7;
             color: #b9b9b9;
         }
     }
-    #selectProject, #selectDomain, #loading {
+    #selectProject, #selectDomain, #loading, #no-connection {
         position: relative;
         .splash-container {
             text-align: center;
@@ -232,10 +247,10 @@ $navBarAndButtonColour: #e7e7e7;
 			    }
 	        }
 	        .configuration {
-			  margin: 20px;
-			  &.closed {
-			  	 overflow: hidden;
-			  }
+			  	margin: 20px;
+			  	&.closed {
+			  	 	overflow: hidden;
+			  	}
 	            #filters {
 	                dt {
 	                    margin-top: 8px;
@@ -325,15 +340,35 @@ $navBarAndButtonColour: #e7e7e7;
 	                right: 10px;
 	                top: 15px;
 	            }
+	            .squid-api-data-widgets-dimension-widget, .squid-api-data-widgets-metric-widget {
+	            	margin-top: 3px;
+	            }
 	            .squid-api-data-widgets-dimension-widget li, .squid-api-data-widgets-metric-widget li {
-	                border: 1px solid #ccc;
-	                font-size: 14px;
+					border: 1px solid #ccc;
+    				font-size: 12px;
+					box-shadow: 3px 3px 3px -4px;
+					padding: 8px;
+    				min-height: 30px;
+	            }
+	            #squid_api_filters_categorical_selected_view, #squid_api_filters-categorical-panel-view {
+	            	li {
+	           			box-shadow: 3px 3px 3px -4px;
+	           			padding: 3px 3px 3px 8px !important;
+	           			font-size: 12px;
+	           		}
+	           		.facet-remove {
+	           			top: 5px;
+	           			font-size: 8px;
+	           		}
 	            }
 	            .squid-api-data-widgets-dimension-widget li .fa {
 	                color: #bdc3c7;
+	                top: 9px;
 	            }
 	            .squid-api-data-widgets-dimension-widget li {
 	                margin: 0px 20px 10px 0px;
+	                min-height: 30px;
+	                padding: 8px;
 	            }
 	            background: #fff;
 	            #date-selector, #selection, #origin, #metric {
@@ -644,8 +679,6 @@ $navBarAndButtonColour: #e7e7e7;
             }
         }
     }
-
-
     // Reduce spacing between each Horizontal Rule
     hr {
         margin: 0px 0px 15px 0px;
@@ -664,5 +697,216 @@ $navBarAndButtonColour: #e7e7e7;
 		text-shadow: 0 1px 2px rgba(0,0,0,0.25);
 		background: $primary-background-color;
 	  	border-bottom: 0px;
+	}
+	.squid-api-export-panel-popup {
+		&:before {
+			left: 250px;
+		}
+		.btn-default, #curl-view {
+				float: left;
+				margin-left: 10px;
+				max-width: 250px;
+		}
+	}
+	#no-connection {
+		.message {
+			color: #4d4d4d;
+    		position: absolute;
+			background: #f9f9f9;
+			padding: 12px;
+			left: 40%;
+			top: 30px;
+			font-size: 30px;
+		}
+		.pot {
+	  		background: #d0631e;
+	  		position: relative;
+	  		div {
+	  			position: absolute;
+	  		}
+	  		width: 65px;
+	  		height: 70px;
+	  		margin-left: 30%;
+	  		top: 25px;
+	  		&:before {
+	  			top: 0;
+	  			left: -15px;
+	  			border-left: 15px solid transparent;
+				border-right: 0px solid transparent;	
+				border-top: 100px solid #ee7d15;
+	  		}
+	  		&:after {
+	  			top: 0;
+	  			right: -15px;
+	  			border-left: 0px solid transparent;
+				border-right: 15px solid transparent;	
+				border-top: 100px solid #ee7d15;
+	  		}
+	  		.pot-top {
+	  			width: 140px;
+	  			height: 25px;
+	  			top: -25px;
+	 			left: 50%;
+	  			margin-left: -70px;
+	  			&:before {
+	  				left: -5px;   
+	  				top: 0;
+	  				border-left: 5px solid transparent;
+					border-right: 0px solid transparent;	
+					border-top: 25px solid #ee7d15;
+	  			}
+	  			&:after {
+	  				right: -5px;   
+	  				top: 0;
+	  				border-right: 5px solid transparent;
+					border-left: 0px solid transparent;	
+					border-top: 25px solid #ee7d15;
+	  			}
+			}
+			.pot-shadow {
+				z-index: 3;
+		  		width: 125px;
+		  		height: 10px;
+		  		background: rgba(220,84,0,0.2);
+		  		left: 50%;
+		  		top: 0;
+		 	 	margin-left: -62.5px;
+			}
+			.shadow {
+		  		background: rgba(220, 84,0,0.1);
+		  		z-index: -1; 
+		 	 	bottom: -5px;
+		  		left: 50%;
+		  		margin-left: -60px;
+		  		width: 120px;
+		  		height: 10px;
+				border-radius: 120px / 10px;
+			}
+			.plant {
+				animation: grow 4s ease-out forwards;
+				height: 150px;
+				background: #74bb41;
+				width: 16px;
+				z-index: -1;
+				bottom: 0;
+				left: 50%;
+				margin-left: -8px;
+				border-radius: 16px 16px 0 0;
+				div {
+					position: absolute;
+				}
+				&:before {
+					height: 275px;
+					animation: grow 4s ease-out forwards;
+					width: 4px;
+					right: 0;
+					bottom: 0;
+					background: rgba(60,188,131,0.5);
+					border-radius: 0 30px 0 0;
+				}
+				&:after {
+					left: 10px;
+					top: 110px;
+					width: 0px;
+					height: 0px;
+					border-radius: 100px 0px 100px 0px;
+					background:#3cbc83;
+					transform: rotate(-20deg);
+					animation: leaf 5s ease-out forwards;
+					animation-delay: 4s;
+				}
+				.head {
+					width: 50px;
+					height: 50px;
+					left: 50%;
+					top: -15px;
+					margin-left: -25px;
+					border-radius: 50px;
+					background:  #ed692a;
+					transform: scale(0.4); 
+					animation-name: flower, rota;
+					animation-duration: 3s, 15s;
+					animation-timing-function: ease-out, ease-out;
+					animation-fill-mode: forwards;
+					animation-delay: 1s, 4s;
+				}
+				.face {
+					background: #a3430c;
+					width: 20px;
+					height: 20px;
+					border-radius: 25px;
+					position: absolute;
+					margin-top: -10px;
+					margin-left: -10px;
+					top: 50%;
+					left: 50%;
+				}
+				li {
+					list-style: none;
+		 			width:44px;
+		  			height:25px;
+		  			position: absolute; 
+		  			float:left;
+		  			border-radius: 100px 0px 100px 0px;
+		  			background:#ffc008;
+		  			&:nth-child(1) {
+		  				top:10px;
+						left:60px;
+						transform: rotate(30deg);
+		  			}
+		  			&:nth-child(2) {
+		  				top:15px;
+						right:60px;
+						transform: rotate(20deg);
+		  			}
+		  			&:nth-child(3) {
+		  				top:55px;
+						right:45px;
+						transform: rotate(-20deg);
+		  			}
+		  			&:nth-child(4) {
+		  				top:55px;
+						left:45px;
+						transform: rotate(-110deg);
+		  			}
+		  			&:nth-child(5) {
+		  				top:75px;
+						left:00px;
+						transform: rotate(-60deg);
+		  			}
+		  			&:nth-child(6) {
+		  				bottom: 55px;
+						left:45px;
+						transform: rotate(-20deg);
+		  			}
+		  			&:nth-child(7) {
+		  				bottom:55px;
+						right:45px;
+						transform: rotate(-110deg);
+		  			}
+		  			&:nth-child(8) {
+		  				bottom:75px;
+						left:00px;
+						transform: rotate(-60deg);
+		  			}
+		  			@keyframes grow {
+						from { height : 50px; }
+						to { height : 200px ; }
+					}
+					@keyframes flower {
+						from { transform: scale(0.4); }
+						to { transform: scale(1); }
+					}
+					@keyframes rota {
+						from { transform : rotate(0); }
+						to { transform : rotate(360deg); }
+					}
+					@keyframes leaf {
+						from { width : 0px; height: 0; }
+						to {   width: 40px; height: 20px; }
+					}
+				}
+			}
+		}
 	}
 }
