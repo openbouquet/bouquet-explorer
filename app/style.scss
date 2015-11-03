@@ -652,8 +652,6 @@ $navBarAndButtonColour: #e7e7e7;
             }
         }
     }
-
-
     // Reduce spacing between each Horizontal Rule
     hr {
         margin: 0px 0px 15px 0px;
@@ -674,247 +672,205 @@ $navBarAndButtonColour: #e7e7e7;
 	  	border-bottom: 0px;
 	}
 	#no-connection {
+		.splash-container {
+			background: #ffc008;
+		}
+		.message {
+			color: #fff;
+    		position: absolute;
+    		left: 40%;
+    		top: 30px;
+    		font-size: 30px;
+		}
 		.pot {
 	  		background: #d0631e;
 	  		position: relative;
-		}
-	
-		.pot > div {
-	  		position: absolute;
-		}
-	
-		.pot-bot {
+	  		div {
+	  			position: absolute;
+	  		}
 	  		width: 65px;
 	  		height: 70px;
 	  		margin-left: 30%;
-	  		top: 120px;
-		}
-	
-		.pot-bot:before {
-	  		top: 0;
-	  		left: -15px;
-	  		border-left: 15px solid transparent;
-			border-right: 0px solid transparent;	
-			border-top: 100px solid #ee7d15;
-		}
-	
-		.pot-bot:after {
-	  		top: 0;
-	  		right: -15px;
-	  		border-left: 0px solid transparent;
-			border-right: 15px solid transparent;	
-			border-top: 100px solid #ee7d15;
-		}
-	
-		.pot-top {
-	  		width: 140px;
-	  		height: 25px;
-	  		top: -25px;
-	 		left: 50%;
-	  		margin-left: -70px;
-		}
-	
-		.pot-top:before {
-	  		left: -5px;   
-	  		top: 0;
-	  		border-left: 5px solid transparent;
-			border-right: 0px solid transparent;	
-			border-top: 25px solid #ee7d15;
-		}
-	
-		.pot-top:after {
-	  		right: -5px;   
-	  		top: 0;
-	  		border-right: 5px solid transparent;
-			border-left: 0px solid transparent;	
-			border-top: 25px solid #ee7d15;
-		}
-	
-		.pot-shadow {
-			z-index: 3;
-	  		width: 125px;
-	  		height: 10px;
-	  		background: rgba(220,84,0,0.2);
-	  		left: 50%;
-	  		top: 0;
-	 	 	margin-left: -62.5px;
-		}
-	
-		.shadow {
-	  		background: rgba(220, 84,0,0.1);
-	  		z-index: -1; 
-	 	 	bottom: -5px;
-	  		left: 50%;
-	  		margin-left: -60px;
-	  		width: 120px;
-	  		height: 10px;
-			border-radius: 120px / 10px;
-		}
-	
-		.plant {
-			height: 280px;
-			background: #74bb41;
-			width: 16px;
-			z-index: -1;
-			bottom: 0;
-			left: 50%;
-			margin-left: -8px;
-			border-radius: 16px 16px 0 0;
-		}
-		
-		.plant > div {
-			position: absolute;
-		}
-		
-		.plant:before {
-			height: 275px;
-			width: 4px;
-			right: 0;
-			bottom: 0;
-			background: rgba(60,188,131,0.5);
-			border-radius: 0 30px 0 0;
-		}
-		
-		.plant:after {
-			left: 10px;
-			top: 110px;
-			width: 0px;
-			height: 0px;
-			border-radius: 100px 0px 100px 0px;
-			background:#3cbc83;
-			transform: rotate(-20deg);
-		}
-		
-		.head {
-			width: 50px;
-			height: 50px;
-			left: 50%;
-			top: -15px;
-			margin-left: -25px;
-			border-radius: 50px;
-			background:  #ed692a;
-		}
-		
-		.face {
-			background: #a3430c;
-			width: 20px;
-			height: 20px;
-			border-radius: 25px;
-			position: absolute;
-			margin-top: -10px;
-			margin-left: -10px;
-			top: 50%;
-			left: 50%;
-		}
-		
-		li {
-			list-style: none;
-		 	width:50px;
-		  	height:30px;
-		  	position: absolute; 
-		  	float:left;
-		  	border-radius: 100px 0px 100px 0px;
-		  	background:#ffc008;
-		}
-	
-		li:nth-child(1) {
-			top:10px;
-			left:60px;
-			transform: rotate(30deg);
-		}
-		
-		li:nth-child(2) {
-			top:15px;
-			right:60px;
-			transform: rotate(20deg);
-		}
-		
-		li:nth-child(3) {
-			top:55px;
-			right:45px;
-			transform: rotate(-20deg);
-		}
-		
-		li:nth-child(4) {
-			top:55px;
-			left:45px;
-			transform: rotate(-110deg);
-		}
-		
-		li:nth-child(5) {
-			top:75px;
-			left:00px;
-			transform: rotate(-60deg);
-		}
-		
-		li:nth-child(6) {
-			bottom: 55px;
-			left:45px;
-			transform: rotate(-20deg);
-		}
-		
-		li:nth-child(7) {
-			bottom:55px;
-			right:45px;
-			transform: rotate(-110deg);
-		}
-		
-		li:nth-child(8) {
-			bottom:75px;
-			left:00px;
-			transform: rotate(-60deg);
-		}
-		
-		/* animation controls */ 
-		
-		.plant, .plant:before {
-			animation: grow 4s ease-out forwards;
-		}
-		
-		.head {
-			transform: scale(0.4); 
-			animation-name: flower, rota;
-			animation-duration: 3s, 15s;
-			animation-timing-function: ease-out, ease-out;
-			animation-fill-mode: forwards;
-			animation-delay: 1s, 4s;
-		}
-		
-		.plant:after {
-			animation: leaf 5s ease-out forwards;
-			animation-delay: 4s;
-		}
-		
-		@keyframes grow {
-			from { height : 50px; }
-			to { height : 280px ; }
-		}
-		
-		@keyframes flower {
-			from { transform: scale(0.4); }
-			to { transform: scale(1); }
-		}
-		
-		@keyframes rota {
-			from { transform : rotate(0); }
-			to { transform : rotate(360deg); }
-		}
-		
-		@keyframes leaf {
-			from { width : 0px; height: 0; }
-			to {   width: 40px; height: 20px; }
-		}
-		
-		.message {
-			position: absolute;
-    		left: 40%;
-			width: 500px;
-			top: 70px;
-			background: #f3f3f3;
-			font-size: 45px;
-			text-align: center;
-			padding: 5px;
-			border-radius: 8px;
+	  		top: 25px;
+	  		&:before {
+	  			top: 0;
+	  			left: -15px;
+	  			border-left: 15px solid transparent;
+				border-right: 0px solid transparent;	
+				border-top: 100px solid #ee7d15;
+	  		}
+	  		&:after {
+	  			top: 0;
+	  			right: -15px;
+	  			border-left: 0px solid transparent;
+				border-right: 15px solid transparent;	
+				border-top: 100px solid #ee7d15;
+	  		}
+	  		.pot-top {
+	  			width: 140px;
+	  			height: 25px;
+	  			top: -25px;
+	 			left: 50%;
+	  			margin-left: -70px;
+	  			&:before {
+	  				left: -5px;   
+	  				top: 0;
+	  				border-left: 5px solid transparent;
+					border-right: 0px solid transparent;	
+					border-top: 25px solid #ee7d15;
+	  			}
+	  			&:after {
+	  				right: -5px;   
+	  				top: 0;
+	  				border-right: 5px solid transparent;
+					border-left: 0px solid transparent;	
+					border-top: 25px solid #ee7d15;
+	  			}
+			}
+			.pot-shadow {
+				z-index: 3;
+		  		width: 125px;
+		  		height: 10px;
+		  		background: rgba(220,84,0,0.2);
+		  		left: 50%;
+		  		top: 0;
+		 	 	margin-left: -62.5px;
+			}
+			.shadow {
+		  		background: rgba(220, 84,0,0.1);
+		  		z-index: -1; 
+		 	 	bottom: -5px;
+		  		left: 50%;
+		  		margin-left: -60px;
+		  		width: 120px;
+		  		height: 10px;
+				border-radius: 120px / 10px;
+			}
+			.plant {
+				animation: grow 4s ease-out forwards;
+				height: 150px;
+				background: #74bb41;
+				width: 16px;
+				z-index: -1;
+				bottom: 0;
+				left: 50%;
+				margin-left: -8px;
+				border-radius: 16px 16px 0 0;
+				div {
+					position: absolute;
+				}
+				&:before {
+					height: 275px;
+					animation: grow 4s ease-out forwards;
+					width: 4px;
+					right: 0;
+					bottom: 0;
+					background: rgba(60,188,131,0.5);
+					border-radius: 0 30px 0 0;
+				}
+				&:after {
+					left: 10px;
+					top: 110px;
+					width: 0px;
+					height: 0px;
+					border-radius: 100px 0px 100px 0px;
+					background:#3cbc83;
+					transform: rotate(-20deg);
+					animation: leaf 5s ease-out forwards;
+					animation-delay: 4s;
+				}
+				.head {
+					width: 50px;
+					height: 50px;
+					left: 50%;
+					top: -15px;
+					margin-left: -25px;
+					border-radius: 50px;
+					background:  #ed692a;
+					transform: scale(0.4); 
+					animation-name: flower, rota;
+					animation-duration: 3s, 15s;
+					animation-timing-function: ease-out, ease-out;
+					animation-fill-mode: forwards;
+					animation-delay: 1s, 4s;
+				}
+				.face {
+					background: #a3430c;
+					width: 20px;
+					height: 20px;
+					border-radius: 25px;
+					position: absolute;
+					margin-top: -10px;
+					margin-left: -10px;
+					top: 50%;
+					left: 50%;
+				}
+				li {
+					list-style: none;
+		 			width:44px;
+		  			height:25px;
+		  			position: absolute; 
+		  			float:left;
+		  			border-radius: 100px 0px 100px 0px;
+		  			background:#ffc008;
+		  			&:nth-child(1) {
+		  				top:10px;
+						left:60px;
+						transform: rotate(30deg);
+		  			}
+		  			&:nth-child(2) {
+		  				top:15px;
+						right:60px;
+						transform: rotate(20deg);
+		  			}
+		  			&:nth-child(3) {
+		  				top:55px;
+						right:45px;
+						transform: rotate(-20deg);
+		  			}
+		  			&:nth-child(4) {
+		  				top:55px;
+						left:45px;
+						transform: rotate(-110deg);
+		  			}
+		  			&:nth-child(5) {
+		  				top:75px;
+						left:00px;
+						transform: rotate(-60deg);
+		  			}
+		  			&:nth-child(6) {
+		  				bottom: 55px;
+						left:45px;
+						transform: rotate(-20deg);
+		  			}
+		  			&:nth-child(7) {
+		  				bottom:55px;
+						right:45px;
+						transform: rotate(-110deg);
+		  			}
+		  			&:nth-child(8) {
+		  				bottom:75px;
+						left:00px;
+						transform: rotate(-60deg);
+		  			}
+		  			@keyframes grow {
+						from { height : 50px; }
+						to { height : 200px ; }
+					}
+					@keyframes flower {
+						from { transform: scale(0.4); }
+						to { transform: scale(1); }
+					}
+					@keyframes rota {
+						from { transform : rotate(0); }
+						to { transform : rotate(360deg); }
+					}
+					@keyframes leaf {
+						from { width : 0px; height: 0; }
+						to {   width: 40px; height: 20px; }
+					}
+				}
+			}
 		}
 	}
 }
