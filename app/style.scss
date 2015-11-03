@@ -676,4 +676,14 @@ $navBarAndButtonColour: #e7e7e7;
 		background: $primary-background-color;
 	  	border-bottom: 0px;
 	}
+	.squid-api-export-panel-popup {
+		&:before {
+			left: 250px;
+		}
+		.btn-default, #curl-view {
+			float: left;
+			margin-left: 10px;
+			max-width: 250px;
+		}
+	}
 }
