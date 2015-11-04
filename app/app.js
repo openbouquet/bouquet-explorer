@@ -376,6 +376,59 @@ config.on("change:startIndex", function(config) {
     }
 });
 
+config.on("change", function(config) {
+	var project = config.get("project");
+	var domain = config.get("domain");
+	var tourViewed = config.get("tourFinished");
+	if (project && domain && ! tourViewed) {
+		setTimeout(function() {
+			// Instance the tour
+			var tour = new Tour({
+			  steps: [
+			  {
+			    element: "#date-picker",
+			    title: "Let's dive straight into it!",
+			    content: "This area is the date selection area. We have automatically chosen one from your data for you (if one exists) and selected a predefined range!"
+			  },
+			  {
+			    element: "#origin",
+			    title: "Column Selection",
+			    content: "Ok, so here are where the columns of your table are stored. They are seperated into 'Dimensions' & 'Metrics'."
+			  },
+			  {
+				element: "#origin",
+				title: "What can I do here?",
+				content: "In this space you can either: <br />1. Add your database columns to an analysis <br /> 2. Modify existing attributes. <br /> 3. Index them"
+			  },
+			  {
+				 element: "#dimension",
+				 placement: "bottom",
+				 title: "So why this area?",
+				 content: "This area along with the one undernieth it shows the currently selected columns for your analysis"
+			  },
+			  {	
+				  element: ".refresh-analysis",
+				  placement: "bottom",
+				  title: "Let me see my data!",
+				  content: "Whenever you update the configuration of your analysis you need to hit this green button to launch an analysis."
+			  },
+			  {	
+				  element: "#display-selector",
+				  placement: "top",
+				  title: "Visualiation not appropriate?",
+				  content: "You can trigger different visualisations by clicking the icons. <br /><br />Enjoy and don't forget to provide us feedback at [link]"
+			  }
+			]});
+
+			// Initialize the tour
+			tour.init();
+
+			// Start the tour
+			tour.start();
+		}, 2000);
+	}
+});
+
 var getOrderByIndex = function() {
     var index;
     if (config.get("chosenDimensions")) {
@@ -449,11 +502,6 @@ config.on('change:domain', function(model) {
         }, 1000);
 
     }
-});
-
-new api.view.UIoverlayWidget({
-    dateArea : dateSelectionView,
-    displayTypeArea : displayTypeView
 });
 
 // Menu State management
