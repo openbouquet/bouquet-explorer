@@ -404,7 +404,7 @@ config.on("change", function(config) {
 				 element: "#dimension",
 				 placement: "bottom",
 				 title: "So why this area?",
-				 content: "This area along with the one undernieth it shows the currently selected columns for your analysis"
+				 content: "This area along with the one underneath it shows the currently selected columns for your analysis"
 			  },
 			  {	
 				  element: ".refresh-analysis",
