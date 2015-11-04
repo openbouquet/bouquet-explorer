@@ -60,6 +60,22 @@ api.model.login.on('change:login', function(model) {
     }
 });
 
+api.model.status.on('change', function(model) {
+	var error = model.get("error");
+	if (error) {
+		if (error.canStart) {
+			$("#no-connection").addClass("hidden");
+			$("#loading").show();
+		} else {
+			$("#no-connection").removeClass("hidden");
+			$("#selectProject").addClass("hidden");
+			$("#loading").hide();
+		}
+	} else {
+		$("#no-connection").addClass("hidden");
+	}
+});
+
 var tableAnalysis = new api.model.AnalysisJob();
 var timeAnalysis = new api.model.AnalysisJob();
 var exportAnalysis = new api.model.AnalysisJob();
@@ -87,7 +103,7 @@ config.on("change", function() {
         $("#selectProject").addClass("hidden");
         $("#selectDomain").removeClass("hidden");
         $("#main").addClass("hidden");
-    } else {
+    } else if (! api.model.status.get("error")) {
         $("#selectProject").removeClass("hidden");
         $("#selectDomain").addClass("hidden");
         $("#main").addClass("hidden");
@@ -228,7 +244,8 @@ var exportView = new api.view.DataExport({
     el : '#export',
     renderTo : '#export-content',
     model : exportAnalysis,
-    displayInAccordion : true,
+    displayInPopup : true,
+    sqlView : true
 });
 
 // Controllers
