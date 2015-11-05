@@ -386,37 +386,48 @@ config.on("change", function(config) {
 			var tour = new Tour({
 			  steps: [
 			  {
+			    element: ".zEWidget-launcher",
+			    title: "How to get help",
+			    placement: "left",
+			    content: "This Help button is available at all times. Use it to browse the documentation and find answers."
+			  },
+			  {
 			    element: "#date-picker",
-			    title: "Let's dive straight into it!",
-			    content: "This area is the date selection area. We have automatically chosen one from your data for you (if one exists) and selected a predefined range!"
+			    title: "Select date range",
+			    content: "This is where you define the date range of your data. If multiple data measures are available, pick one first."
 			  },
 			  {
-			    element: "#origin",
-			    title: "Column Selection",
-			    content: "Ok, so here are where the columns of your table are stored. They are seperated into 'Dimensions' & 'Metrics'."
+				element: "#selection",
+				title: "Filter your data",
+				content: "This is where you can filter your data. First pick a filter, then search the values you want to filter on. Remember to index the dimension first."
 			  },
 			  {
-				element: "#origin",
-				title: "What can I do here?",
-				content: "In this space you can either: <br />1. Add your database columns to an analysis <br /> 2. Modify existing attributes. <br /> 3. Index them"
-			  },
-			  {
-				 element: "#dimension",
+				 element: "#metric",
 				 placement: "bottom",
-				 title: "So why this area?",
-				 content: "This area along with the one underneath it shows the currently selected columns for your analysis"
+				 title: "Add columns to your data set",
+				 content: "Pick from the available dimensions and metrics to add columns to your data. You can reorder the dimensions with a simple drag & drop.",
+				 onNext: function() {
+					 setTimeout(function() {
+						 $("#origin button").click();
+					 }, 100);
+				 }
 			  },
 			  {	
-				  element: ".refresh-analysis",
+				  element: "#origin",
 				  placement: "bottom",
-				  title: "Let me see my data!",
-				  content: "Whenever you update the configuration of your analysis you need to hit this green button to launch an analysis."
+				  title: "Edit the datamodel",
+				  content: "By clicking the Configure icon after clicking on one of the buttons, you can choose to index dimensions, create new metrics and manage relations between domains."
 			  },
 			  {	
-				  element: "#display-selector",
-				  placement: "top",
-				  title: "Visualiation not appropriate?",
-				  content: "You can trigger different visualisations by clicking the icons. <br /><br />Enjoy and don't forget to provide us feedback at [link]"
+				  element: ".menu-link",
+				  placement: "right",
+				  title: "Management panel",
+				  content: "By clicking here you can open the management panel allowing you to manage users & shortcuts.",
+				  onPrev: function() {
+					 setTimeout(function() {
+						 $("#origin button").click();
+					 }, 100);
+				  }
 			  }
 			]});
 
