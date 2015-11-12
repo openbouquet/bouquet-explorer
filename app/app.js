@@ -6,7 +6,6 @@ var me = this;
 api.setup({
     "clientId" : "dashboard",
     "config" : {
-        "orderBy" : [{"col":0, "direction":"DESC"}],
         "limit" : 1000,
         "startIndex" : 0,
         "maxResults" : 10
@@ -312,23 +311,6 @@ refreshExportAnalysis = function() {
     }
 };
 
-var timeAnalysisOrder = function(a) {
-	var obj = {direction : config.get("orderBy")[0].direction};
-	var metrics = config.get("chosenMetrics");
-	
-	for (var i=0; i<metrics.length; i++) {
-		if (config.get("selectedMetric")) {
-			if (metrics[i] == config.get("selectedMetric")) {
-				obj.col = i + 1;
-			}
-		} else {
-			obj.col = 1;
-		}
-	}
-	
-	return obj;
-};
-
 var refreshCurrentAnalysis = function() {
     var a = mainModel.get("currentAnalysis");
     var chosenDimensions = config.get("chosenDimensions");
@@ -349,9 +331,6 @@ var refreshCurrentAnalysis = function() {
         a.set({"limit": null}, {"silent" : silent});
     } else {
         a.set({"limit": config.get("limit")}, {"silent" : silent});
-    }
-    if (a == timeAnalysis) {
-    	a.set("orderBy", [timeAnalysisOrder(a)]);
     }
     changed = changed || a.hasChanged();
     // only trigger change if the analysis has changed
@@ -374,43 +353,6 @@ config.on("change:startIndex", function(config) {
         a.set("status", "RUNNING");
         squid_api.controller.analysisjob.getAnalysisJobResults(null, a);
     }
-});
-
-var getOrderByIndex = function() {
-    var index;
-    if (config.get("chosenDimensions")) {
-        index = config.get("chosenDimensions").length;
-        var selectedMetric = config.get("selectedMetric");
-        var metrics = config.get("chosenMetrics");
-        if (metrics && metrics.length > 0) {
-            for (i=0; i<metrics.length; i++) {
-                if (metrics[i] === selectedMetric) {
-                    index += i;
-                }
-            }
-        } else {
-            index = index - 1;
-        }
-    } else {
-        index = 0;
-    }
-    return index;
-};
-
-// listen to orderBy widget
-config.on("change:selectedMetric", function(config) {
-    var orderBy = config.get("orderBy")[0];
-    config.set("orderBy", [{"col" : getOrderByIndex(), "direction" : orderBy.direction}]);
-});
-
-config.on("change:chosenDimensions", function(config) {
-    var orderBy = config.get("orderBy")[0];
-    config.set("orderBy", [{"col" : getOrderByIndex(), "direction" : orderBy.direction}]);
-});
-
-config.on("change:chosenMetrics", function(config) {
-    var orderBy = config.get("orderBy")[0];
-    config.set("orderBy", [{"col" : getOrderByIndex(), "direction" : orderBy.direction}]);
 });
 
 config.on('change:project', function(model) {
