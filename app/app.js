@@ -18,6 +18,7 @@ new api.view.LoginView();
 
 new api.view.StatusView();
 
+
 var projectSelect = new api.view.ProjectManagementWidget({
     el : '#project'
 });
@@ -36,6 +37,10 @@ new api.view.ShortcutsAdminView({
     onSave : function() {
         $('#shortcutsModal').modal('hide');
     }
+});
+
+new api.view.BookmarksManagementWidget({
+    el : '#bookmark'
 });
 
 /*
