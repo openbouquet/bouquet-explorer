@@ -22,7 +22,7 @@ $navBarAndButtonColour: #e7e7e7;
             margin-top: 20px;
         }
     }
-    #project, #domain {
+    #project, #domain, #bookmark {
     	float: left;
     	.open>.multiselect-container {
     		left: auto;
@@ -99,7 +99,7 @@ $navBarAndButtonColour: #e7e7e7;
             }
         }
         .navbar-nav {
-            .project, .domain {
+            .project, .domain, .bookmark {
                 padding-right: 20px;
                 margin-top: 10px;
                 min-width: 150px;
@@ -109,17 +109,15 @@ $navBarAndButtonColour: #e7e7e7;
             margin-top: 12px;
         }
         .navbar-right {
-        	margin-top: 16px;
+        	
         	li {
         		margin-left: 20px;
         		
         		#medium, #zendesk {
+        			margin-top: 16px;
         			a {
 						color: #fff;
-						font-size: 20px;
-						position: relative;
-						top: -2px;
-        				
+    				
         				:hover {
         					color: $primary-font-color;
         				}
@@ -127,6 +125,7 @@ $navBarAndButtonColour: #e7e7e7;
         		}
         	}
         	#login {
+        		margin-top: 16px;
 				a {
 					color: $primary-font-color;
 					text-decoration: underline;
