@@ -88,7 +88,7 @@ var exportAnalysis = new api.model.AnalysisJob();
 // note model objects references contain oids
 var mainModel = new Backbone.Model({
     "timeDimension": null,
-    "currentAnalysis" : null,
+    "currentAnalysis" : tableAnalysis,
     "tableAnalysis" : tableAnalysis,
     "timeAnalysis" : timeAnalysis,
     "exportAnalysis" : exportAnalysis
