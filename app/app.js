@@ -43,11 +43,6 @@ new api.view.BookmarksManagementWidget({
     el : '#bookmark-crud'
 });
 
-new api.view.BookmarksManagementWidget({
-    el : '#bookmark-create',
-    createOnlyView : true,
-});
-
 /*
  * Controllers
  */

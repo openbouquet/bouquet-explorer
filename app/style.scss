@@ -36,11 +36,12 @@ $navBarAndButtonColour: #e7e7e7;
     .bookmark {
         position: relative;
         top: 10px;
-        #bookmark-create, #bookmark-crud {
+        #bookmark-crud {
             float: left;
-            width: auto;
             button {
-                font-size: 18px;
+                font-size: 23px;
+                left: -15px;
+                top: -3px;
                 color: $primary-font-color;
             }
         }
