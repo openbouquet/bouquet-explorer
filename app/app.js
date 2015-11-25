@@ -40,7 +40,12 @@ new api.view.ShortcutsAdminView({
 });
 
 new api.view.BookmarksManagementWidget({
-    el : '#bookmark'
+    el : '#bookmark-crud'
+});
+
+new api.view.BookmarksManagementWidget({
+    el : '#bookmark-create',
+    createOnlyView : true,
 });
 
 /*
@@ -281,7 +286,7 @@ var refreshAnalysis = function(a, silent) {
             "silent" : silent
         });
     changed = changed || a.hasChanged();
-    
+
     // if timeAnalysis, use the date as the default dimension if non already set
     if (a == timeAnalysis) {
     	var selection = config.get("selection");
@@ -396,13 +401,13 @@ config.on("change", function(config) {
 					 }, 100);
 				 }
 			  },
-			  {	
+			  {
 				  element: "#origin",
 				  placement: "bottom",
 				  title: "Edit the datamodel",
 				  content: "By clicking the Configure icon after clicking on one of the buttons, you can choose to index dimensions, create new metrics and manage relations between domains."
 			  },
-			  {	
+			  {
 				  element: ".menu-link",
 				  placement: "right",
 				  title: "Management panel",
