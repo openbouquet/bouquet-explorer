@@ -40,7 +40,7 @@ new api.view.ShortcutsAdminView({
 });
 
 new api.view.BookmarksManagementWidget({
-    el : '#bookmark'
+    el : '#bookmark-crud'
 });
 
 /*
@@ -283,6 +283,7 @@ var refreshAnalysis = function(a, silent) {
         }]}, {
                 "silent" : silent
         });
+<<<<<<< HEAD
 
         changed = changed || a.hasChanged();
 
@@ -307,6 +308,30 @@ var refreshAnalysis = function(a, silent) {
         	a.setParameter("startIndex", config.get("startIndex"));
         	a.setParameter("maxResults", config.get("maxResults"));
         }
+=======
+    changed = changed || a.hasChanged();
+
+    // if timeAnalysis, use the date as the default dimension if non already set
+    if (a == timeAnalysis) {
+    	var selection = config.get("selection");
+    	for (i=0; i<selection.facets.length; i++) {
+    		if (selection.facets[i].dimension.type == "CONTINUOUS" && selection.facets[i].dimension.valueType == "DATE") {
+    			a.setFacets([selection.facets[i].id], silent);
+    			break;
+    		}
+    	}
+    } else {
+    	a.setFacets(config.get("chosenDimensions"), silent);
+    }
+    changed = changed || a.hasChanged();
+    a.setMetrics(config.get("chosenMetrics"), silent);
+    changed = changed || a.hasChanged();
+    a.setSelection(api.model.filters.get("selection"), silent);
+    changed = changed || a.hasChanged();
+    if (a == tableAnalysis) {
+    	a.setParameter("startIndex", config.get("startIndex"));
+    	a.setParameter("maxResults", config.get("maxResults"));
+>>>>>>> feature/T654
     }
 
     return changed;
@@ -382,6 +407,7 @@ config.on("change", function(config) {
 	var project = config.get("project");
 	var domain = config.get("domain");
 	var tourViewed = config.get("tourFinished");
+<<<<<<< HEAD
 	if (project && domain) {
         if (! config.get("currentAnalysis")) {
             mainModel.set("currentAnalysis", tableAnalysis);
@@ -444,6 +470,65 @@ config.on("change", function(config) {
     			tour.start();
     		}, 2000);
         }
+=======
+	if (project && domain && ! tourViewed) {
+		setTimeout(function() {
+			// Instance the tour
+			var tour = new Tour({
+			  steps: [
+			  {
+			    element: ".zEWidget-launcher",
+			    title: "How to get help",
+			    placement: "left",
+			    content: "This Help button is available at all times. Use it to browse the documentation and find answers."
+			  },
+			  {
+			    element: "#date-picker",
+			    title: "Select date range",
+			    content: "This is where you define the date range of your data. If multiple data measures are available, pick one first."
+			  },
+			  {
+				element: "#selection",
+				title: "Filter your data",
+				content: "This is where you can filter your data. First pick a filter, then search the values you want to filter on. Remember to index the dimension first."
+			  },
+			  {
+				 element: "#metric",
+				 placement: "bottom",
+				 title: "Add columns to your data set",
+				 content: "Pick from the available dimensions and metrics to add columns to your data. You can reorder the dimensions with a simple drag & drop.",
+				 onNext: function() {
+					 setTimeout(function() {
+						 $("#origin button").click();
+					 }, 100);
+				 }
+			  },
+			  {
+				  element: "#origin",
+				  placement: "bottom",
+				  title: "Edit the datamodel",
+				  content: "By clicking the Configure icon after clicking on one of the buttons, you can choose to index dimensions, create new metrics and manage relations between domains."
+			  },
+			  {
+				  element: ".menu-link",
+				  placement: "right",
+				  title: "Management panel",
+				  content: "By clicking here you can open the management panel allowing you to manage users & shortcuts.",
+				  onPrev: function() {
+					 setTimeout(function() {
+						 $("#origin button").click();
+					 }, 100);
+				  }
+			  }
+			]});
+
+			// Initialize the tour
+			tour.init();
+
+			// Start the tour
+			tour.start();
+		}, 2000);
+>>>>>>> feature/T654
 	}
 });
 
