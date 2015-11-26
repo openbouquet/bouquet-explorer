@@ -307,6 +307,15 @@ var refreshAnalysis = function(a, silent) {
         	a.setParameter("startIndex", config.get("startIndex"));
         	a.setParameter("maxResults", config.get("maxResults"));
         }
+        if (a == exportAnalysis) {
+            if (a.get("facets") || a.get("metricList")) {
+                if (a.get("facets").length > 0 || a.get("metricList").length > 0) {
+                    a.set("enabled", true);
+                } else {
+                    a.set("enabled", false);
+                }
+            }
+        }
     }
 
     return changed;
