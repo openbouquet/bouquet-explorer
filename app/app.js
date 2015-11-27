@@ -395,7 +395,11 @@ config.on("change:currentAnalysis", function(config) {
     if (! config._previousAttributes.currentAnalysis) {
         // leave 1 second before computing
         setTimeout(function() {
-            compute(mainModel.get("currentAnalysis"));
+            if (config.get("chosenDimensions") || config.get("chosenMetrics")) {
+                if (config.get("chosenMetrics").length > 0 || config.get("chosenDimensions").length > 0) {
+                    compute(mainModel.get("currentAnalysis"));
+                }
+            }
         }, 1000);
     }
 });
