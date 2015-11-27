@@ -22,7 +22,7 @@ $navBarAndButtonColour: #e7e7e7;
             margin-top: 20px;
         }
     }
-    #project, #domain {
+    #project, #domain, #bookmark {
     	float: left;
     	.open>.multiselect-container {
     		left: auto;
@@ -33,6 +33,19 @@ $navBarAndButtonColour: #e7e7e7;
     		min-width: 130px;
     	}
    	}
+    .bookmark {
+        position: relative;
+        top: 10px;
+        #bookmark-crud {
+            float: left;
+            button {
+                font-size: 18px;
+                left: -15px;
+                top: -1px;
+                color: $primary-font-color;
+            }
+        }
+    }
    	#project-edit {
    		float: left;
    		margin-left: -4px;
@@ -109,17 +122,15 @@ $navBarAndButtonColour: #e7e7e7;
             margin-top: 12px;
         }
         .navbar-right {
-        	margin-top: 16px;
+
         	li {
         		margin-left: 20px;
-        		
+
         		#medium, #zendesk {
+        			margin-top: 16px;
         			a {
 						color: #fff;
-						font-size: 20px;
-						position: relative;
-						top: -2px;
-        				
+
         				:hover {
         					color: $primary-font-color;
         				}
@@ -127,6 +138,7 @@ $navBarAndButtonColour: #e7e7e7;
         		}
         	}
         	#login {
+        		margin-top: 16px;
 				a {
 					color: $primary-font-color;
 					text-decoration: underline;
@@ -708,14 +720,14 @@ $navBarAndButtonColour: #e7e7e7;
 	  			top: 0;
 	  			left: -15px;
 	  			border-left: 15px solid transparent;
-				border-right: 0px solid transparent;	
+				border-right: 0px solid transparent;
 				border-top: 100px solid #ee7d15;
 	  		}
 	  		&:after {
 	  			top: 0;
 	  			right: -15px;
 	  			border-left: 0px solid transparent;
-				border-right: 15px solid transparent;	
+				border-right: 15px solid transparent;
 				border-top: 100px solid #ee7d15;
 	  		}
 	  		.pot-top {
@@ -725,17 +737,17 @@ $navBarAndButtonColour: #e7e7e7;
 	 			left: 50%;
 	  			margin-left: -70px;
 	  			&:before {
-	  				left: -5px;   
+	  				left: -5px;
 	  				top: 0;
 	  				border-left: 5px solid transparent;
-					border-right: 0px solid transparent;	
+					border-right: 0px solid transparent;
 					border-top: 25px solid #ee7d15;
 	  			}
 	  			&:after {
-	  				right: -5px;   
+	  				right: -5px;
 	  				top: 0;
 	  				border-right: 5px solid transparent;
-					border-left: 0px solid transparent;	
+					border-left: 0px solid transparent;
 					border-top: 25px solid #ee7d15;
 	  			}
 			}
@@ -750,7 +762,7 @@ $navBarAndButtonColour: #e7e7e7;
 			}
 			.shadow {
 		  		background: rgba(220, 84,0,0.1);
-		  		z-index: -1; 
+		  		z-index: -1;
 		 	 	bottom: -5px;
 		  		left: 50%;
 		  		margin-left: -60px;
@@ -799,7 +811,7 @@ $navBarAndButtonColour: #e7e7e7;
 					margin-left: -25px;
 					border-radius: 50px;
 					background:  #ed692a;
-					transform: scale(0.4); 
+					transform: scale(0.4);
 					animation-name: flower, rota;
 					animation-duration: 3s, 15s;
 					animation-timing-function: ease-out, ease-out;
@@ -821,7 +833,7 @@ $navBarAndButtonColour: #e7e7e7;
 					list-style: none;
 		 			width:44px;
 		  			height:25px;
-		  			position: absolute; 
+		  			position: absolute;
 		  			float:left;
 		  			border-radius: 100px 0px 100px 0px;
 		  			background:#ffc008;

@@ -15,21 +15,15 @@
     "tests"
   ],
   "dependencies": {
-    "squid_api": "https://github.com/squidsolutions/jssdk2.git#3.2.2",
-    "squid_api_core_widgets": "https://github.com/squidsolutions/jssdk-core-widgets.git#2.8.1",
+    "squid_api": "https://github.com/squidsolutions/jssdk2.git#3.2.4",
+    "squid_api_core_widgets": "https://github.com/squidsolutions/jssdk-core-widgets.git#2.8.3",
     "bootstrap": "3.3.4",
     "font-awesome": "https://github.com/components/font-awesome.git",
     "bigSlide": "https://github.com/ascott1/bigSlide.js.git#648f9fe724ff18903e7e3188738def089111050d",
     "typed": "https://github.com/mattboldt/typed.js.git",
-<<<<<<< HEAD
-    "squid_api_data_widgets": "https://github.com/squidsolutions/jssdk-data-widgets.git#3.2.5",
-    "squid_api_filters_widget": "https://github.com/squidsolutions/jssdk-filters-widget.git#3.2.4",
-    "squid_api_admin_widgets": "https://github.com/squidsolutions/jssdk-admin-widgets.git#2.3.5"
-=======
-    "squid_api_data_widgets": "https://github.com/squidsolutions/jssdk-data-widgets.git#3.2.4",
-    "squid_api_filters_widget": "https://github.com/squidsolutions/jssdk-filters-widget.git#3.2.3",
-    "squid_api_admin_widgets": "https://github.com/squidsolutions/jssdk-admin-widgets.git#2.3.4"
->>>>>>> 1d1bc27f71ca69dd44d8130e2166144eaba44e54
+    "squid_api_data_widgets": "https://github.com/squidsolutions/jssdk-data-widgets.git#3.2.9",
+    "squid_api_filters_widget": "https://github.com/squidsolutions/jssdk-filters-widget.git#3.2.5",
+    "squid_api_admin_widgets": "https://github.com/squidsolutions/jssdk-admin-widgets.git#2.3.7"
   },
   "resolutions": {
     "squid_api": "develop",

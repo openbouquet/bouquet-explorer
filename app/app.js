@@ -6,7 +6,6 @@ var me = this;
 api.setup({
     "clientId" : "dashboard",
     "config" : {
-        "orderBy" : [{"col":0, "direction":"DESC"}],
         "limit" : 1000,
         "startIndex" : 0,
         "maxResults" : 10
@@ -18,6 +17,7 @@ config = api.model.config;
 new api.view.LoginView();
 
 new api.view.StatusView();
+
 
 var projectSelect = new api.view.ProjectManagementWidget({
     el : '#project'
@@ -37,6 +37,10 @@ new api.view.ShortcutsAdminView({
     onSave : function() {
         $('#shortcutsModal').modal('hide');
     }
+});
+
+new api.view.BookmarksManagementWidget({
+    el : '#bookmark-crud'
 });
 
 /*
@@ -183,7 +187,7 @@ var timeView = new squid_api.view.TimeSeriesView ({
     staleMessage : "Click preview to update"
 });
 
-new api.view.DisplayTypeSelectorView({
+var displayTypeView = new api.view.DisplayTypeSelectorView({
     el : '#display-selector',
     model : mainModel,
     tableView : tableView,
@@ -193,15 +197,17 @@ new api.view.DisplayTypeSelectorView({
 mainModel.on("change:currentAnalysis", function() {
     var a = mainModel.get("currentAnalysis");
     refreshCurrentAnalysis(a);
-    if (a == tableAnalysis) {
-        tableView.$el.show();
-    } else {
-        tableView.$el.hide();
-    }
-    if (a == timeAnalysis) {
-        timeView.$el.show();
-    } else {
-        timeView.$el.hide();
+    if (a) {
+        if (a == tableAnalysis) {
+            tableView.$el.show();
+        } else {
+            tableView.$el.hide();
+        }
+        if (a == timeAnalysis) {
+            timeView.$el.show();
+        } else {
+            timeView.$el.hide();
+        }
     }
 });
 
@@ -214,7 +220,7 @@ new api.view.CategoricalView({
     popup : true
 });
 
-new api.view.DateSelectionWidget({
+var dateSelectionView = new api.view.DateSelectionWidget({
     el : '#date-picker',
     datePickerPosition : "right",
     ranges : {
@@ -245,7 +251,8 @@ var exportView = new api.view.DataExport({
     renderTo : '#export-content',
     model : exportAnalysis,
     displayInPopup : true,
-    sqlView : true
+    sqlView : true,
+    materializeDatasetsView: false
 });
 
 // Controllers
@@ -263,42 +270,55 @@ var compute = function(analysis) {
 
 var refreshAnalysis = function(a, silent) {
     var changed = false;
-    a.set({"id": {
-        "projectId" : config.get("project"),
-        "analysisJobId" : a.get("id").analysisJobId
-    }}, {
-            "silent" : silent
+    if (a) {
+        a.set({"id": {
+            "projectId" : config.get("project"),
+            "analysisJobId" : a.get("id").analysisJobId
+        }}, {
+                "silent" : silent
+            });
+        changed = changed || a.hasChanged();
+        a.set({"domains": [{
+            "projectId": config.get("project"),
+            "domainId": config.get("domain")
+        }]}, {
+                "silent" : silent
         });
-    changed = changed || a.hasChanged();
-    a.set({"domains": [{
-        "projectId": config.get("project"),
-        "domainId": config.get("domain")
-    }]}, {
-            "silent" : silent
-        });
-    changed = changed || a.hasChanged();
-    
-    // if timeAnalysis, use the date as the default dimension if non already set
-    if (a == timeAnalysis) {
-    	var selection = config.get("selection");
-    	for (i=0; i<selection.facets.length; i++) {
-    		if (selection.facets[i].dimension.type == "CONTINUOUS" && selection.facets[i].dimension.valueType == "DATE") {
-    			a.setFacets([selection.facets[i].id], silent);
-    			break;
-    		}
-    	}
-    } else {
-    	a.setFacets(config.get("chosenDimensions"), silent);
+
+        changed = changed || a.hasChanged();
+
+        // if timeAnalysis, use the date as the default dimension if non already set
+        if (a == timeAnalysis) {
+        	var selection = config.get("selection");
+        	for (i=0; i<selection.facets.length; i++) {
+        		if (selection.facets[i].dimension.type == "CONTINUOUS" && selection.facets[i].dimension.valueType == "DATE") {
+        			a.setFacets([selection.facets[i].id], silent);
+        			break;
+        		}
+        	}
+        } else {
+        	a.setFacets(config.get("chosenDimensions"), silent);
+        }
+        changed = changed || a.hasChanged();
+        a.setMetrics(config.get("chosenMetrics"), silent);
+        changed = changed || a.hasChanged();
+        a.setSelection(api.model.filters.get("selection"), silent);
+        changed = changed || a.hasChanged();
+        if (a == tableAnalysis) {
+        	a.setParameter("startIndex", config.get("startIndex"));
+        	a.setParameter("maxResults", config.get("maxResults"));
+        }
+        if (a == exportAnalysis) {
+            if (a.get("facets") || a.get("metricList")) {
+                if (a.get("facets").length > 0 || a.get("metricList").length > 0) {
+                    a.set("enabled", true);
+                } else {
+                    a.set("enabled", false);
+                }
+            }
+        }
     }
-    changed = changed || a.hasChanged();
-    a.setMetrics(config.get("chosenMetrics"), silent);
-    changed = changed || a.hasChanged();
-    a.setSelection(api.model.filters.get("selection"), silent);
-    changed = changed || a.hasChanged();
-    if (a == tableAnalysis) {
-    	a.setParameter("startIndex", config.get("startIndex"));
-    	a.setParameter("maxResults", config.get("maxResults"));
-    }
+
     return changed;
 };
 
@@ -312,54 +332,36 @@ refreshExportAnalysis = function() {
     }
 };
 
-var timeAnalysisOrder = function(a) {
-	var obj = {direction : config.get("orderBy")[0].direction};
-	var metrics = config.get("chosenMetrics");
-	
-	for (var i=0; i<metrics.length; i++) {
-		if (config.get("selectedMetric")) {
-			if (metrics[i] == config.get("selectedMetric")) {
-				obj.col = i + 1;
-			}
-		} else {
-			obj.col = 1;
-		}
-	}
-	
-	return obj;
-};
-
 var refreshCurrentAnalysis = function() {
     var a = mainModel.get("currentAnalysis");
-    var chosenDimensions = config.get("chosenDimensions");
-    var chosenMetrics = config.get("chosenMetrics");
-    var orderBy = config.get("orderBy");
-    if ((!chosenDimensions || chosenDimensions.length === 0) && (!chosenMetrics || chosenMetrics.length === 0)) {
-        $("button.refresh-analysis").prop('disabled', true);
-    } else {
-        $("button.refresh-analysis").prop('disabled', false);
-    }
-    var silent = false;
-    var changed = refreshAnalysis(a, silent);
-    a.set({"orderBy" : config.get("orderBy")}, {"silent" : silent});
-    changed = changed || a.hasChanged();
-    a.set({"rollups": config.get("rollups")}, {"silent" : silent});
-    changed = changed || a.hasChanged();
-    if (a == exportAnalysis) {
-        a.set({"limit": null}, {"silent" : silent});
-    } else {
-        a.set({"limit": config.get("limit")}, {"silent" : silent});
-    }
-    if (a == timeAnalysis) {
-    	a.set("orderBy", [timeAnalysisOrder(a)]);
-    }
-    changed = changed || a.hasChanged();
-    // only trigger change if the analysis has changed
-    if (changed) {
-        if (a == exportAnalysis) {
-            a.trigger("change");
+    if (a) {
+        var chosenDimensions = config.get("chosenDimensions");
+        var chosenMetrics = config.get("chosenMetrics");
+        var orderBy = config.get("orderBy");
+        if ((!chosenDimensions || chosenDimensions.length === 0) && (!chosenMetrics || chosenMetrics.length === 0)) {
+            $("button.refresh-analysis").prop('disabled', true);
         } else {
-            a.set("status", "PENDING");
+            $("button.refresh-analysis").prop('disabled', false);
+        }
+        var silent = false;
+        var changed = refreshAnalysis(a, silent);
+        a.set({"orderBy" : config.get("orderBy")}, {"silent" : silent});
+        changed = changed || a.hasChanged();
+        a.set({"rollups": config.get("rollups")}, {"silent" : silent});
+        changed = changed || a.hasChanged();
+        if (a == exportAnalysis) {
+            a.set({"limit": null}, {"silent" : silent});
+        } else {
+            a.set({"limit": config.get("limit")}, {"silent" : silent});
+        }
+        changed = changed || a.hasChanged();
+        // only trigger change if the analysis has changed
+        if (changed) {
+            if (a == exportAnalysis) {
+                a.trigger("change");
+            } else {
+                a.set("status", "PENDING");
+            }
         }
     }
 };
@@ -374,6 +376,86 @@ config.on("change:startIndex", function(config) {
         a.set("status", "RUNNING");
         squid_api.controller.analysisjob.getAnalysisJobResults(null, a);
     }
+});
+
+config.on("change:currentAnalysis", function(config) {
+    mainModel.set("currentAnalysis", mainModel.get(config.get("currentAnalysis")));
+    if (! config._previousAttributes.currentAnalysis) {
+        // leave 1 second before computing
+        setTimeout(function() {
+            compute(mainModel.get("currentAnalysis"));
+        }, 1000);
+    }
+});
+
+config.on("change", function(config) {
+	var project = config.get("project");
+	var domain = config.get("domain");
+	var tourViewed = config.get("tourFinished");
+
+	if (project && domain) {
+        if (! config.get("currentAnalysis")) {
+            mainModel.set("currentAnalysis", tableAnalysis);
+        }
+        if (! tourViewed) {
+            setTimeout(function() {
+    			// Instance the tour
+    			var tour = new Tour({
+    			  steps: [
+    			  {
+    			    element: ".zEWidget-launcher",
+    			    title: "How to get help",
+    			    placement: "left",
+    			    content: "This Help button is available at all times. Use it to browse the documentation and find answers."
+    			  },
+    			  {
+    			    element: "#date-picker",
+    			    title: "Select date range",
+    			    content: "This is where you define the date range of your data. If multiple data measures are available, pick one first."
+    			  },
+    			  {
+    				element: "#selection",
+    				title: "Filter your data",
+    				content: "This is where you can filter your data. First pick a filter, then search the values you want to filter on. Remember to index the dimension first."
+    			  },
+    			  {
+    				 element: "#metric",
+    				 placement: "bottom",
+    				 title: "Add columns to your data set",
+    				 content: "Pick from the available dimensions and metrics to add columns to your data. You can reorder the dimensions with a simple drag & drop.",
+    				 onNext: function() {
+    					 setTimeout(function() {
+    						 $("#origin button").click();
+    					 }, 100);
+    				 }
+    			  },
+    			  {
+    				  element: "#origin",
+    				  placement: "bottom",
+    				  title: "Edit the datamodel",
+    				  content: "By clicking the Configure icon after clicking on one of the buttons, you can choose to index dimensions, create new metrics and manage relations between domains."
+    			  },
+    			  {
+    				  element: ".menu-link",
+    				  placement: "right",
+    				  title: "Management panel",
+    				  content: "By clicking here you can open the management panel allowing you to manage users & shortcuts.",
+    				  onPrev: function() {
+    					 setTimeout(function() {
+    						 $("#origin button").click();
+    					 }, 100);
+    				  }
+    			  }
+    			]});
+
+    			// Initialize the tour
+    			tour.init();
+
+    			// Start the tour
+    			tour.start();
+    		}, 2000);
+        }
+	}
 });
 
 var getOrderByIndex = function() {
@@ -396,22 +478,6 @@ var getOrderByIndex = function() {
     }
     return index;
 };
-
-// listen to orderBy widget
-config.on("change:selectedMetric", function(config) {
-    var orderBy = config.get("orderBy")[0];
-    config.set("orderBy", [{"col" : getOrderByIndex(), "direction" : orderBy.direction}]);
-});
-
-config.on("change:chosenDimensions", function(config) {
-    var orderBy = config.get("orderBy")[0];
-    config.set("orderBy", [{"col" : getOrderByIndex(), "direction" : orderBy.direction}]);
-});
-
-config.on("change:chosenMetrics", function(config) {
-    var orderBy = config.get("orderBy")[0];
-    config.set("orderBy", [{"col" : getOrderByIndex(), "direction" : orderBy.direction}]);
-});
 
 config.on('change:project', function(model) {
     if (model.get("project")) {
