@@ -251,7 +251,8 @@ var exportView = new api.view.DataExport({
     renderTo : '#export-content',
     model : exportAnalysis,
     displayInPopup : true,
-    sqlView : true
+    sqlView : true,
+    materializeDatasetsView: true
 });
 
 // Controllers
