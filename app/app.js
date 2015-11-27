@@ -309,8 +309,20 @@ var refreshAnalysis = function(a, silent) {
         	a.setParameter("maxResults", config.get("maxResults"));
         }
         if (a == exportAnalysis) {
-            if (a.get("facets") || a.get("metricList")) {
-                if (a.get("facets").length > 0 || a.get("metricList").length > 0) {
+            if (config.get("chosenDimensions") && config.get("chosenMetrics")) {
+                if (config.get("chosenDimensions").length > 0 || config.get("chosenMetrics").length > 0) {
+                    a.set("enabled", true);
+                } else {
+                    a.set("enabled", false);
+                }
+            } else if (config.get("chosenDimensions")) {
+                if (config.get("chosenDimensions").length > 0) {
+                    a.set("enabled", true);
+                } else {
+                    a.set("enabled", false);
+                }
+            } else if (config.get("chosenMetrics")) {
+                if (config.get("chosenMetrics").length > 0) {
                     a.set("enabled", true);
                 } else {
                     a.set("enabled", false);
