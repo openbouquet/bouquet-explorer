@@ -359,11 +359,13 @@ var refreshCurrentAnalysis = function() {
         }
         var silent = false;
         var changed = refreshAnalysis(a, silent);
-        a.set({"orderBy" : config.get("orderBy")}, {"silent" : silent});
+        if (a !== timeAnalysis) {
+            a.set({"orderBy" : config.get("orderBy")}, {"silent" : silent});
+        }
         changed = changed || a.hasChanged();
         a.set({"rollups": config.get("rollups")}, {"silent" : silent});
         changed = changed || a.hasChanged();
-        if (a == exportAnalysis) {
+        if (a == exportAnalysis || timeAnalysis) {
             a.set({"limit": null}, {"silent" : silent});
         } else {
             a.set({"limit": config.get("limit")}, {"silent" : silent});
