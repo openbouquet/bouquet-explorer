@@ -396,6 +396,10 @@ config.on("change:startIndex", function(config) {
     }
 });
 
+config.on("change:bookmark", function(config) {
+    config.trigger("change:currentAnalysis", config, true);
+});
+
 config.on("change:currentAnalysis", function(config, forceRefresh) {
     mainModel.set("currentAnalysis", mainModel.get(config.get("currentAnalysis")));
     if (! config._previousAttributes.currentAnalysis || forceRefresh === true) {
