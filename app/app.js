@@ -372,7 +372,9 @@ var refreshCurrentAnalysis = function() {
             if (a == exportAnalysis) {
                 a.trigger("change");
             } else {
-                a.set("status", "PENDING");
+                if (a.get("status") !== "RUNNING") {
+                    a.set("status", "PENDING");
+                }
             }
         }
     }
@@ -393,14 +395,15 @@ config.on("change:startIndex", function(config) {
 config.on("change:currentAnalysis", function(config, forceRefresh) {
     mainModel.set("currentAnalysis", mainModel.get(config.get("currentAnalysis")));
     if (! config._previousAttributes.currentAnalysis || forceRefresh === true) {
-        // leave 1 second before computing
-        setTimeout(function() {
-            if (config.get("chosenDimensions") || config.get("chosenMetrics")) {
-                if (config.get("chosenMetrics").length > 0 || config.get("chosenDimensions").length > 0) {
-                    compute(mainModel.get("currentAnalysis"));
+        if (config.get("chosenDimensions") || config.get("chosenMetrics")) {
+            if (config.get("chosenMetrics").length > 0 || config.get("chosenDimensions").length > 0) {
+                if (mainModel.get("currentAnalysis").get("status") !== "RUNNING") {
+                    setTimeout(function() {
+                        compute(mainModel.get("currentAnalysis"));
+                    }, 1000);
                 }
             }
-        }, 1000);
+        }
     }
 });
 
