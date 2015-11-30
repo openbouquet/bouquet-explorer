@@ -359,11 +359,13 @@ var refreshCurrentAnalysis = function() {
         }
         var silent = false;
         var changed = refreshAnalysis(a, silent);
-        a.set({"orderBy" : config.get("orderBy")}, {"silent" : silent});
+        if (a !== timeAnalysis) {
+            a.set({"orderBy" : config.get("orderBy")}, {"silent" : silent});
+        }
         changed = changed || a.hasChanged();
         a.set({"rollups": config.get("rollups")}, {"silent" : silent});
         changed = changed || a.hasChanged();
-        if (a == exportAnalysis) {
+        if (a == exportAnalysis || timeAnalysis) {
             a.set({"limit": null}, {"silent" : silent});
         } else {
             a.set({"limit": config.get("limit")}, {"silent" : silent});
@@ -399,10 +401,12 @@ config.on("change:currentAnalysis", function(config, forceRefresh) {
     if (! config._previousAttributes.currentAnalysis || forceRefresh === true) {
         if (config.get("chosenDimensions") || config.get("chosenMetrics")) {
             if (config.get("chosenMetrics").length > 0 || config.get("chosenDimensions").length > 0) {
-                if (mainModel.get("currentAnalysis").get("status") !== "RUNNING") {
-                    setTimeout(function() {
-                        compute(mainModel.get("currentAnalysis"));
-                    }, 1000);
+                if (mainModel.get("currentAnalysis")) {
+                    if (mainModel.get("currentAnalysis").get("status") !== "RUNNING") {
+                        setTimeout(function() {
+                            compute(mainModel.get("currentAnalysis"));
+                        }, 1000);
+                    }
                 }
             }
         }
