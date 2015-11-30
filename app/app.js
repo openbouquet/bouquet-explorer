@@ -290,12 +290,14 @@ var refreshAnalysis = function(a, silent) {
         // if timeAnalysis, use the date as the default dimension if non already set
         if (a == timeAnalysis) {
         	var selection = config.get("selection");
-        	for (i=0; i<selection.facets.length; i++) {
-        		if (selection.facets[i].dimension.type == "CONTINUOUS" && selection.facets[i].dimension.valueType == "DATE") {
-        			a.setFacets([selection.facets[i].id], silent);
-        			break;
-        		}
-        	}
+            if (selection) {
+                for (i=0; i<selection.facets.length; i++) {
+            		if (selection.facets[i].dimension.type == "CONTINUOUS" && selection.facets[i].dimension.valueType == "DATE") {
+            			a.setFacets([selection.facets[i].id], silent);
+            			break;
+            		}
+            	}
+            }
         } else {
         	a.setFacets(config.get("chosenDimensions"), silent);
         }
