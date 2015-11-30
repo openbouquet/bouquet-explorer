@@ -399,10 +399,12 @@ config.on("change:currentAnalysis", function(config, forceRefresh) {
     if (! config._previousAttributes.currentAnalysis || forceRefresh === true) {
         if (config.get("chosenDimensions") || config.get("chosenMetrics")) {
             if (config.get("chosenMetrics").length > 0 || config.get("chosenDimensions").length > 0) {
-                if (mainModel.get("currentAnalysis").get("status") !== "RUNNING") {
-                    setTimeout(function() {
-                        compute(mainModel.get("currentAnalysis"));
-                    }, 1000);
+                if (mainModel.get("currentAnalysis")) {
+                    if (mainModel.get("currentAnalysis").get("status") !== "RUNNING") {
+                        setTimeout(function() {
+                            compute(mainModel.get("currentAnalysis"));
+                        }, 1000);
+                    }
                 }
             }
         }
