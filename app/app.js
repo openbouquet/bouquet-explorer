@@ -70,7 +70,7 @@ api.model.status.on('change', function(model) {
 		if (error.canStart) {
 			$("#no-connection").addClass("hidden");
 			$("#loading").show();
-		} else if (! error.reason) {
+		} else if (error === true) {
 			$("#no-connection").removeClass("hidden");
 			$("#selectProject").addClass("hidden");
 			$("#loading").hide();
