@@ -18,19 +18,27 @@ new api.view.LoginView();
 
 new api.view.StatusView();
 
+// var projectSelect = new api.view.ProjectCollectionManagementWidget({
+//     el : '#project'
+// });
 
-var projectSelect = new api.view.ProjectManagementWidget({
-    el : '#project'
+var projectSelect = new api.view.CollectionManagementWidget({
+    el : '#project',
+    type : "Project",
+    parent : null,
+    modelView : api.view.ProjectModelManagementWidget
 });
 
-var projectCreate = new api.view.ProjectManagementWidget({
-    el : '#project-create',
-    createOnlyView : true
-});
+// null for project - parent
 
-var domainSelect = new api.view.DomainManagementWidget({
-    el : '#domain'
-});
+// var projectCreate = new api.view.ProjectModelManagementWidget({
+//     el : '#project-create',
+//     createOnlyView : true
+// });
+
+// var domainSelect = new api.view.DomainManagementWidget({
+//     el : '#domain'
+// });
 
 new api.view.ShortcutsAdminView({
     el : '#shortcuts',
@@ -39,9 +47,9 @@ new api.view.ShortcutsAdminView({
     }
 });
 
-new api.view.BookmarksManagementWidget({
-    el : '#bookmark-crud'
-});
+// new api.view.BookmarksManagementWidget({
+//     el : '#bookmark-crud'
+// });
 
 /*
  * Controllers
