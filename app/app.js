@@ -26,7 +26,7 @@ var projectSelect = new api.view.CollectionManagementWidget({
     el : '#project',
     type : "Project",
     parent : null,
-    modelView : api.view.ProjectModelManagementWidget
+    modelView : api.view.ProjectModelWidget
 });
 
 // null for project - parent
