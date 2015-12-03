@@ -70,7 +70,7 @@ api.model.status.on('change', function(model) {
 		if (error.canStart) {
 			$("#no-connection").addClass("hidden");
 			$("#loading").show();
-		} else if (! error.reason) {
+		} else if (error === true) {
 			$("#no-connection").removeClass("hidden");
 			$("#selectProject").addClass("hidden");
 			$("#loading").hide();
@@ -96,8 +96,10 @@ var mainModel = new Backbone.Model({
 
 config.on("change", function() {
     api.saveState();
-    refreshCurrentAnalysis();
-    refreshExportAnalysis();
+    if (! this.hasChanged("configDisplay")) {
+    	refreshCurrentAnalysis();
+        refreshExportAnalysis();
+    }
 
     if (config.get("project") && config.get("domain")) {
         $("#selectProject").addClass("hidden");
@@ -365,7 +367,7 @@ var refreshCurrentAnalysis = function() {
         changed = changed || a.hasChanged();
         a.set({"rollups": config.get("rollups")}, {"silent" : silent});
         changed = changed || a.hasChanged();
-        if (a == exportAnalysis || timeAnalysis) {
+        if (a == exportAnalysis || a == timeAnalysis) {
             a.set({"limit": null}, {"silent" : silent});
         } else {
             a.set({"limit": config.get("limit")}, {"silent" : silent});
@@ -575,6 +577,41 @@ $("#app #menu #shortcut-management").click(function() {
 
 // Trigger Sliding Nav
 $('.menu-link').bigSlide();
+
+// Configuration accordion
+
+$(".configuration-hider").click(function() {
+	var configDisplay = api.model.config.get("configDisplay");
+	var obj = {};
+	if (configDisplay) {
+		obj.originalHeight = configDisplay.originalHeight;
+		if (configDisplay.visible) {
+			obj.visible = false;
+		} else {
+			obj.visible = true;
+		}
+	} else {
+		obj.visible = false;
+		obj.originalHeight = $(".configuration").height();
+	}
+	api.model.config.set("configDisplay", obj);
+});
+
+config.on("change:configDisplay", function(model, attribute) {
+	if (attribute.visible) {
+		$(".configuration-hider").removeClass("closed");
+		$(".configuration").animate({opacity: 1});
+		$(".configuration").animate({height:attribute.originalHeight + "px"}, function() {
+			$(".configuration").removeClass("closed");
+		});
+	} else {
+		$(".configuration-hider").addClass("closed");
+		$(".configuration").addClass("closed");
+		$(".configuration").animate({opacity: 0});
+		$(".configuration").animate({height:"10px"});
+	}
+});
+
 
 /*
 * Start the App

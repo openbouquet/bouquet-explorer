@@ -236,9 +236,33 @@ $navBarAndButtonColour: #e7e7e7;
     #app-export {
 	    #main {
 	        position: relative;
+	        .configuration-hider {
+	        	font-family: FontAwesome;
+			    width: 45px;
+			    position: absolute;
+			    right: 50px;
+			    padding-left: 10px;
+			    font-size: 24px;
+			    top: -30px;
+			    height: 36px;
+			    border-radius: 4px;
+			    box-shadow: 2px 3px 4px -3px;
+			    background: #f3f3f3;
+			    cursor: pointer;
+			    &:before {
+					content: "\f077";
+				}
+			    &.closed {
+			    	&:before {
+						content: "\f078";
+			    	}
+			    }
+	        }
 	        .configuration {
-			  	margin: 0px 20px;
-    			padding-top: 15px;
+			  	margin: 20px;
+			  	&.closed {
+			  	 	overflow: hidden;
+			  	}
 	            #filters {
 	                dt {
 	                    margin-top: 8px;
