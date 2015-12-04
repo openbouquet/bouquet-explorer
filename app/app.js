@@ -162,11 +162,11 @@ userAdminView = new api.view.UsersAdminView({
     status : api.model.status
 });
 
-new api.view.DimensionSelector({
-    el : '#origin',
-    model : config,
-    dimensionIndex: null
-});
+// new api.view.DimensionSelector({
+//     el : '#origin',
+//     model : config,
+//     dimensionIndex: null
+// });
 
 new api.view.OrderByView({
     el : '#orderby',
@@ -243,11 +243,11 @@ new squid_api.view.DateFilterSelectionWidget({
     el : "#date-selector"
 });
 
-new api.view.MetricSelectorView({
-    el : '#metric',
-    model : config,
-    metricIndex: null
-});
+// new api.view.MetricSelectorView({
+//     el : '#metric',
+//     model : config,
+//     metricIndex: null
+// });
 
 new api.view.MetricView({
     el : '#total',
