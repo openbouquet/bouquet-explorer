@@ -22,12 +22,51 @@ new api.view.StatusView();
 //     el : '#project'
 // });
 
-var projectSelect = new api.view.CollectionManagementWidget({
-    el : '#project',
+/* Project */
+
+var projectCollection = new api.view.CollectionManagementWidget({
     type : "Project",
     parent : null,
     modelView : api.view.ProjectModelWidget
 });
+
+var projectModal = new api.view.ModalView({
+    view : projectCollection
+});
+
+var projectButton = new api.view.ButtonView({
+    el : '#project',
+    model : "Project"
+});
+
+projectButton.$el.click(function() {
+    projectModal.render();
+});
+
+/* Domain */
+var domainCollection = new api.view.CollectionManagementWidget({
+    type : "Domain",
+    parent : "Project",
+    modelView : api.view.ModelManagementWidget
+});
+
+var domainModal = new api.view.ModalView({
+    view : domainCollection
+});
+
+var domainButton = new api.view.ButtonView({
+    el : '#domain',
+    model : "Domain"
+});
+
+domainButton.$el.click(function() {
+    domainModal.render();
+});
+
+
+// buttonView.on("click", function() {
+//     alert("hey");
+// });
 
 // null for project - parent
 
