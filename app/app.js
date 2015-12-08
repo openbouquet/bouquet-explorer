@@ -189,12 +189,7 @@ new api.view.ShortcutsAdminView({
  */
 
 // filters controller
-new api.controller.FiltersContoller({
-    onChangeHandler : function(selection, timeFacet) {
-        // apply to main filters
-        api.controller.facetjob.compute(api.model.filters, selection);
-    }
-});
+new api.controller.FiltersContoller();
 
 api.model.login.on('change:login', function(model) {
     // performed when login is updated
@@ -508,7 +503,7 @@ var refreshCurrentAnalysis = function() {
         changed = changed || a.hasChanged();
         a.set({"rollups": config.get("rollups")}, {"silent" : silent});
         changed = changed || a.hasChanged();
-        if (a == exportAnalysis || timeAnalysis) {
+        if (a == exportAnalysis || a == timeAnalysis) {
             a.set({"limit": null}, {"silent" : silent});
         } else {
             a.set({"limit": config.get("limit")}, {"silent" : silent});
