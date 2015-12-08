@@ -48,12 +48,7 @@ new api.view.BookmarksManagementWidget({
  */
 
 // filters controller
-new api.controller.FiltersContoller({
-    onChangeHandler : function(selection, timeFacet) {
-        // apply to main filters
-        api.controller.facetjob.compute(api.model.filters, selection);
-    }
-});
+new api.controller.FiltersContoller();
 
 api.model.login.on('change:login', function(model) {
     // performed when login is updated
