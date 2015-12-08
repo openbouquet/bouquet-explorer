@@ -139,7 +139,7 @@ metricButton.$el.click(function() {
 });
 
 /* Relations Management */
-var relationsCollection = new api.view.CollectionManagementWidget({
+var relationsCollection = new api.view.RelationManagementView({
     type : "Relation",
     parent : "Domain",
     modelView : api.view.ModelManagementWidget,
