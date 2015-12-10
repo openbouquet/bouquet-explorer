@@ -21,17 +21,12 @@ new api.view.StatusView();
 
 /* Project */
 
-var projectCollection = new api.view.CollectionManagementWidget({
-    type : "Project",
-    parent : null,
-    modelView : api.view.ModelManagementWidget
-});
+var projectCollection = new api.view.ProjectCollectionManagementWidget();
 
 var projectModal = new api.view.ModalView({
     view : projectCollection
 });
 
-// pass config
 var projectButton = new api.view.ButtonView({
     el : '#project',
     configAttribute : "Project"
@@ -42,21 +37,7 @@ projectButton.$el.click(function() {
 });
 
 /* Domain */
-var domainCollection = new api.view.CollectionManagementWidget({
-    type : "Domain",
-    parent : "Project",
-    modelView : api.view.ModelManagementWidget,
-    setCollectionParent : function() {
-        var parentId =  this.config.get(this.parent.toLowerCase());
-        if (parentId) {
-            this.collection.parentId = {"projectId" : parentId};
-        }
-    },
-    setParentModel : function() {
-        var parentId = this.config.get(this.parent.toLowerCase());
-        this.parentModel.set("id", {projectId : parentId});
-    }
-});
+var domainCollection = new api.view.DomainCollectionManagementWidget();
 
 var domainModal = new api.view.ModalView({
     view : domainCollection
@@ -72,104 +53,90 @@ domainButton.$el.click(function() {
     domainModal.render();
 });
 
-/* Dimension Management */
-var dimensionCollection = new api.view.ColumnsManagementWidget({
-    type : "Dimension",
-    parent : "Domain",
-    modelView : api.view.ModelManagementWidget,
-    setCollectionParent : function() {
-        var projectId =  this.config.get("project");
-        var domainId =  this.config.get("domain");
-        if (projectId && domainId) {
-            this.collection.parentId = {"projectId" : projectId, "domainId" : domainId};
-        }
-    },
-    setParentModel : function() {
-        var projectId = this.config.get("project");
-        var domainId = this.config.get("domain");
-        this.parentModel.set("id", {projectId : projectId, domainId : domainId});
-    }
-});
+// /* Dimension Management */
+// var dimensionCollection = new api.view.ColumnsManagementWidget({
 
-var dimensionModal = new api.view.ModalView({
-    view : dimensionCollection
-});
-
-var dimensionButton = new api.view.ButtonView({
-    el : '#dimension-management',
-    configAttribute : "Dimension",
-    parent : "Domain"
-});
-
-dimensionButton.$el.click(function() {
-    dimensionModal.render();
-});
-
-/* Metric Management */
-var metricCollection = new api.view.ColumnsManagementWidget({
-    type : "Metric",
-    parent : "Domain",
-    modelView : api.view.ModelManagementWidget,
-    setCollectionParent : function() {
-        var projectId =  this.config.get("project");
-        var domainId =  this.config.get("domain");
-        if (projectId && domainId) {
-            this.collection.parentId = {"projectId" : projectId, "domainId" : domainId};
-        }
-    },
-    setParentModel : function() {
-        var projectId = this.config.get("project");
-        var domainId = this.config.get("domain");
-        this.parentModel.set("id", {projectId : projectId, domainId : domainId});
-    }
-});
-
-var metricModal = new api.view.ModalView({
-    view : metricCollection
-});
-
-var metricButton = new api.view.ButtonView({
-    el : '#metric-management',
-    configAttribute : "Metric",
-    parent : "Domain"
-});
-
-metricButton.$el.click(function() {
-    metricModal.render();
-});
-
-/* Relations Management */
-var relationsCollection = new api.view.RelationManagementView({
-    type : "Relation",
-    parent : "Domain",
-    modelView : api.view.ModelManagementWidget,
-    setCollectionParent : function() {
-        var projectId =  this.config.get("project");
-        var domainId =  this.config.get("domain");
-        if (projectId && domainId) {
-            this.collection.parentId = {"projectId" : projectId, "domainId" : domainId};
-        }
-    },
-    setParentModel : function() {
-        var projectId = this.config.get("project");
-        var domainId = this.config.get("domain");
-        this.parentModel.set("id", {projectId : projectId, domainId : domainId});
-    }
-});
-
-var relationModal = new api.view.ModalView({
-    view : relationsCollection
-});
-
-var relationButton = new api.view.ButtonView({
-    el : '#relation-management',
-    configAttribute : "Relation",
-    parent : "Domain"
-});
-
-relationButton.$el.click(function() {
-    relationModal.render();
-});
+// });
+//
+// var dimensionModal = new api.view.ModalView({
+//     view : dimensionCollection
+// });
+//
+// var dimensionButton = new api.view.ButtonView({
+//     el : '#dimension-management',
+//     configAttribute : "Dimension",
+//     parent : "Domain"
+// });
+//
+// dimensionButton.$el.click(function() {
+//     dimensionModal.render();
+// });
+//
+// /* Metric Management */
+// var metricCollection = new api.view.ColumnsManagementWidget({
+//     type : "Metric",
+//     parent : "Domain",
+//     modelView : api.view.ModelManagementWidget,
+//     setCollectionParent : function() {
+//         var projectId =  this.config.get("project");
+//         var domainId =  this.config.get("domain");
+//         if (projectId && domainId) {
+//             this.collection.parentId = {"projectId" : projectId, "domainId" : domainId};
+//         }
+//     },
+//     setParentModel : function() {
+//         var projectId = this.config.get("project");
+//         var domainId = this.config.get("domain");
+//         this.parentModel.set("id", {projectId : projectId, domainId : domainId});
+//     }
+// });
+//
+// var metricModal = new api.view.ModalView({
+//     view : metricCollection
+// });
+//
+// var metricButton = new api.view.ButtonView({
+//     el : '#metric-management',
+//     configAttribute : "Metric",
+//     parent : "Domain"
+// });
+//
+// metricButton.$el.click(function() {
+//     metricModal.render();
+// });
+//
+// /* Relations Management */
+// var relationsCollection = new api.view.RelationManagementView({
+//     type : "Relation",
+//     parent : "Domain",
+//     modelView : api.view.ModelManagementWidget,
+//     setCollectionParent : function() {
+//         var projectId =  this.config.get("project");
+//         var domainId =  this.config.get("domain");
+//         if (projectId && domainId) {
+//             this.collection.parentId = {"projectId" : projectId, "domainId" : domainId};
+//         }
+//     },
+//     setParentModel : function() {
+//         var projectId = this.config.get("project");
+//         var domainId = this.config.get("domain");
+//         this.parentModel.set("id", {projectId : projectId, domainId : domainId});
+//     }
+// });
+//
+// var relationModal = new api.view.ModalView({
+//     view : relationsCollection
+// });
+//
+// var relationButton = new api.view.ButtonView({
+//     el : '#relation-management',
+//     configAttribute : "Relation",
+//     parent : "Domain"
+// });
+//
+// relationButton.$el.click(function() {
+//     relationModal.render();
+// });
 
 /* end */
 
