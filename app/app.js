@@ -53,23 +53,6 @@ domainButton.$el.click(function() {
     domainModal.render();
 });
 
-// /* Dimension Management */
-var dimensionCollection = new api.view.DimensionCollectionManagementWidget();
-
-var dimensionModal = new api.view.ModalView({
-    view : dimensionCollection
-});
-
-var dimensionButton = new api.view.ButtonView({
-    el : '#dimension-management',
-    configAttribute : "Dimension",
-    parent : "Domain"
-});
-
-dimensionButton.$el.click(function() {
-    dimensionModal.render();
-});
-//
 // /* Metric Management */
 var metricCollection = new api.view.MetricCollectionManagementWidget();
 
