@@ -54,57 +54,39 @@ domainButton.$el.click(function() {
 });
 
 // /* Dimension Management */
-// var dimensionCollection = new api.view.ColumnsManagementWidget({
+var dimensionCollection = new api.view.DimensionCollectionManagementWidget();
 
-// });
-//
-// var dimensionModal = new api.view.ModalView({
-//     view : dimensionCollection
-// });
-//
-// var dimensionButton = new api.view.ButtonView({
-//     el : '#dimension-management',
-//     configAttribute : "Dimension",
-//     parent : "Domain"
-// });
-//
-// dimensionButton.$el.click(function() {
-//     dimensionModal.render();
-// });
+var dimensionModal = new api.view.ModalView({
+    view : dimensionCollection
+});
+
+var dimensionButton = new api.view.ButtonView({
+    el : '#dimension-management',
+    configAttribute : "Dimension",
+    parent : "Domain"
+});
+
+dimensionButton.$el.click(function() {
+    dimensionModal.render();
+});
 //
 // /* Metric Management */
-// var metricCollection = new api.view.ColumnsManagementWidget({
-//     type : "Metric",
-//     parent : "Domain",
-//     modelView : api.view.ModelManagementWidget,
-//     setCollectionParent : function() {
-//         var projectId =  this.config.get("project");
-//         var domainId =  this.config.get("domain");
-//         if (projectId && domainId) {
-//             this.collection.parentId = {"projectId" : projectId, "domainId" : domainId};
-//         }
-//     },
-//     setParentModel : function() {
-//         var projectId = this.config.get("project");
-//         var domainId = this.config.get("domain");
-//         this.parentModel.set("id", {projectId : projectId, domainId : domainId});
-//     }
-// });
-//
-// var metricModal = new api.view.ModalView({
-//     view : metricCollection
-// });
-//
-// var metricButton = new api.view.ButtonView({
-//     el : '#metric-management',
-//     configAttribute : "Metric",
-//     parent : "Domain"
-// });
-//
-// metricButton.$el.click(function() {
-//     metricModal.render();
-// });
-//
+var metricCollection = new api.view.MetricCollectionManagementWidget();
+
+var metricModal = new api.view.ModalView({
+    view : metricCollection
+});
+
+var metricButton = new api.view.ButtonView({
+    el : '#metric-management',
+    configAttribute : "Metric",
+    parent : "Domain"
+});
+
+metricButton.$el.click(function() {
+    metricModal.render();
+});
+
 // /* Relations Management */
 // var relationsCollection = new api.view.RelationManagementView({
 //     type : "Relation",
@@ -338,11 +320,11 @@ new squid_api.view.DateFilterSelectionWidget({
     el : "#date-selector"
 });
 
-// new api.view.MetricSelectorView({
-//     el : '#metric',
-//     model : config,
-//     metricIndex: null
-// });
+new api.view.MetricSelectorView({
+    el : '#metric',
+    model : config,
+    metricIndex: null
+});
 
 new api.view.MetricView({
     el : '#total',
