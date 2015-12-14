@@ -21,6 +21,7 @@ new api.view.StatusView();
 
 /* Project */
 
+
 var projectCollection = new api.view.ProjectCollectionManagementWidget();
 
 var projectModal = new api.view.ModalView({
@@ -36,7 +37,9 @@ projectButton.$el.click(function() {
     projectModal.render();
 });
 
+
 /* Domain */
+
 var domainCollection = new api.view.DomainCollectionManagementWidget();
 
 var domainModal = new api.view.ModalView({
