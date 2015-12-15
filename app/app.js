@@ -21,6 +21,7 @@ new api.view.StatusView();
 
 /* Project */
 
+// collection view
 var projectCollection = new api.view.ProjectCollectionManagementWidget();
 
 var projectModal = new api.view.ModalView({
@@ -36,7 +37,22 @@ projectButton.$el.click(function() {
     projectModal.render();
 });
 
+// model view
+var projectModel = new api.view.ProjectModelManagementWidget({
+    model : new api.model.ProjectModel()
+});
+
+var projectModelModal = new api.view.ModalView({
+    view : projectModel
+});
+
+$("#project-create button").click(function() {
+    projectModelModal.render();
+});
+
 /* Domain */
+
+// collection view
 var domainCollection = new api.view.DomainCollectionManagementWidget();
 
 var domainModal = new api.view.ModalView({
@@ -51,23 +67,6 @@ var domainButton = new api.view.ButtonView({
 
 domainButton.$el.click(function() {
     domainModal.render();
-});
-
-// /* Metric Management */
-var metricCollection = new api.view.MetricCollectionManagementWidget();
-
-var metricModal = new api.view.ModalView({
-    view : metricCollection
-});
-
-var metricButton = new api.view.ButtonView({
-    el : '#metric-management',
-    configAttribute : "Metric",
-    parent : "Domain"
-});
-
-metricButton.$el.click(function() {
-    metricModal.render();
 });
 
 // /* Relations Management */
