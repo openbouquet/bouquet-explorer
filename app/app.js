@@ -70,37 +70,20 @@ domainButton.$el.click(function() {
 });
 
 // /* Relations Management */
-// var relationsCollection = new api.view.RelationManagementView({
-//     type : "Relation",
-//     parent : "Domain",
-//     modelView : api.view.ModelManagementWidget,
-//     setCollectionParent : function() {
-//         var projectId =  this.config.get("project");
-//         var domainId =  this.config.get("domain");
-//         if (projectId && domainId) {
-//             this.collection.parentId = {"projectId" : projectId, "domainId" : domainId};
-//         }
-//     },
-//     setParentModel : function() {
-//         var projectId = this.config.get("project");
-//         var domainId = this.config.get("domain");
-//         this.parentModel.set("id", {projectId : projectId, domainId : domainId});
-//     }
-// });
-//
-// var relationModal = new api.view.ModalView({
-//     view : relationsCollection
-// });
-//
-// var relationButton = new api.view.ButtonView({
-//     el : '#relation-management',
-//     configAttribute : "Relation",
-//     parent : "Domain"
-// });
-//
-// relationButton.$el.click(function() {
-//     relationModal.render();
-// });
+var relationCollection = new api.view.RelationCollectionManagementWidget();
+
+var relationModal = new api.view.ModalView({
+    view : relationCollection
+});
+
+var relationButton = new api.view.ButtonView({
+    el : '#relation',
+    parent : "Project"
+});
+
+relationButton.$el.click(function() {
+    relationModal.render();
+});
 
 /* end */
 
