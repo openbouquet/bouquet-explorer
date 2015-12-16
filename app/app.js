@@ -39,7 +39,8 @@ projectButton.$el.click(function() {
 
 // model view
 var projectModel = new api.view.ProjectModelManagementWidget({
-    model : new api.model.ProjectModel()
+    model : new api.model.ProjectModel(),
+    setConfigOnSave : true,
 });
 
 var projectModelModal = new api.view.ModalView({
