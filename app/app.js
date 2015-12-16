@@ -22,7 +22,11 @@ new api.view.StatusView();
 /* Project */
 
 // collection view
-var projectCollection = new api.view.ProjectCollectionManagementWidget();
+var projectCollection = new api.view.ProjectCollectionManagementWidget({
+    onSelect: function() {
+        projectModal.close();
+    }
+});
 
 var projectModal = new api.view.ModalView({
     view : projectCollection
@@ -59,7 +63,11 @@ $("#project-create button").click(function() {
 /* Domain */
 
 // collection view
-var domainCollection = new api.view.DomainCollectionManagementWidget();
+var domainCollection = new api.view.DomainCollectionManagementWidget({
+    onSelect: function() {
+        domainModal.close();
+    }
+});
 
 var domainModal = new api.view.ModalView({
     view : domainCollection
