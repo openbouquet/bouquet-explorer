@@ -28,9 +28,8 @@ var projectModal = new api.view.ModalView({
     view : projectCollection
 });
 
-var projectButton = new api.view.ButtonView({
-    el : '#project',
-    configAttribute : "Project"
+var projectButton = new api.view.ProjectSelectorButton({
+    el : '#project'
 });
 
 projectButton.$el.click(function() {
@@ -60,10 +59,8 @@ var domainModal = new api.view.ModalView({
     view : domainCollection
 });
 
-var domainButton = new api.view.ButtonView({
-    el : '#domain',
-    configAttribute : "Domain",
-    parent : "Project"
+var domainButton = new api.view.DomainSelectorButton({
+    el : '#domain'
 });
 
 domainButton.$el.click(function() {
@@ -93,10 +90,8 @@ var bookmarkModal = new api.view.ModalView({
     view : bookmarkCollection
 });
 
-var bookmarkButton = new api.view.ButtonView({
-    el : '#bookmark',
-    configAttribute : "Bookmark",
-    parent : "Project"
+var bookmarkButton = new api.view.BookmarkSelectorButton({
+    el : '#bookmark'
 });
 
 bookmarkButton.$el.click(function() {
