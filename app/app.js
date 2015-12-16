@@ -40,7 +40,12 @@ projectButton.$el.click(function() {
 // model view
 var projectModel = new api.view.ProjectModelManagementWidget({
     model : new api.model.ProjectModel(),
-    setConfigOnSave : true,
+    onceSaved : function(model) {
+        // set project
+        this.config.set("project", model.get("id").projectId);
+        // close modal
+        projectModelModal.close();
+    }
 });
 
 var projectModelModal = new api.view.ModalView({
