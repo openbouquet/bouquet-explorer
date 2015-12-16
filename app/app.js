@@ -22,7 +22,11 @@ new api.view.StatusView();
 /* Project */
 
 // collection view
-var projectCollection = new api.view.ProjectCollectionManagementWidget();
+var projectCollection = new api.view.ProjectCollectionManagementWidget({
+    onSelect: function() {
+        projectModal.close();
+    }
+});
 
 var projectModal = new api.view.ModalView({
     view : projectCollection
@@ -39,7 +43,12 @@ projectButton.$el.click(function() {
 // model view
 var projectModel = new api.view.ProjectModelManagementWidget({
     model : new api.model.ProjectModel(),
-    setConfigOnSave : true,
+    onceSaved : function(model) {
+        // set project
+        this.config.set("project", model.get("id").projectId);
+        // close modal
+        projectModelModal.close();
+    }
 });
 
 var projectModelModal = new api.view.ModalView({
@@ -53,7 +62,11 @@ $("#project-create button").click(function() {
 /* Domain */
 
 // collection view
-var domainCollection = new api.view.DomainCollectionManagementWidget();
+var domainCollection = new api.view.DomainCollectionManagementWidget({
+    onSelect: function() {
+        domainModal.close();
+    }
+});
 
 var domainModal = new api.view.ModalView({
     view : domainCollection
