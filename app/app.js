@@ -69,7 +69,7 @@ domainButton.$el.click(function() {
     domainModal.render();
 });
 
-// /* Relations Management */
+/* Relations Management */
 var relationCollection = new api.view.RelationCollectionManagementWidget();
 
 var relationModal = new api.view.ModalView({
@@ -83,6 +83,23 @@ var relationButton = new api.view.ButtonView({
 
 relationButton.$el.click(function() {
     relationModal.render();
+});
+
+/* Bookmark Management */
+var bookmarkCollection = new api.view.BookmarkCollectionManagementWidget();
+
+var bookmarkModal = new api.view.ModalView({
+    view : bookmarkCollection
+});
+
+var bookmarkButton = new api.view.ButtonView({
+    el : '#bookmark',
+    configAttribute : "Bookmark",
+    parent : "Project"
+});
+
+bookmarkButton.$el.click(function() {
+    bookmarkModal.render();
 });
 
 /* end */

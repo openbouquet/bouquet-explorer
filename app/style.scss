@@ -33,6 +33,18 @@ $navBarAndButtonColour: #e7e7e7;
     		min-width: 130px;
     	}
    	}
+    #relation {
+        button {
+            background: none;
+            border: none;
+            box-shadow: none;
+            font-size: 30px;
+            &:before {
+                content: "\f0c1";
+                font-family: FontAwesome;
+            }
+        }
+    }
     .bookmark {
         position: relative;
         top: 10px;
