@@ -129,65 +129,7 @@ new api.view.ShortcutsAdminView({
  */
 
 // filters controller
-new api.controller.FiltersContoller({
-    onChangeHandler: function(selection, timeFacets) {
-        var configPeriod = config.get("period");
-        var domain = config.get("domain");
-        var timeFacet = false;
-        if (configPeriod) {
-            if (configPeriod[domain]) {
-                for (i=0; i<timeFacets.length; i++) {
-                    if (configPeriod[domain] == timeFacets[i].oid) {
-                        timeFacet = timeFacets[i];
-                    }
-                    break;
-                }
-            }
-        }
-        if (!timeFacet) {
-            for (i=0; i<timeFacets.length; i++) {
-                timeFacet = timeFacets[i];
-                break;
-            }
-        }
-        if (timeFacet) {
-            // set config period
-            if (! configPeriod) {
-                var obj = {};
-                obj[domain] = timeFacet.id;
-                config.set("period", obj);
-            } else {
-                configPeriod[domain] = timeFacet.id;
-                config.set("period", configPeriod);
-            }
-            // set selectedItems
-            if (timeFacet.selectedItems.length === 0) {
-                var minDate;
-                var maxDate;
-                // detect mix & max
-                if (timeFacet.items.length > 0) {
-                    minDate = timeFacet.items[0].lowerBound;
-                    maxDate = timeFacet.items[0].upperBound;
-                } else {
-                    minDate = moment().subtract("50", "years").format(squid_api.DATE_FORMAT);
-                    maxDate = moment().format(squid_api.DATE_FORMAT);
-                }
-                // set timeFacet selected Items
-                timeFacet.selectedItems = [{upperBound : maxDate, lowerBound : moment(maxDate).subtract("1", "month").format(squid_api.DATE_FORMAT), type : "i"}];
-                // update selection
-                for (ix=0; ix<selection.facets.length; ix++) {
-                    if (selection.facets[ix].id == timeFacet.id) {
-                        selection.facets[ix] = timeFacet;
-                    }
-                }
-                // set selection in config
-                config.set("selection", squid_api.utils.buildCleanSelection(selection));
-            }
-
-        }
-        this.filters.set("selection", selection);
-    }
-});
+new api.controller.FiltersContoller();
 
 api.model.login.on('change:login', function(model) {
     // performed when login is updated
