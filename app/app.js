@@ -81,20 +81,20 @@ domainButton.$el.click(function() {
 });
 
 /* Relations Management */
-// var relationCollection = new api.view.RelationCollectionManagementWidget();
-//
-// var relationModal = new api.view.ModalView({
-//     view : relationCollection
-// });
-//
-// var relationButton = new api.view.ButtonView({
-//     el : '#relation',
-//     parent : "Project"
-// });
-//
-// relationButton.$el.click(function() {
-//     relationModal.render();
-// });
+ //var relationCollection = new api.view.RelationCollectionManagementWidget();
+ //
+ //var relationModal = new api.view.ModalView({
+ //    view : relationCollection
+ //});
+ //
+ //var relationButton = new api.view.ButtonView({
+ //    el : '#relation',
+ //    parent : "Project"
+ //});
+ //
+ //relationButton.$el.click(function() {
+ //    relationModal.render();
+ //});
 
 /* Bookmark Management */
 var bookmarkCollection = new api.view.BookmarkCollectionManagementWidget();

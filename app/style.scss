@@ -48,13 +48,22 @@ $navBarAndButtonColour: #e7e7e7;
     .bookmark {
         position: relative;
         top: 10px;
-        #bookmark-crud {
-            float: left;
-            button {
-                font-size: 18px;
-                left: -15px;
-                top: -1px;
-                color: $primary-font-color;
+        button {
+            min-width: auto !important;
+            width: 35px;
+            text-indent: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            background: #ffe084;
+            border: none;
+            text-align: left;
+            &:before {
+                content: "\f02e";
+                color: #fff;
+                font-family: FontAwesome;
+                left: -10px;
+                position: relative;
+                top: 1px;
             }
         }
     }
