@@ -481,15 +481,22 @@ config.on("change:bookmark", function(config) {
 config.on("change:currentAnalysis", function(config, forceRefresh) {
     mainModel.set("currentAnalysis", mainModel.get(config.get("currentAnalysis")));
     if (! config._previousAttributes.currentAnalysis || forceRefresh === true) {
-        if (config.get("chosenDimensions") || config.get("chosenMetrics")) {
-            if (config.get("chosenMetrics").length > 0 || config.get("chosenDimensions").length > 0) {
-                if (mainModel.get("currentAnalysis")) {
-                    if (mainModel.get("currentAnalysis").get("status") !== "RUNNING") {
-                        setTimeout(function() {
-                            compute(mainModel.get("currentAnalysis"));
-                        }, 1000);
-                    }
-                }
+        var canCompute = false;
+        if (config.get("chosenDimensions")) {
+            if (config.get("chosenDimensions").length > 0) {
+                canCompute = true;
+            }
+        }
+        if (config.get("chosenMetrics")) {
+            if (config.get("chosenMetrics").length > 0) {
+                canCompute = true;
+            }
+        }
+        if (mainModel.get("currentAnalysis")) {
+            if (mainModel.get("currentAnalysis").get("status") !== "RUNNING" && canCompute === true) {
+                setTimeout(function() {
+                    compute(mainModel.get("currentAnalysis"));
+                }, 1000);
             }
         }
     }

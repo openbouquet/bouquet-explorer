@@ -66,6 +66,11 @@ $navBarAndButtonColour: #e7e7e7;
                 top: 1px;
             }
         }
+        button.match {
+            &:before {
+                color: #465966;
+            }
+        }
     }
    	#project-edit {
    		float: left;
