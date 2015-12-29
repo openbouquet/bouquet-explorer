@@ -40,23 +40,9 @@ projectButton.$el.click(function() {
     projectModal.render();
 });
 
-// model view
-var projectModel = new api.view.ProjectModelManagementWidget({
-    model : new api.model.ProjectModel(),
-    onSave : function(model) {
-        // set project
-        this.config.set("project", model.get("id").projectId);
-        // close modal
-        projectModelModal.close();
-    }
-});
-
-var projectModelModal = new api.view.ModalView({
-    view : projectModel
-});
-
 $("#project-create button").click(function() {
-    projectModelModal.render();
+    projectModal.render();
+    projectModal.view.eventCreate();
 });
 
 /* Domain */
