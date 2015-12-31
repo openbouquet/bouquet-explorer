@@ -52,14 +52,15 @@ $navBarAndButtonColour: #e7e7e7;
             min-width: auto !important;
             width: 35px;
             text-indent: 100%;
+		  	color: #465966;
             white-space: nowrap;
             overflow: hidden;
-            background: #ffe084;
+            background: #fff;
             border: none;
             text-align: left;
             &:before {
                 content: "\f02e";
-                color: #fff;
+                color: $primary-font-color;
                 font-family: FontAwesome;
                 left: -10px;
                 position: relative;
@@ -67,9 +68,7 @@ $navBarAndButtonColour: #e7e7e7;
             }
         }
         button.match {
-            &:before {
-                color: #465966;
-            }
+		  	background: #ffe084;
         }
     }
    	#project-edit {
