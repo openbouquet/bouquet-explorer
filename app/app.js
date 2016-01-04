@@ -83,7 +83,11 @@ domainButton.$el.click(function() {
  //});
 
 /* Bookmark Management */
-var bookmarkCollection = new api.view.BookmarkCollectionManagementWidget();
+var bookmarkCollection = new api.view.BookmarkCollectionManagementWidget({
+    onSelect: function() {
+        bookmarkModal.close();
+    }
+});
 
 var bookmarkModal = new api.view.ModalView({
     view : bookmarkCollection
