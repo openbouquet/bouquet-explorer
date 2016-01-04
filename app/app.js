@@ -19,18 +19,85 @@ new api.view.LoginView();
 new api.view.StatusView();
 
 
-var projectSelect = new api.view.ProjectManagementWidget({
+/* Project */
+
+// collection view
+var projectCollection = new api.view.ProjectCollectionManagementWidget({
+    onSelect: function() {
+        projectModal.close();
+    }
+});
+
+var projectModal = new api.view.ModalView({
+    view : projectCollection
+});
+
+var projectButton = new api.view.ProjectSelectorButton({
     el : '#project'
 });
 
-var projectCreate = new api.view.ProjectManagementWidget({
-    el : '#project-create',
-    createOnlyView : true
+projectButton.$el.click(function() {
+    projectModal.render();
 });
 
-var domainSelect = new api.view.DomainManagementWidget({
+$("#project-create button").click(function() {
+    projectModal.render();
+    projectModal.view.eventCreate();
+});
+
+/* Domain */
+
+// collection view
+var domainCollection = new api.view.DomainCollectionManagementWidget({
+    onSelect: function() {
+        domainModal.close();
+    }
+});
+
+var domainModal = new api.view.ModalView({
+    view : domainCollection
+});
+
+var domainButton = new api.view.DomainSelectorButton({
     el : '#domain'
 });
+
+domainButton.$el.click(function() {
+    domainModal.render();
+});
+
+/* Relations Management */
+ //var relationCollection = new api.view.RelationCollectionManagementWidget();
+ //
+ //var relationModal = new api.view.ModalView({
+ //    view : relationCollection
+ //});
+ //
+ //var relationButton = new api.view.ButtonView({
+ //    el : '#relation',
+ //    parent : "Project"
+ //});
+ //
+ //relationButton.$el.click(function() {
+ //    relationModal.render();
+ //});
+
+/* Bookmark Management */
+var bookmarkCollection = new api.view.BookmarkCollectionManagementWidget();
+
+var bookmarkModal = new api.view.ModalView({
+    view : bookmarkCollection
+});
+
+var bookmarkButton = new api.view.BookmarkSelectorButton({
+    el : '#bookmark'
+});
+
+bookmarkButton.$el.click(function() {
+    bookmarkModal.render();
+});
+
+/* end */
 
 new api.view.ShortcutsAdminView({
     el : '#shortcuts',
@@ -39,21 +106,16 @@ new api.view.ShortcutsAdminView({
     }
 });
 
-new api.view.BookmarksManagementWidget({
-    el : '#bookmark-crud'
-});
+// new api.view.BookmarksManagementWidget({
+//     el : '#bookmark-crud'
+// });
 
 /*
  * Controllers
  */
 
 // filters controller
-new api.controller.FiltersContoller({
-    onChangeHandler : function(selection, timeFacet) {
-        // apply to main filters
-        api.controller.facetjob.compute(api.model.filters, selection);
-    }
-});
+new api.controller.FiltersContoller();
 
 api.model.login.on('change:login', function(model) {
     // performed when login is updated
@@ -405,15 +467,22 @@ config.on("change:bookmark", function(config) {
 config.on("change:currentAnalysis", function(config, forceRefresh) {
     mainModel.set("currentAnalysis", mainModel.get(config.get("currentAnalysis")));
     if (! config._previousAttributes.currentAnalysis || forceRefresh === true) {
-        if (config.get("chosenDimensions") || config.get("chosenMetrics")) {
-            if (config.get("chosenMetrics").length > 0 || config.get("chosenDimensions").length > 0) {
-                if (mainModel.get("currentAnalysis")) {
-                    if (mainModel.get("currentAnalysis").get("status") !== "RUNNING") {
-                        setTimeout(function() {
-                            compute(mainModel.get("currentAnalysis"));
-                        }, 1000);
-                    }
-                }
+        var canCompute = false;
+        if (config.get("chosenDimensions")) {
+            if (config.get("chosenDimensions").length > 0) {
+                canCompute = true;
+            }
+        }
+        if (config.get("chosenMetrics")) {
+            if (config.get("chosenMetrics").length > 0) {
+                canCompute = true;
+            }
+        }
+        if (mainModel.get("currentAnalysis")) {
+            if (mainModel.get("currentAnalysis").get("status") !== "RUNNING" && canCompute === true) {
+                setTimeout(function() {
+                    compute(mainModel.get("currentAnalysis"));
+                }, 1000);
             }
         }
     }
