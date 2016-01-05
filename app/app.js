@@ -493,8 +493,6 @@ config.on("change:currentAnalysis", function(config, forceRefresh) {
     }
 });
 
-
-
 config.on("change", function(config) {
 	var project = config.get("project");
 	var domain = config.get("domain");
@@ -559,8 +557,8 @@ config.on("change", function(config) {
             // Start the tour
             tour.start();
         }, 2000);
-	} else if (! project) {
-        // Instance the tour
+	} else if (! project && ! config.previousAttributes().project) {
+            // Instance the tour
             var projectTour = new Tour({
                 backdrop: true,
                 steps: [
@@ -591,7 +589,7 @@ config.on("change", function(config) {
             // Start the tour
             projectTour.start(true);
 
-    } else if (! domain) {
+    } else if (! domain && ! config.previousAttributes().domain) {
         // Instance the tour
         var domainTour = new Tour({
             backdrop: true,
