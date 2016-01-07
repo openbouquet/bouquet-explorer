@@ -40,7 +40,12 @@ projectButton.$el.click(function() {
     projectModal.render();
 });
 
-$("#project-create button").click(function() {
+var projectCreateButton = new api.view.ProjectCreatorButton({
+    el : '#project-create'
+});
+
+
+projectCreateButton.$el.click(function() {
     projectModal.render();
     projectModal.view.eventCreate();
 });
