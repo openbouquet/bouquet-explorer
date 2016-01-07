@@ -40,7 +40,12 @@ projectButton.$el.click(function() {
     projectModal.render();
 });
 
-$("#project-create button").click(function() {
+var projectCreateButton = new api.view.ProjectCreatorButton({
+    el : '#project-create'
+});
+
+
+projectCreateButton.$el.click(function() {
     projectModal.render();
     projectModal.view.eventCreate();
 });
@@ -83,7 +88,11 @@ domainButton.$el.click(function() {
  //});
 
 /* Bookmark Management */
-var bookmarkCollection = new api.view.BookmarkCollectionManagementWidget();
+var bookmarkCollection = new api.view.BookmarkCollectionManagementWidget({
+    onSelect: function() {
+        bookmarkModal.close();
+    }
+});
 
 var bookmarkModal = new api.view.ModalView({
     view : bookmarkCollection
