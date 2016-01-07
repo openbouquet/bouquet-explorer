@@ -563,6 +563,10 @@ config.on("change", function(config) {
             // Start the tour
             tour.start();
 
+            $("#tour").click(function() {
+                tour.start(true);
+            });
+
         } else if (! project && ! config.previousAttributes().project && ! me.projectTour) {
             // Instance the tour
             me.projectTour = new Tour({
