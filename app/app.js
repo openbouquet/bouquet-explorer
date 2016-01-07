@@ -41,7 +41,12 @@ projectButton.$el.click(function() {
     projectModal.render();
 });
 
-$("#project-create button").click(function() {
+var projectCreateButton = new api.view.ProjectCreatorButton({
+    el : '#project-create'
+});
+
+
+projectCreateButton.$el.click(function() {
     projectModal.render();
     projectModal.view.eventCreate();
 });
@@ -120,7 +125,7 @@ new api.view.ShortcutsAdminView({
  */
 
 // filters controller
-new api.controller.FiltersContoller();
+new api.controller.FiltersController();
 
 api.model.login.on('change:login', function(model) {
     // performed when login is updated
@@ -186,15 +191,15 @@ config.on("change", function() {
 var updateRefreshButton = function(analysis) {
     if (analysis.get("status") === "DONE") {
         $("button.refresh-analysis .text").html("Refresh");
-        $("button.refresh-analysis .glyphicon").hide();
-        $("button.refresh-analysis .glyphicon").removeClass("loading");
+        $("button.refresh-analysis i").hide();
+        $("button.refresh-analysis i").removeClass("fa-spin");
     } else if (analysis.get("status") === "RUNNING") {
-        $("button.refresh-analysis .glyphicon").show();
+        $("button.refresh-analysis i").show();
         $("button.refresh-analysis .text").html("Refreshing...");
-        $("button.refresh-analysis .glyphicon").addClass("loading");
+        $("button.refresh-analysis i").addClass("fa-spin");
     } else if (analysis.get("status") === "PENDING") {
-        $("button.refresh-analysis .glyphicon").show();
-        $("button.refresh-analysis .glyphicon").removeClass("loading");
+        $("button.refresh-analysis i").show();
+        $("button.refresh-analysis i").removeClass("fa-spin");
         $("button.refresh-analysis").removeClass("dataUpdated");
         $("button.refresh-analysis .text").html("Preview");
     }
@@ -565,7 +570,7 @@ config.on("change", function(config) {
                 steps: [
                     {
                         element: "#project",
-                        title: "Lets get going!",
+                        title: "Welcome!",
                         template: "<div class='popover tour'>\
                             <div class='arrow'></div>\
                             <h3 class='popover-title'></h3>\
@@ -573,7 +578,7 @@ config.on("change", function(config) {
                             <div class='popover-navigation'>\
                             </div>",
                         placement: "bottom",
-                        content: "Now we're into the app it's up to you to either choose an existing project or create a new one - Go on don't be scared ;)",
+                        content: "Click the button above to select your project <i> (we don't bite) </i>",
                         onShow: function(tour) {
                             $('body').click({tour: tour}, function (e) {
                                 if ($(e.target).closest('.popover').length === 0) {
@@ -597,7 +602,7 @@ config.on("change", function(config) {
                 steps: [
                     {
                         element: "#domain",
-                        title: "We're on a roll!",
+                        title: "Almost there...",
                         template: "<div class='popover tour'>\
                             <div class='arrow'></div>\
                             <h3 class='popover-title'></h3>\
@@ -605,7 +610,7 @@ config.on("change", function(config) {
                             <div class='popover-navigation'>\
                             </div>",
                         placement: "bottom",
-                        content: "Great so now it's time to choose your domain? If you were wondering.. domain can be referred to as a database table.",
+                        content: "“That’s one small step for man, one giant leap for mankind,” - just choose a domain then you're in! ",
                         onShow: function(tour) {
                             $('body').click({tour: tour}, function (e) {
                                 if ($(e.target).closest('.popover').length === 0) {
