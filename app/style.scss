@@ -564,14 +564,10 @@ $navBarAndButtonColour: #e7e7e7;
 	                -webkit-box-shadow: inset 0 -2px #27ae60;
 	                box-shadow: inset 0 -2px #27ae60;
 
-	                .glyphicon {
-	                    top: 3px;
-	                    right: -15px;
-
-	                    &.loading {
-	                        -moz-animation: spin .7s infinite linear;
-	                        -webkit-animation: spin .7s infinite linear;
-	                    }
+	                i {
+					  	top: 1px;
+					  	right: -7px;
+					  	position: relative;
 	                }
 	            }
 	            #export {
@@ -623,81 +619,7 @@ $navBarAndButtonColour: #e7e7e7;
 	                left: 0px;
 	                top:0% !important;
 	            }
-	            .spinner {
-	                margin: 100px auto;
-	                width: 400px;
-	                height: 100px;
-	                text-align: center;
-	                font-size: 10px;
-	            }
-	            .spinner > div {
-	                margin-left:10px;
-	                background-color: rgba(102, 102, 102, .5);
-	                height: 100%;
-	                width: 10px;
-	                display: inline-block;
-	                -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
-	                animation: stretchdelay 1.2s infinite ease-in-out;
-	            }
-	            .spinner .rect2 {
-	                -webkit-animation-delay: -1.1s;
-	                animation-delay: -1.1s;
-	            }
-	            .spinner .rect3 {
-	                -webkit-animation-delay: -1.0s;
-	                animation-delay: -1.0s;
-	            }
-	            .spinner .rect4 {
-	                -webkit-animation-delay: -0.9s;
-	                animation-delay: -0.9s;
-	            }
-	            .spinner .rect5 {
-	                -webkit-animation-delay: -0.8s;
-	                animation-delay: -0.8s;
-	            }
-	            @-webkit-keyframes stretchdelay {
-	                0%, 40%, 100% {
-	                    -webkit-transform: scaleY(0.0)
-	                }
-	                20% {
-	                    -webkit-transform: scaleY(1.0)
-	                }
-	            }
-	            @keyframes stretchdelay {
-	                0%, 40%, 100% {
-	                    transform: scaleY(0.0);
-	                    -webkit-transform: scaleY(0.0);
-	                }
-	                20% {
-	                    transform: scaleY(1.0);
-	                    -webkit-transform: scaleY(1.0);
-	                }
-	            }
-	            @-moz-keyframes spin {
-	                0% {
-	                    -moz-transform: rotate(0deg);
-	                }
-	                100% {
-	                    -moz-transform: rotate(360deg);
-	                };
-	            }
-	            @-moz-keyframes spinoff {
-	                0% {
-	                    -moz-transform: rotate(0deg);
-	                }
-	                100% {
-	                    -moz-transform: rotate(-360deg);
-	                };
-	            }
 
-	            @-webkit-keyframes spin {
-	                0% {
-	                    -webkit-transform: rotate(0deg);
-	                }
-	                100% {
-	                    -webkit-transform: rotate(360deg);
-	                };
-	            }
 	        }
 	    }
 	}

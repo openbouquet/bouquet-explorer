@@ -190,15 +190,15 @@ config.on("change", function() {
 var updateRefreshButton = function(analysis) {
     if (analysis.get("status") === "DONE") {
         $("button.refresh-analysis .text").html("Refresh");
-        $("button.refresh-analysis .glyphicon").hide();
-        $("button.refresh-analysis .glyphicon").removeClass("loading");
+        $("button.refresh-analysis i").hide();
+        $("button.refresh-analysis i").removeClass("fa-spin");
     } else if (analysis.get("status") === "RUNNING") {
-        $("button.refresh-analysis .glyphicon").show();
+        $("button.refresh-analysis i").show();
         $("button.refresh-analysis .text").html("Refreshing...");
-        $("button.refresh-analysis .glyphicon").addClass("loading");
+        $("button.refresh-analysis i").addClass("fa-spin");
     } else if (analysis.get("status") === "PENDING") {
-        $("button.refresh-analysis .glyphicon").show();
-        $("button.refresh-analysis .glyphicon").removeClass("loading");
+        $("button.refresh-analysis i").show();
+        $("button.refresh-analysis i").removeClass("fa-spin");
         $("button.refresh-analysis").removeClass("dataUpdated");
         $("button.refresh-analysis .text").html("Preview");
     }
