@@ -115,7 +115,7 @@ new api.view.ShortcutsAdminView({
  */
 
 // filters controller
-new api.controller.FiltersContoller();
+new api.controller.FiltersController();
 
 api.model.login.on('change:login', function(model) {
     // performed when login is updated
