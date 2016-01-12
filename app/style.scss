@@ -522,7 +522,8 @@ $navBarAndButtonColour: #e7e7e7;
 		}
 	  }
 	  .main-container {
-		margin: 20px;
+		margin: 0px 20px;
+		display: inline-block;
 		.orderby-col {
 		  padding-left: 0px;
 		  display: inline-block;
