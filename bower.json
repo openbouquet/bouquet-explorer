@@ -15,7 +15,7 @@
     "tests"
   ],
   "dependencies": {
-    "squid_api": "https://github.com/squidsolutions/jssdk2.git#3.3.3",
+    "squid_api": "https://github.com/squidsolutions/jssdk2.git#3.3.4",
     "squid_api_core_widgets": "https://github.com/squidsolutions/jssdk-core-widgets.git#2.9.0",
     "bootstrap": "3.3.4",
     "font-awesome": "https://github.com/components/font-awesome.git",
