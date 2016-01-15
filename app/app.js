@@ -1,4 +1,5 @@
 (function (api) {
+    /*jshint multistr: true */
 
 var loginView, statusView, config;
 var me = this;
@@ -482,73 +483,139 @@ config.on("change:currentAnalysis", function(config, forceRefresh) {
 });
 
 config.on("change", function(config) {
+    var me = this;
 	var project = config.get("project");
 	var domain = config.get("domain");
-	var tourViewed = config.get("tourFinished");
 
-	if (project && domain) {
-        if (! config.get("currentAnalysis")) {
-            mainModel.set("currentAnalysis", tableAnalysis);
+    setTimeout(function() {
+        if (project && domain) {
+            if (! config.get("currentAnalysis")) {
+                mainModel.set("currentAnalysis", tableAnalysis);
+            }
+            // Instance the tour
+            var tour = new Tour({
+                steps: [
+                    {
+                        element: ".zEWidget-launcher",
+                        title: "How to get help",
+                        placement: "left",
+                        content: "This Help button is available at all times. Use it to browse the documentation and find answers."
+                    },
+                    {
+                        element: "#date-picker",
+                        title: "Select date range",
+                        content: "This is where you define the date range of your data. If multiple data measures are available, pick one first."
+                    },
+                    {
+                        element: "#selection",
+                        title: "Filter your data",
+                        content: "This is where you can filter your data. First pick a filter, then search the values you want to filter on. Remember to index the dimension first."
+                    },
+                    {
+                        element: "#metric",
+                        placement: "bottom",
+                        title: "Add columns to your data set",
+                        content: "Pick from the available dimensions and metrics to add columns to your data. You can reorder the dimensions with a simple drag & drop.",
+                        onNext: function() {
+                            setTimeout(function() {
+                                $("#origin button").click();
+                            }, 100);
+                        }
+                    },
+                    {
+                        element: "#origin",
+                        placement: "bottom",
+                        title: "Edit the datamodel",
+                        content: "By clicking the Configure icon after clicking on one of the buttons, you can choose to index dimensions, create new metrics and manage relations between domains."
+                    },
+                    {
+                        element: ".menu-link",
+                        placement: "right",
+                        title: "Management panel",
+                        content: "By clicking here you can open the management panel allowing you to manage users & shortcuts.",
+                        onPrev: function() {
+                            setTimeout(function() {
+                                $("#origin button").click();
+                            }, 100);
+                        }
+                    }
+                ]
+            });
+
+            // Initialize the tour
+            tour.init();
+            // Start the tour
+            tour.start();
+
+            $("#tour").click(function() {
+                tour.start(true);
+            });
+
+        } else if (! project && ! config.previousAttributes().project && ! me.projectTour) {
+            // Instance the tour
+            me.projectTour = new Tour({
+                backdrop: true,
+                steps: [
+                    {
+                        element: "#project",
+                        title: "Welcome!",
+                        template: "<div class='popover tour'>\
+                            <div class='arrow'></div>\
+                            <h3 class='popover-title'></h3>\
+                            <div class='popover-content'></div>\
+                            <div class='popover-navigation'>\
+                            </div>",
+                        placement: "bottom",
+                        content: "Click the button above to select your project <i> (we don't bite) </i>",
+                        onShow: function(tour) {
+                            $('body').click({tour: tour}, function (e) {
+                                if ($(e.target).closest('.popover').length === 0 && $(e.target).parents().hasClass("project")) {
+                                    e.data.tour.end();
+                                }
+                            });
+                        }
+                    }
+                ]});
+
+            // Initialize the tour
+            me.projectTour.init();
+
+            // Start the tour
+            me.projectTour.start(true);
+
+        } else if (! domain && ! config.previousAttributes().domain && ! me.domainTour) {
+            // Instance the tour
+            me.domainTour = new Tour({
+                backdrop: true,
+                steps: [
+                    {
+                        element: "#domain",
+                        title: "Almost there...",
+                        template: "<div class='popover tour'>\
+                            <div class='arrow'></div>\
+                            <h3 class='popover-title'></h3>\
+                            <div class='popover-content'></div>\
+                            <div class='popover-navigation'>\
+                            </div>",
+                        placement: "bottom",
+                        content: "“That’s one small step for man, one giant leap for mankind,” - just choose a domain then you're in! ",
+                        onShow: function(tour) {
+                            $('body').click({tour: tour}, function (e) {
+                                if ($(e.target).closest('.popover').length === 0 && $(e.target).parents().hasClass("domain")) {
+                                    e.data.tour.end();
+                                }
+                            });
+                        }
+                    }
+                ]});
+
+            // Initialize the tour
+            me.domainTour.init();
+
+            // Start the tour
+            me.domainTour.start(true);
         }
-        if (! tourViewed) {
-            setTimeout(function() {
-    			// Instance the tour
-    			var tour = new Tour({
-    			  steps: [
-    			  {
-    			    element: ".zEWidget-launcher",
-    			    title: "How to get help",
-    			    placement: "left",
-    			    content: "This Help button is available at all times. Use it to browse the documentation and find answers."
-    			  },
-    			  {
-    			    element: "#date-picker",
-    			    title: "Select date range",
-    			    content: "This is where you define the date range of your data. If multiple data measures are available, pick one first."
-    			  },
-    			  {
-    				element: "#selection",
-    				title: "Filter your data",
-    				content: "This is where you can filter your data. First pick a filter, then search the values you want to filter on. Remember to index the dimension first."
-    			  },
-    			  {
-    				 element: "#metric",
-    				 placement: "bottom",
-    				 title: "Add columns to your data set",
-    				 content: "Pick from the available dimensions and metrics to add columns to your data. You can reorder the dimensions with a simple drag & drop.",
-    				 onNext: function() {
-    					 setTimeout(function() {
-    						 $("#origin button").click();
-    					 }, 100);
-    				 }
-    			  },
-    			  {
-    				  element: "#origin",
-    				  placement: "bottom",
-    				  title: "Edit the datamodel",
-    				  content: "By clicking the Configure icon after clicking on one of the buttons, you can choose to index dimensions, create new metrics and manage relations between domains."
-    			  },
-    			  {
-    				  element: ".menu-link",
-    				  placement: "right",
-    				  title: "Management panel",
-    				  content: "By clicking here you can open the management panel allowing you to manage users & shortcuts.",
-    				  onPrev: function() {
-    					 setTimeout(function() {
-    						 $("#origin button").click();
-    					 }, 100);
-    				  }
-    			  }
-    			]});
-
-    			// Initialize the tour
-    			tour.init();
-
-    			// Start the tour
-    			tour.start();
-    		}, 2000);
-        }
-	}
+    }, 500);
 });
 
 var getOrderByIndex = function() {
