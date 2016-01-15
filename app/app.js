@@ -481,19 +481,24 @@ config.on("change:currentAnalysis", function(config, forceRefresh) {
         }
     }
 });
-
-config.on("change", function(config) {
+var tour = function() {
     var me = this;
-	var project = config.get("project");
-	var domain = config.get("domain");
+    var config = squid_api.model.config;
 
+    var tourSeen = config.get("tourSeen");
+    var project = config.get("project");
+    var domain = config.get("domain");
     setTimeout(function() {
-        if (project && domain) {
+        if (project && domain && ! this.mainTour) {
             if (! config.get("currentAnalysis")) {
                 mainModel.set("currentAnalysis", tableAnalysis);
             }
             // Instance the tour
-            var tour = new Tour({
+            this.mainTour = new Tour({
+                storage: false,
+                onEnd: function() {
+                 config.set("tourSeen", true);
+                },
                 steps: [
                     {
                         element: ".zEWidget-launcher",
@@ -543,28 +548,26 @@ config.on("change", function(config) {
             });
 
             // Initialize the tour
-            tour.init();
+            this.mainTour.init();
             // Start the tour
-            tour.start();
-
-            $("#tour").click(function() {
-                tour.start(true);
-            });
-
-        } else if (! project && ! config.previousAttributes().project && ! me.projectTour) {
+            if (! tourSeen) {
+                this.mainTour.start(true);
+            }
+        } else if (! project && ! config.previousAttributes().project && ! this.projectTour) {
             // Instance the tour
-            me.projectTour = new Tour({
+            this.projectTour = new Tour({
                 backdrop: true,
+                storage: false,
                 steps: [
                     {
                         element: "#project",
                         title: "Welcome!",
                         template: "<div class='popover tour'>\
-                            <div class='arrow'></div>\
-                            <h3 class='popover-title'></h3>\
-                            <div class='popover-content'></div>\
-                            <div class='popover-navigation'>\
-                            </div>",
+                        <div class='arrow'></div>\
+                        <h3 class='popover-title'></h3>\
+                        <div class='popover-content'></div>\
+                        <div class='popover-navigation'>\
+                        </div>",
                         placement: "bottom",
                         content: "Click the button above to select your project <i> (we don't bite) </i>",
                         onShow: function(tour) {
@@ -578,25 +581,26 @@ config.on("change", function(config) {
                 ]});
 
             // Initialize the tour
-            me.projectTour.init();
+            this.projectTour.init();
 
             // Start the tour
-            me.projectTour.start(true);
+            this.projectTour.start();
 
-        } else if (! domain && ! config.previousAttributes().domain && ! me.domainTour) {
+        } else if (! domain && ! config.previousAttributes().domain && ! this.domainTour) {
             // Instance the tour
-            me.domainTour = new Tour({
+            this.domainTour = new Tour({
                 backdrop: true,
+                storage: false,
                 steps: [
                     {
                         element: "#domain",
                         title: "Almost there...",
                         template: "<div class='popover tour'>\
-                            <div class='arrow'></div>\
-                            <h3 class='popover-title'></h3>\
-                            <div class='popover-content'></div>\
-                            <div class='popover-navigation'>\
-                            </div>",
+                        <div class='arrow'></div>\
+                        <h3 class='popover-title'></h3>\
+                        <div class='popover-content'></div>\
+                        <div class='popover-navigation'>\
+                        </div>",
                         placement: "bottom",
                         content: "“That’s one small step for man, one giant leap for mankind,” - just choose a domain then you're in! ",
                         onShow: function(tour) {
@@ -610,13 +614,15 @@ config.on("change", function(config) {
                 ]});
 
             // Initialize the tour
-            me.domainTour.init();
+            this.domainTour.init();
 
             // Start the tour
-            me.domainTour.start(true);
+            this.domainTour.start(true);
         }
     }, 500);
-});
+};
+
+config.on("change", tour);
 
 var getOrderByIndex = function() {
     var index;
@@ -740,6 +746,12 @@ config.on("change:configDisplay", function(model, attribute) {
 		$(".configuration").animate({height:"10px"});
 	}
 });
+
+// trigger tour on button click
+$("#tour").click(function() {
+    me.mainTour.start(true);
+});
+
 
 
 /*
