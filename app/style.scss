@@ -542,6 +542,9 @@ $navBarAndButtonColour: #e7e7e7;
 		  #squid-api-data-widgets-data-table table thead th {
 			cursor: pointer;
 		  }
+		  #squid-api-data-widgets-data-table table.many-columns {
+			display: table;
+		  }
 		}
 		.squid-api-data-widgets-displaytype-selector {
 		  float: right;
