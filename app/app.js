@@ -509,7 +509,24 @@ var tour = function() {
                     {
                         element: "#date-picker",
                         title: "Select date range",
-                        content: "This is where you define the date range of your data. If multiple data measures are available, pick one first."
+                        onShow: function (tour) {
+                            var selection = config.get("selection");
+                            var dateFound = false;
+                            if (selection) {
+                                if (selection.facets) {
+                                    var facets = selection.facets;
+                                    for (i=0; i<facets.length; i++) {
+                                        if (facets[i].dimension.type == "CONTINUOUS" && facets[i].dimension.valueType == "DATE") {
+                                            dateFound = true;
+                                            this.content = "This is where you define the date range of your data. If multiple data measures are available, pick one first.";
+                                        }
+                                    }
+                                    if (! dateFound) {
+                                        this.content = "Looks like we can't find a date column to us in the date picker. One will have to be defined, but we'll look into this later.";
+                                    }
+                                }
+                            }
+                        }
                     },
                     {
                         element: "#selection",
@@ -532,17 +549,6 @@ var tour = function() {
                         placement: "bottom",
                         title: "Edit the datamodel",
                         content: "By clicking the Configure icon after clicking on one of the buttons, you can choose to index dimensions, create new metrics and manage relations between domains."
-                    },
-                    {
-                        element: ".menu-link",
-                        placement: "right",
-                        title: "Management panel",
-                        content: "By clicking here you can open the management panel allowing you to manage users & shortcuts.",
-                        onPrev: function() {
-                            setTimeout(function() {
-                                $("#origin button").click();
-                            }, 100);
-                        }
                     }
                 ]
             });
