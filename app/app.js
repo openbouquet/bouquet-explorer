@@ -522,7 +522,7 @@ var tour = function() {
                                         }
                                     }
                                     if (! dateFound) {
-                                        this.content = "Looks like we can't find a date column to us in the date picker. One will have to be defined, but we'll look into this later.";
+                                        this.content = "This is where you define the date range of your data. Looks like we can't find a date column within your dataset to use. One will have to be defined, but we'll look into this later.";
                                     }
                                 }
                             }
