@@ -585,7 +585,7 @@ config.on("change", function(config) {
                         content: "Click the button above to select your project <i> (we don't bite) </i>",
                         onShow: function(tour) {
                             $('body').click({tour: tour}, function (e) {
-                                if ($(e.target).closest('.popover').length === 0) {
+                                if ($(e.target).closest('.popover').length === 0 && $(e.target).parents().hasClass("project")) {
                                     e.data.tour.end();
                                 }
                             });
@@ -617,7 +617,7 @@ config.on("change", function(config) {
                         content: "“That’s one small step for man, one giant leap for mankind,” - just choose a domain then you're in! ",
                         onShow: function(tour) {
                             $('body').click({tour: tour}, function (e) {
-                                if ($(e.target).closest('.popover').length === 0) {
+                                if ($(e.target).closest('.popover').length === 0 && $(e.target).parents().hasClass("domain")) {
                                     e.data.tour.end();
                                 }
                             });
