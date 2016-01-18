@@ -453,7 +453,9 @@ config.on("change:startIndex", function(config) {
         // update if pagination changed
         a.setParameter("startIndex", config.get("startIndex"));
         a.set("status", "RUNNING");
-        squid_api.controller.analysisjob.getAnalysisJobResults(null, a);
+        if (a.get("id") && (a.get("id").analysisJobId)) {
+            squid_api.controller.analysisjob.getAnalysisJobResults(null, a);
+        }
     }
 });
 
