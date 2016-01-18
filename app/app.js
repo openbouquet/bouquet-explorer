@@ -309,7 +309,7 @@ var exportView = new api.view.DataExport({
     model : exportAnalysis,
     displayInPopup : true,
     sqlView : true,
-    materializeDatasetsView: false
+    materializeDatasetsView: true
 });
 
 // Controllers
