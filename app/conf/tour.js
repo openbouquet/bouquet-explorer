@@ -55,7 +55,7 @@
                 storage: false,
                 steps: [
                     {
-                        element: "#domain",
+                        element: "#domain-bookmark",
                         title: "Almost there...",
                         template: "<div class='popover tour'>\
                         <div class='arrow'></div>\
@@ -67,7 +67,7 @@
                         content: "“That’s one small step for man, one giant leap for mankind,” - just choose a domain then you're in! ",
                         onShow: function(tour) {
                             $('body').click({tour: tour}, function (e) {
-                                if ($(e.target).closest('.popover').length === 0 && $(e.target).parents().hasClass("domain")) {
+                                if ($(e.target).closest('.popover').length === 0 && ($(e.target).parents().hasClass("domain") || $(e.target).parents().hasClass("bookmark"))) {
                                     e.data.tour.end();
                                 }
                             });

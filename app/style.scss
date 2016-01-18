@@ -45,9 +45,18 @@ $navBarAndButtonColour: #e7e7e7;
 	  }
 	}
   }
+  #domain-bookmark {
+	height: 53px;
+	width: 200px;
+	ul {
+	  padding-left: 0px;
+	}
+  }
   .bookmark {
 	position: relative;
 	top: 10px;
+	list-style-type: none;
+	float: left;
 	button {
 	  min-width: auto !important;
 	  width: 35px;
@@ -152,7 +161,10 @@ $navBarAndButtonColour: #e7e7e7;
 	  .project, .domain {
 		padding-right: 20px;
 		margin-top: 10px;
+		padding-left: 10px;
 		min-width: 150px;
+		float: left;
+		list-style-type: none;
 	  }
 	}
 	#status {
@@ -983,4 +995,7 @@ $navBarAndButtonColour: #e7e7e7;
 	  }
 	}
   }
+}
+.tour-backdrop {
+  opacity: 0.4;
 }
