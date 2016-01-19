@@ -228,6 +228,7 @@ new api.view.DimensionView({
     el : '#dimension',
     model : config,
     selectDimension : false,
+    "noDataMessage" : "Select a dimension"
 });
 
 var tableView = new squid_api.view.DataTableView ({
@@ -275,6 +276,7 @@ mainModel.on("change:currentAnalysis", function() {
 new api.view.CategoricalView({
     el : '#selection',
     filterPanel : '#filters',
+    noFiltersMessage : "Select a filter",
     filterSelected : '#selected',
     panelButtons : false,
     config : config,
@@ -305,6 +307,7 @@ new api.view.MetricView({
     model : config,
     displayMetricValue : false,
     selectMetric : false,
+    noDataMessage: "Select a metric"
 });
 
 var exportView = new api.view.DataExport({
