@@ -27,11 +27,15 @@
 					<li class="project">
 						<div id="project"></div>
 					</li>
-					<li class="domain">
-						<div id="domain"></div>
-					</li>
-					<li class="bookmark">
-						<div id="bookmark"></div>
+					<li id="domain-bookmark">
+						<ul>
+							<li class="domain">
+								<div id="domain"></div>
+							</li>
+							<li class="bookmark">
+								<div id="bookmark"></div>
+							</li>
+						</ul>
 					</li>
 					<li class="relation">
 						<div id="relation"></div>
@@ -45,6 +49,9 @@
 			</div>
 			<div class="navbar-header navbar-right">
                 <ul class="nav navbar-nav">
+					<li>
+						<div id="tour"><a>Tour</a></div>
+					</li>
                     <li>
                         <div id="zendesk"><a target="_blank" href="http://bouquet.zendesk.com">Support</a></div>
                     </li>
@@ -127,19 +134,6 @@
     	</div>
     </div>
     <div class="hidden push" id="app-export">
-        <div class="push" id="selectProject">
-	    	<div class="splash-container">
-	    		 <span class="splash-message">Please select your project</span>
-                    <div id="project-create">
-
-                    </div>
-	    	</div>
-	    </div>
-	    <div class="hidden push" id="selectDomain">
-	    	<div class="col-md-12 splash-container">
-	    		 <span class="splash-message">Please select your domain</span>
-	    	</div>
-	    </div>
 	    <div class="hidden push" id="main">
 	    <div class="configuration-hider"></div>
 	    <div class="configuration">
@@ -147,7 +141,7 @@
 				<div class="col-sm-3 col-xs-3 col-md-2">
 					<div id="date-selector"></div>
 				</div>
-				<div class="col-sm-5 col-xs-5 col-md-4">
+				<div class="col-sm-3 col-xs-3 col-md-2">
 					<div id="date-picker"></div>
 				</div>
 	    	</div>

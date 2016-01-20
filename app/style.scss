@@ -45,9 +45,18 @@ $navBarAndButtonColour: #e7e7e7;
 	  }
 	}
   }
+  #domain-bookmark {
+	height: 53px;
+	width: 230px;
+	ul {
+	  padding-left: 0px;
+	}
+  }
   .bookmark {
 	position: relative;
 	top: 10px;
+	list-style-type: none;
+	float: left;
 	button {
 	  min-width: auto !important;
 	  width: 35px;
@@ -152,7 +161,10 @@ $navBarAndButtonColour: #e7e7e7;
 	  .project, .domain {
 		padding-right: 20px;
 		margin-top: 10px;
+		padding-left: 10px;
 		min-width: 150px;
+		float: left;
+		list-style-type: none;
 	  }
 	}
 	#status {
@@ -163,7 +175,7 @@ $navBarAndButtonColour: #e7e7e7;
 	  li {
 		margin-left: 20px;
 
-		#medium, #zendesk {
+		#tour, #medium, #zendesk {
 		  margin-top: 16px;
 		  a {
 			color: #fff;
@@ -486,7 +498,8 @@ $navBarAndButtonColour: #e7e7e7;
 			  border: none;
 			  text-align: left;
 			  width: 105px;
-			  top: -1px;
+			  top: -20px;
+			  left: 170px;
 			  font-size: 11px;
 			  padding: 2px 0px 0px 15px;
 			  border-radius: 8px;
@@ -534,12 +547,16 @@ $navBarAndButtonColour: #e7e7e7;
 		  position: relative;
 		  top: 10px;
 		  z-index: 0;
+		  width: 100%;
 
 		  #squid-api-data-widgets-data-table table tr:nth-child(even) {
 			background: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#f6f6f6));
 		  }
 		  #squid-api-data-widgets-data-table table thead th {
 			cursor: pointer;
+		  }
+		  #squid-api-data-widgets-data-table table.many-columns {
+			display: table;
 		  }
 		}
 		.squid-api-data-widgets-displaytype-selector {
@@ -978,4 +995,7 @@ $navBarAndButtonColour: #e7e7e7;
 	  }
 	}
   }
+}
+.tour-backdrop {
+  opacity: 0.4;
 }
