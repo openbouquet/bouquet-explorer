@@ -571,6 +571,9 @@ $navBarAndButtonColour: #e7e7e7;
 		  position: relative;
 		  clear: both;
 		  z-index: 0;
+		  #chart {
+			top: -35px;
+		  }
 		  .squid-api-data-widgets-data-table {
 			width: 100%;
 			background: #f8f8f8;
