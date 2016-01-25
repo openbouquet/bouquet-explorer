@@ -208,9 +208,18 @@ $("button.refresh-analysis").click(function(event) {
 
 // Views
 
-userAdminView = new api.view.UsersAdminView({
+var userAdminView = new api.view.UsersAdminView({
     el : '#adminDisplay',
     status : api.model.status
+});
+
+var userModal = new api.view.ModalView({
+    view : userAdminView
+});
+
+$(".users-icon").click(function() {
+    userModal.render();
+    userAdminView.fetchModels();
 });
 
 new api.view.DimensionSelector({
@@ -549,23 +558,6 @@ config.on('change:domain', function(model) {
         }, 1000);
 
     }
-});
-
-// Menu State management
-
-$(".back-to-app").click(function() {
-    $('#admin').addClass("hidden");
-    $('#app-export').removeClass("hidden");
-    $("#users .primary-el").show();
-    $("#users .secondary-el").hide();
-});
-
-$(".users-icon").click(function() {
-    userAdminView.fetchModels();
-    $('#admin').removeClass("hidden");
-    $('#app-export').addClass("hidden");
-    $("#users .primary-el").hide();
-    $("#users .secondary-el").show();
 });
 
 // Configuration accordion

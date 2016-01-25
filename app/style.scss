@@ -127,6 +127,20 @@ $navBarAndButtonColour: #e7e7e7;
 	  box-shadow: inset 0 -2px #bdc3c7;
 	}
   }
+  #squid-api-admin-widgets-user-table {
+	margin-top: 15px;
+	height: 800px;
+	overflow-y: scroll;
+	input {
+	  margin-right: 15px;
+	}
+	table {
+	  table-layout: fixed;
+	  th {
+		width: 120px !important;
+	  }
+	}
+  }
   .navbar {
 	margin-bottom: 0px;
 	position: relative;
