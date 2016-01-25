@@ -181,7 +181,7 @@ $navBarAndButtonColour: #e7e7e7;
 	  li {
 		margin-left: 20px;
 
-		#tour, #medium, #zendesk {
+		#tour, #medium, #zendesk, #users {
 		  margin-top: 16px;
 		  a {
 			color: #fff;
@@ -189,6 +189,15 @@ $navBarAndButtonColour: #e7e7e7;
 			:hover {
 			  color: $primary-font-color;
 			}
+		  }
+		}
+		#medium {
+		  margin-right: 30px;
+		}
+		#users {
+		  .back-to-app {
+			top: -7px;
+			position: relative;
 		  }
 		}
 	  }

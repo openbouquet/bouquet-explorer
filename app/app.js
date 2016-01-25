@@ -556,12 +556,16 @@ config.on('change:domain', function(model) {
 $(".back-to-app").click(function() {
     $('#admin').addClass("hidden");
     $('#app-export').removeClass("hidden");
+    $("#users .primary-el").show();
+    $("#users .secondary-el").hide();
 });
 
-$("#users").click(function() {
+$(".users-icon").click(function() {
     userAdminView.fetchModels();
     $('#admin').removeClass("hidden");
     $('#app-export').addClass("hidden");
+    $("#users .primary-el").hide();
+    $("#users .secondary-el").show();
 });
 
 // Configuration accordion
