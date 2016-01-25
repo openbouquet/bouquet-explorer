@@ -350,6 +350,8 @@ var refreshAnalysis = function(a, silent) {
         });
 
         changed = changed || a.hasChanged();
+        a.set({"rollups": config.get("rollups")}, {"silent" : silent});
+        changed = changed || a.hasChanged();
 
         // if timeAnalysis, use the date as the default dimension if non already set
         if (a == timeAnalysis) {
