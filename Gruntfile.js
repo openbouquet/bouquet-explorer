@@ -12,17 +12,6 @@ module.exports = function(grunt) {
                             'bower_components/squid_api_data_widgets' : 'dev',
                             'bower_components/squid_api_filters_widget' : 'dev'
                         }
-                    },
-                    dist : {
-                        projects : {
-                            // For each of these projects, the specified grunt
-                            // task will be executed:
-                            'bower_components/squid_api' : 'default',
-                            'bower_components/squid_api_admin_widgets' : 'default',
-                            'bower_components/squid_api_core_widgets' : 'default',
-                            'bower_components/squid_api_data_widgets' : 'default',
-                            'bower_components/squid_api_filters_widget' : 'default'
-                        }
                     }
                 },
         jshint : {
@@ -283,7 +272,7 @@ module.exports = function(grunt) {
             'handlebars', 'concat', 'copy', 'sass', 'wiredep',
             'wiredepCopy:dev' ]);
 
-    grunt.registerTask('build', [ 'subgrunt:dist', 'jshint', 'clean',
+    grunt.registerTask('build', [ 'jshint', 'clean',
             'handlebars', 'concat', 'copy', 'sass', 'wiredep',
             'wiredepCopy:dist' ]);
     grunt.registerTask('dist', [ 'build', 'cacheBust' ]);
