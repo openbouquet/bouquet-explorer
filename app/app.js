@@ -553,33 +553,16 @@ config.on('change:domain', function(model) {
 
 // Menu State management
 
-$("#app #menu #export-app").click(function() {
+$(".back-to-app").click(function() {
     $('#admin').addClass("hidden");
-    $('#project').removeClass("hidden");
-    userAdminView.remove();
     $('#app-export').removeClass("hidden");
 });
 
-$("#app #menu #user-management").click(function() {
+$("#users").click(function() {
     userAdminView.fetchModels();
-    $('#admin').removeClass("hidden");
-    $('#project').addClass("hidden");
-    $('#app-export').addClass("hidden");
-});
-
-$("#app #menu #user-management").click(function() {
-    userAdminView.fetchModels();
-    $('#project').removeClass("hidden");
     $('#admin').removeClass("hidden");
     $('#app-export').addClass("hidden");
 });
-
-$("#app #menu #shortcut-management").click(function() {
-    $('#shortcutsModal').modal('show');
-});
-
-// Trigger Sliding Nav
-$('.menu-link').bigSlide();
 
 // Configuration accordion
 

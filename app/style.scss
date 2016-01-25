@@ -18,6 +18,9 @@ $navBarAndButtonColour: #e7e7e7;
 
   #admin {
 	position: relative;
+	.back-to-app {
+	  float: right;
+	}
 	#adminDisplay {
 	  margin-top: 20px;
 	}
