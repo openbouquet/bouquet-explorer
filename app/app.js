@@ -214,7 +214,10 @@ var userAdminView = new api.view.UsersAdminView({
 });
 
 var userModal = new api.view.ModalView({
-    view : userAdminView
+    view : userAdminView,
+    header: true,
+    footer: true,
+    headerTitle: "User Management"
 });
 
 $(".users-icon").click(function() {
