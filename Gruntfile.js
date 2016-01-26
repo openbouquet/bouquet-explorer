@@ -1,70 +1,57 @@
 module.exports = function(grunt) {
     grunt
             .initConfig({
-                subgrunt : {
-                    dev : {
-                        projects : {
-                            // For each of these projects, the specified grunt
-                            // task will be executed:
-                            'bower_components/squid_api' : 'dev',
-                            'bower_components/squid_api_admin_widgets' : 'dev',
-                            'bower_components/squid_api_core_widgets' : 'dev',
-                            'bower_components/squid_api_data_widgets' : 'dev',
-                            'bower_components/squid_api_filters_widget' : 'dev'
+                jshint : {
+                    all : [ 'app/**/*.js' ],
+                    options : {
+                        force : true
+                    }
+                },
+                sass : {
+                    dist : {
+                        files : {
+                            'dist/app/style.css' : 'app/style.scss'
+                        },
+                        options : {
+                            sourcemap : 'none',
+                            style : 'compressed'
                         }
                     }
                 },
-        jshint : {
-            all : [ 'app/**/*.js' ],
-            options: {
-                force : true
-            }
-        },
-        sass: {
-            dist: {
-                files: {
-                    'dist/app/style.css': 'app/style.scss'
+                clean : {
+                    all : "dist/"
                 },
-                options: {
-                    sourcemap: 'none',
-                    style: 'compressed'
-                }
-            }
-        },
-        clean : {
-            all : "dist/"
-        },
-        handlebars : {
-            options : {
-                namespace : 'app.template',
-                processName : function(filePath) {
+                handlebars : {
+                    options : {
+                        namespace : 'app.template',
+                        processName : function(filePath) {
                             return filePath.replace(/^app\/templates\//, '')
                                     .replace(/\.hbs$/, '').replace(/^.*\//, '');
-                }
-            },
-            all : {
-                files : {
-                    "dist/templates.js" : [ "app/templates/*.hbs" ]
-                }
-            }
-        },
-        concat : {
-            options : {
-                stripBanners : true,
-            },
-            all : {
+                        }
+                    },
+                    all : {
+                        files : {
+                            "dist/templates.js" : [ "app/templates/*.hbs" ]
+                        }
+                    }
+                },
+                concat : {
+                    options : {
+                        stripBanners : true,
+                    },
+                    all : {
                         src : [ 'dist/templates.js',
                                 'app/config/base-setup.js',
                                 'app/config/api-setup.js', 'app/models/*.js',
                                 'app/views/*.js', 'app/controllers/*.js',
                                 'app/conf/*.js', 'app/*.js' ],
-                dest : 'dist/app.js',
-            }
-        },
-        copy : {
-            main : {
-                files : [ {
-                    expand : true,
+                        dest : 'dist/app.js',
+                    }
+                },
+                copy : {
+                    main : {
+                        files : [ {
+                            expand : true,
                             src : [
                                     "app/app.js",
                                     "*.html",
@@ -76,37 +63,37 @@ module.exports = function(grunt) {
                                     "bower_components/bootstrap/dist/fonts/*",
                                     "bower_components/backbone-forms/distribution/**",
                                     "bower_components/backbone.bootstrap-modal/**" ],
-                    dest : 'dist/',
-                    rename : function(dest, src) {
+                            dest : 'dist/',
+                            rename : function(dest, src) {
                                 return dest
                                         + src.replace(/\.template.html$/,
                                                 ".html");
+                            }
+                        } ]
                     }
-                } ]
-            }
-        },
-        wiredep : {
-            target : {
-                src : [ 'dist/index.html' ],
-                ignorePath : '../'
-            }
-        },
+                },
+                wiredep : {
+                    target : {
+                        src : [ 'dist/index.html' ],
+                        ignorePath : '../'
+                    }
+                },
                 wiredepCopy : {
                     dist : {
-            options: {
+                        options : {
                             src : 'bower_components',
                             dest : 'dist/bower_components',
                             wiredep : {
                                 src : [ 'dist/index.html' ],
                                 ignorePath : '../'
                             }
-            }
-        },
+                        }
+                    },
                     dev : {
-                options : {
-                    src : 'bower_components',
-                    dest : 'dist/bower_components',
-                    wiredep : {
+                        options : {
+                            src : 'bower_components',
+                            dest : 'dist/bower_components',
+                            wiredep : {
                                 overrides : {
                                     squid_api : {
                                         main : [
@@ -114,8 +101,7 @@ module.exports = function(grunt) {
                                                 'src/squid_api_models.js',
                                                 'src/squid_api_utils.js',
                                                 'src/squid_api_analysisjob_controller.js',
-                                                'src/squid_api_facetjob_controller.js'
-                                               ]
+                                                'src/squid_api_facetjob_controller.js' ]
                                     },
                                     squid_api_data_widgets : {
                                         main : [
@@ -212,8 +198,7 @@ module.exports = function(grunt) {
                                         ]
                                     },
                                     squid_api_core_widgets : {
-                                        main : [ 
-                                                "build/templates.js",
+                                        main : [ "build/templates.js",
                                                 "src/squid_api_login.js",
                                                 "src/squid_api_pagination.js",
                                                 "src/squid_api_selector.js",
@@ -223,40 +208,40 @@ module.exports = function(grunt) {
                                                 "src/squid_api_status.css", ]
                                     },
                                 },
-                        src : [ 'dist/index.html' ],
-                        ignorePath : '../'
+                                src : [ 'dist/index.html' ],
+                                ignorePath : '../'
+                            }
+                        }
                     }
-                }
-                    }
-            },
+                },
 
-                // only used for dev anyway. adding the bower components in the watch list
-        watch : {
-            js : {
+                // only used for dev anyway. adding the bower components in the
+                // watch list
+                watch : {
+                    js : {
                         files : [ 'app/**/*.js', 'app/**/*.hbs',
                                 'index.template.html', 'app/style.scss',
                                 "bower_components/squid_api*/src/*.js",
                                 "bower_components/squid_api*/src/*.css",
                                 "bower_components/squid_api*/src/*.hbs" ],
                         tasks : [ 'dev' ]
-            }
-        },
-        cacheBust: {
-            options: {
-                encoding: 'utf8',
-                algorithm: 'md5',
-                length: 8,
-                deleteOriginals: true,
-                ignorePatterns: ["main.js"]
-            },
-            assets: {
-              files: [{
-                src: ['dist/index.html']
-              }]
-            }
-          }
-    });
-    grunt.loadNpmTasks('grunt-subgrunt');
+                    }
+                },
+                cacheBust : {
+                    options : {
+                        encoding : 'utf8',
+                        algorithm : 'md5',
+                        length : 8,
+                        deleteOriginals : true,
+                        ignorePatterns : [ "main.js" ]
+                    },
+                    assets : {
+                        files : [ {
+                            src : [ 'dist/index.html' ]
+                        } ]
+                    }
+                }
+            });
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-concat');
@@ -268,14 +253,12 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-wiredep-copy');
     grunt.loadNpmTasks('grunt-cache-bust');
 
-    grunt.registerTask('dev', [ 'subgrunt:dev', 'jshint', 'clean',
-            'handlebars', 'concat', 'copy', 'sass', 'wiredep',
-            'wiredepCopy:dev' ]);
+    grunt.registerTask('build', [ 'jshint', 'clean', 'handlebars', 'concat',
+            'copy', 'sass', 'wiredep' ]);
 
-    grunt.registerTask('build', [ 'jshint', 'clean',
-            'handlebars', 'concat', 'copy', 'sass', 'wiredep',
-            'wiredepCopy:dist' ]);
-    grunt.registerTask('dist', [ 'build', 'cacheBust' ]);
+    grunt.registerTask('dev', [ 'build', 'wiredepCopy:dev' ]);
+
+    grunt.registerTask('dist', [ 'build', 'wiredepCopy:dist', 'cacheBust' ]);
 
     grunt.registerTask('default', [ 'dist' ]);
 };
