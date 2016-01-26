@@ -131,6 +131,7 @@ $navBarAndButtonColour: #e7e7e7;
 	margin-top: 15px;
 	height: 600px;
 	overflow-y: scroll;
+	overflow-x: hidden;
 	input {
 	  margin-right: 15px;
 	}
@@ -184,9 +185,7 @@ $navBarAndButtonColour: #e7e7e7;
 	}
 	.navbar-nav {
 	  .project, .domain {
-		padding-right: 20px;
 		margin-top: 10px;
-		padding-left: 10px;
 		min-width: 150px;
 		float: left;
 		list-style-type: none;
