@@ -17,7 +17,6 @@
         projectGuide: function() {
             // Instance the tour
             this.projectTour = new Tour({
-                backdrop: true,
                 storage: false,
                 steps: [
                     {
@@ -51,7 +50,6 @@
         domainGuide: function() {
             // Instance the tour
             this.domainTour = new Tour({
-                backdrop: true,
                 storage: false,
                 steps: [
                     {
