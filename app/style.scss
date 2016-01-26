@@ -204,6 +204,7 @@ $navBarAndButtonColour: #e7e7e7;
 		  margin-top: 16px;
 		  a {
 			color: #fff;
+			cursor: pointer;
 
 			:hover {
 			  color: $primary-font-color;
