@@ -18,6 +18,9 @@ $navBarAndButtonColour: #e7e7e7;
 
   #admin {
 	position: relative;
+	.back-to-app {
+	  float: right;
+	}
 	#adminDisplay {
 	  margin-top: 20px;
 	}
@@ -124,6 +127,25 @@ $navBarAndButtonColour: #e7e7e7;
 	  box-shadow: inset 0 -2px #bdc3c7;
 	}
   }
+  #squid-api-admin-widgets-user-table {
+	margin-top: 15px;
+	height: 600px;
+	overflow-y: scroll;
+	input {
+	  margin-right: 15px;
+	}
+	table {
+	  table-layout: fixed;
+	  tr {
+		background: #fafafa;
+	  }
+	  th {
+		background: #fff;
+		border-right: 1px solid #e0e0e0;
+		border-top: 1px solid #e0e0e0;
+	  }
+	}
+  }
   .navbar {
 	margin-bottom: 0px;
 	position: relative;
@@ -178,7 +200,7 @@ $navBarAndButtonColour: #e7e7e7;
 	  li {
 		margin-left: 20px;
 
-		#tour, #medium, #zendesk {
+		#tour, #medium, #zendesk, #users {
 		  margin-top: 16px;
 		  a {
 			color: #fff;
@@ -186,6 +208,18 @@ $navBarAndButtonColour: #e7e7e7;
 			:hover {
 			  color: $primary-font-color;
 			}
+		  }
+		}
+		#medium {
+		  margin-right: 30px;
+		}
+		#users {
+		  .back-to-app {
+			top: -7px;
+			color: #555;
+			background: #ffe084;
+			border: none;
+			position: relative;
 		  }
 		}
 	  }

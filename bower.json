@@ -19,7 +19,6 @@
     "squid_api_core_widgets": "https://github.com/openbouquet/bouquet-javascript-sdk-core-widgets.git#develop",
     "bootstrap": "3.3.4",
     "font-awesome": "https://github.com/components/font-awesome.git",
-    "bigSlide": "https://github.com/ascott1/bigSlide.js.git#648f9fe724ff18903e7e3188738def089111050d",
     "typed": "https://github.com/mattboldt/typed.js.git",
     "squid_api_data_widgets": "https://github.com/openbouquet/bouquet-javascript-sdk-data-widgets.git#develop",
     "squid_api_filters_widget": "https://github.com/openbouquet/bouquet-javascript-sdk-filtering-widgets.git#develop",

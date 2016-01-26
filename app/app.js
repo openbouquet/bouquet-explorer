@@ -208,9 +208,21 @@ $("button.refresh-analysis").click(function(event) {
 
 // Views
 
-userAdminView = new api.view.UsersAdminView({
+var userAdminView = new api.view.UsersAdminView({
     el : '#adminDisplay',
     status : api.model.status
+});
+
+var userModal = new api.view.ModalView({
+    view : userAdminView,
+    header: true,
+    footer: true,
+    headerTitle: "User Management"
+});
+
+$(".users-icon").click(function() {
+    userModal.render();
+    userAdminView.fetchModels();
 });
 
 new api.view.DimensionSelector({
@@ -550,36 +562,6 @@ config.on('change:domain', function(model) {
 
     }
 });
-
-// Menu State management
-
-$("#app #menu #export-app").click(function() {
-    $('#admin').addClass("hidden");
-    $('#project').removeClass("hidden");
-    userAdminView.remove();
-    $('#app-export').removeClass("hidden");
-});
-
-$("#app #menu #user-management").click(function() {
-    userAdminView.fetchModels();
-    $('#admin').removeClass("hidden");
-    $('#project').addClass("hidden");
-    $('#app-export').addClass("hidden");
-});
-
-$("#app #menu #user-management").click(function() {
-    userAdminView.fetchModels();
-    $('#project').removeClass("hidden");
-    $('#admin').removeClass("hidden");
-    $('#app-export').addClass("hidden");
-});
-
-$("#app #menu #shortcut-management").click(function() {
-    $('#shortcutsModal').modal('show');
-});
-
-// Trigger Sliding Nav
-$('.menu-link').bigSlide();
 
 // Configuration accordion
 
