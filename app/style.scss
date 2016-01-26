@@ -136,6 +136,14 @@ $navBarAndButtonColour: #e7e7e7;
 	}
 	table {
 	  table-layout: fixed;
+	  tr {
+		background: #fafafa;
+	  }
+	  th {
+		background: #fff;
+		border-right: 1px solid #e0e0e0;
+		border-top: 1px solid #e0e0e0;
+	  }
 	}
   }
   .navbar {
