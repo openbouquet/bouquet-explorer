@@ -255,10 +255,7 @@ var tableView = new squid_api.view.DataTableView ({
 var timeView = new squid_api.view.TimeSeriesView ({
     el : '#timeView',
     model : timeAnalysis,
-    multiSeries : true,
-    colorPalette : squid_api.view.metadata,
-    interpolationRange : 'months',
-    staleMessage : "Click preview to update"
+    colorPalette: squid_api.view.metadata
 });
 
 var displayTypeView = new api.view.DisplayTypeSelectorView({
