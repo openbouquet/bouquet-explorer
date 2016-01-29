@@ -148,8 +148,8 @@ module.exports = function(grunt) {
                                                 "src/squid_api_filters_segment_widget.js",
                                                 "src/squid_api_filters_categorical_selector_view.js",
                                                 "src/squid_api_selection_widget.js",
-                                                "src/squid_api_filters_categorical_view.js"
-                                        // No CSS
+                                                "src/squid_api_filters_categorical_view.js",
+                                                "dist/squid_api_filters-widgets.css"
                                         ]
                                     },
                                     squid_api_admin_widgets : {
@@ -256,7 +256,7 @@ module.exports = function(grunt) {
     grunt.registerTask('build', [ 'jshint', 'clean', 'handlebars', 'concat',
             'copy', 'sass', 'wiredep' ]);
 
-    grunt.registerTask('dev', [ 'build', 'wiredepCopy:dev' ]);
+    grunt.registerTask('dev', [ 'build', 'wiredepCopy:dev', 'cacheBust' ]);
 
     grunt.registerTask('dist', [ 'build', 'wiredepCopy:dist', 'cacheBust' ]);
 
