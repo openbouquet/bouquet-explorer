@@ -583,14 +583,14 @@ config.on("change:configDisplay", function(model, attribute) {
 	if (attribute.visible) {
 		$(".configuration-hider").removeClass("closed");
 		$(".configuration").animate({opacity: 1});
-		$(".configuration").animate({height:attribute.originalHeight + "px"}, function() {
+		$(".configuration").animate({height:attribute.originalHeight + "px"}, 200, function() {
 			$(".configuration").removeClass("closed");
 		});
 	} else {
 		$(".configuration-hider").addClass("closed");
 		$(".configuration").addClass("closed");
 		$(".configuration").animate({opacity: 0});
-		$(".configuration").animate({height:"10px"});
+		$(".configuration").animate({height:"10px"}, 200);
 	}
 });
 
