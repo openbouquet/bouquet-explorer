@@ -34,8 +34,8 @@ var projectModal = new api.view.ModalView({
 });
 
 var projectButton = new api.view.ProjectSelectorButton({
-    el : '#project'
-});
+        el : '#project'
+    });
 
 projectButton.$el.click(function() {
     projectModal.render();
@@ -71,6 +71,28 @@ var domainButton = new api.view.DomainSelectorButton({
 domainButton.$el.click(function() {
     domainModal.render();
 });
+
+
+    /* Dataframes */
+
+    //Depends on domains
+    var dfCollection = new api.view.DomainCollectionManagementWidget({
+        onSelect: function() {
+            dfModal.close();
+        }
+    });
+
+    var dfModal = new api.view.ModalView({
+        view : dfCollection
+    });
+
+    var dfButton = new api.view.DomainSelectorButton({
+        el : '#dataframes'
+    });
+
+    dfButton.$el.click(function() {
+        dfModal.render();
+    });
 
 /* Bookmark Management */
 var bookmarkCollection = new api.view.BookmarkCollectionManagementWidget({
@@ -327,6 +349,14 @@ var exportView = new api.view.DataExport({
     sqlView : true,
     materializeDatasetsView: true
 });
+
+    var materializeView = new api.view.Materialize({
+        el : '#materialize',
+        renderTo : '#materialize-content',
+        model : exportAnalysis,
+        displayInPopup : true,
+        materializeDatasetsView: true
+    });
 
 // Controllers
 

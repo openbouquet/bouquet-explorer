@@ -112,7 +112,9 @@ module.exports = function(grunt) {
                                                 "src/squid_api_domain_selector_widget.js",
                                                 "src/squid_api_export_scheduler_widget.js",
                                                 "src/squid_api_export_widget.js",
-                                                "src/squid_api_filters_controller.js",
+                                            "src/squid_api_materialize_widget.js",
+
+                                            "src/squid_api_filters_controller.js",
                                                 "src/squid_api_kpi_widget.js",
                                                 "src/squid_api_metric_total_widget.js",
                                                 "src/squid_api_metric_widget.js",
