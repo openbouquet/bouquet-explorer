@@ -17,7 +17,6 @@
         projectGuide: function() {
             // Instance the tour
             this.projectTour = new Tour({
-                backdrop: true,
                 storage: false,
                 steps: [
                     {
@@ -51,7 +50,6 @@
         domainGuide: function() {
             // Instance the tour
             this.domainTour = new Tour({
-                backdrop: true,
                 storage: false,
                 steps: [
                     {
@@ -93,12 +91,6 @@
                     me.config.set("tourSeen", true);
                 },
                 steps: [
-                    {
-                        element: ".zEWidget-launcher",
-                        title: "How to get help",
-                        placement: "left",
-                        content: "This Help button is available at all times. Use it to browse the documentation and find answers."
-                    },
                     {
                         element: "#date-picker",
                         title: "Select date range",
@@ -142,6 +134,12 @@
                         placement: "bottom",
                         title: "Edit the datamodel",
                         content: "By clicking the Configure icon after clicking on one of the buttons, you can choose to index dimensions, create new metrics and manage relations between domains."
+                    },
+                    {
+                        element: ".zEWidget-launcher",
+                        title: "How to get help",
+                        placement: "left",
+                        content: "This Help button is available at all times. Use it to browse the documentation and find answers."
                     }
                 ]
             });
@@ -149,7 +147,7 @@
             // Initialize the tour
             this.mainTour.init();
             // Start the tour
-            if (! this.tourSeen) {
+            if (! me.config.get("tourSeen")) {
                 squid_api.getSelectedDomain().then(function(domain) {
                     if (domain.get("_role") !== "OWNER") {
                         // by default only start the tour if user isn't an admin

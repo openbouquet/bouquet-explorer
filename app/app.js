@@ -208,9 +208,21 @@ $("button.refresh-analysis").click(function(event) {
 
 // Views
 
-userAdminView = new api.view.UsersAdminView({
+var userAdminView = new api.view.UsersAdminView({
     el : '#adminDisplay',
     status : api.model.status
+});
+
+var userModal = new api.view.ModalView({
+    view : userAdminView,
+    header: true,
+    footer: true,
+    headerTitle: "User Management"
+});
+
+$(".users-icon").click(function() {
+    userModal.render();
+    userAdminView.fetchModels();
 });
 
 new api.view.DimensionSelector({
@@ -228,6 +240,7 @@ new api.view.DimensionView({
     el : '#dimension',
     model : config,
     selectDimension : false,
+    "noDataMessage" : "Select a dimension"
 });
 
 var tableView = new squid_api.view.DataTableView ({
@@ -242,10 +255,7 @@ var tableView = new squid_api.view.DataTableView ({
 var timeView = new squid_api.view.TimeSeriesView ({
     el : '#timeView',
     model : timeAnalysis,
-    multiSeries : true,
-    colorPalette : squid_api.view.metadata,
-    interpolationRange : 'months',
-    staleMessage : "Click preview to update"
+    colorPalette: squid_api.view.metadata
 });
 
 var displayTypeView = new api.view.DisplayTypeSelectorView({
@@ -275,6 +285,7 @@ mainModel.on("change:currentAnalysis", function() {
 new api.view.CategoricalView({
     el : '#selection',
     filterPanel : '#filters',
+    noFiltersMessage : "Select a filter",
     filterSelected : '#selected',
     panelButtons : false,
     config : config,
@@ -305,6 +316,7 @@ new api.view.MetricView({
     model : config,
     displayMetricValue : false,
     selectMetric : false,
+    noDataMessage: "Select a metric"
 });
 
 var exportView = new api.view.DataExport({
@@ -346,6 +358,8 @@ var refreshAnalysis = function(a, silent) {
                 "silent" : silent
         });
 
+        changed = changed || a.hasChanged();
+        a.set({"rollups": config.get("rollups")}, {"silent" : silent});
         changed = changed || a.hasChanged();
 
         // if timeAnalysis, use the date as the default dimension if non already set
@@ -546,36 +560,6 @@ config.on('change:domain', function(model) {
     }
 });
 
-// Menu State management
-
-$("#app #menu #export-app").click(function() {
-    $('#admin').addClass("hidden");
-    $('#project').removeClass("hidden");
-    userAdminView.remove();
-    $('#app-export').removeClass("hidden");
-});
-
-$("#app #menu #user-management").click(function() {
-    userAdminView.fetchModels();
-    $('#admin').removeClass("hidden");
-    $('#project').addClass("hidden");
-    $('#app-export').addClass("hidden");
-});
-
-$("#app #menu #user-management").click(function() {
-    userAdminView.fetchModels();
-    $('#project').removeClass("hidden");
-    $('#admin').removeClass("hidden");
-    $('#app-export').addClass("hidden");
-});
-
-$("#app #menu #shortcut-management").click(function() {
-    $('#shortcutsModal').modal('show');
-});
-
-// Trigger Sliding Nav
-$('.menu-link').bigSlide();
-
 // Configuration accordion
 
 $(".configuration-hider").click(function() {
@@ -599,14 +583,14 @@ config.on("change:configDisplay", function(model, attribute) {
 	if (attribute.visible) {
 		$(".configuration-hider").removeClass("closed");
 		$(".configuration").animate({opacity: 1});
-		$(".configuration").animate({height:attribute.originalHeight + "px"}, function() {
+		$(".configuration").animate({height:attribute.originalHeight + "px"}, 200, function() {
 			$(".configuration").removeClass("closed");
 		});
 	} else {
 		$(".configuration-hider").addClass("closed");
 		$(".configuration").addClass("closed");
 		$(".configuration").animate({opacity: 0});
-		$(".configuration").animate({height:"10px"});
+		$(".configuration").animate({height:"10px"}, 200);
 	}
 });
 

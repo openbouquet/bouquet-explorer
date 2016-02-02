@@ -18,12 +18,16 @@ $navBarAndButtonColour: #e7e7e7;
 
   #admin {
 	position: relative;
+	.back-to-app {
+	  float: right;
+	}
 	#adminDisplay {
 	  margin-top: 20px;
 	}
   }
   #project, #domain, #bookmark {
 	float: left;
+	margin-right: 20px;
 	.open>.multiselect-container {
 	  left: auto;
 	  top: 33px;
@@ -47,7 +51,7 @@ $navBarAndButtonColour: #e7e7e7;
   }
   #domain-bookmark {
 	height: 53px;
-	width: 200px;
+	width: 230px;
 	ul {
 	  padding-left: 0px;
 	}
@@ -75,6 +79,9 @@ $navBarAndButtonColour: #e7e7e7;
 		position: relative;
 		top: 1px;
 	  }
+	}
+	.squid-api-button-view {
+	  min-width: 35px !important;
 	}
 	button.match {
 	  background: #ffe084;
@@ -121,6 +128,26 @@ $navBarAndButtonColour: #e7e7e7;
 	  box-shadow: inset 0 -2px #bdc3c7;
 	}
   }
+  #squid-api-admin-widgets-user-table {
+	margin-top: 15px;
+	height: 600px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	input {
+	  margin-right: 15px;
+	}
+	table {
+	  table-layout: fixed;
+	  tr {
+		background: #fafafa;
+	  }
+	  th {
+		background: #fff;
+		border-right: 1px solid #e0e0e0;
+		border-top: 1px solid #e0e0e0;
+	  }
+	}
+  }
   .navbar {
 	margin-bottom: 0px;
 	position: relative;
@@ -159,9 +186,7 @@ $navBarAndButtonColour: #e7e7e7;
 	}
 	.navbar-nav {
 	  .project, .domain {
-		padding-right: 20px;
 		margin-top: 10px;
-		padding-left: 10px;
 		min-width: 150px;
 		float: left;
 		list-style-type: none;
@@ -175,14 +200,27 @@ $navBarAndButtonColour: #e7e7e7;
 	  li {
 		margin-left: 20px;
 
-		#tour, #medium, #zendesk {
+		#tour, #medium, #zendesk, #users {
 		  margin-top: 16px;
 		  a {
 			color: #fff;
+			cursor: pointer;
 
 			:hover {
 			  color: $primary-font-color;
 			}
+		  }
+		}
+		#medium {
+		  margin-right: 30px;
+		}
+		#users {
+		  .back-to-app {
+			top: -7px;
+			color: #555;
+			background: #ffe084;
+			border: none;
+			position: relative;
 		  }
 		}
 	  }
@@ -568,6 +606,9 @@ $navBarAndButtonColour: #e7e7e7;
 		  position: relative;
 		  clear: both;
 		  z-index: 0;
+		  #chart {
+			top: -35px;
+		  }
 		  .squid-api-data-widgets-data-table {
 			width: 100%;
 			background: #f8f8f8;
