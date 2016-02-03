@@ -87,12 +87,31 @@ domainButton.$el.click(function() {
     });
 
     var dfButton = new api.view.DomainSelectorButton({
-        el : '#dataframes'
+        el : '#destDomain'
     });
 
     dfButton.$el.click(function() {
         dfModal.render();
     });
+
+    var ddfCollection = new api.view.ProjectCollectionManagementWidget({
+        onSelect: function() {
+            ddfModal.close();
+        }
+    });
+
+    var ddfModal = new api.view.ModalView({
+        view : ddfCollection
+    });
+
+    var ddfButton = new api.view.ProjectSelectorButton({
+        el : '#destProject'
+    });
+
+    ddfButton.$el.click(function() {
+        ddfModal.render();
+    });
+
 
 /* Bookmark Management */
 var bookmarkCollection = new api.view.BookmarkCollectionManagementWidget({
@@ -355,7 +374,14 @@ var exportView = new api.view.DataExport({
         renderTo : '#materialize-content',
         model : exportAnalysis,
         displayInPopup : true,
-        materializeDatasetsView: true
+        materializeDatasetsView: true,
+        mdomainCollection: dfCollection,
+        mprojectCollection: ddfCollection,
+        mdomainModal: dfModal,
+        mdomainButton: dfButton,
+        mprojectModal: ddfModal,
+        mprojectButton: ddfButton,
+
     });
 
 // Controllers
