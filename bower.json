@@ -22,7 +22,7 @@
     "typed": "https://github.com/mattboldt/typed.js.git",
     "squid_api_data_widgets": "https://github.com/openbouquet/bouquet-javascript-sdk-data-widgets.git#develop",
     "squid_api_filters_widget": "https://github.com/openbouquet/bouquet-javascript-sdk-filtering-widgets.git#develop",
-    "squid_api_admin_widgets": "https://github.com/openbouquet/bouquet-javascript-sdk-admin-widgets.git#develop",
+    "squid_api_admin_widgets": "https://github.com/openbouquet/bouquet-javascript-sdk-admin-widgets.git#feature/T654",
     "bootstrap-tour": "~0.10.2"
   },
   "resolutions": {

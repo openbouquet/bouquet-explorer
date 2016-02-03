@@ -183,6 +183,7 @@ module.exports = function(grunt) {
                                                 "src/squid_api_users_admin_widget.js",
 
                                                 "src/squid_api_base_collection_management_widget.css",
+                                                "src/squid_api_bookmark_collection_management_widget.css",
                                                 "src/squid_api_base_model_management_widget.css",
                                                 "src/squid_api_button_view.css",
                                                 "src/squid_api_columns_management_widget.css",
