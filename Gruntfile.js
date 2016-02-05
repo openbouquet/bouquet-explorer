@@ -123,6 +123,7 @@ module.exports = function (grunt) {
                                         "src/squid_api_materialize_widget.js",
                                         "src/squid_api_saveastable_widget.js",
                                         "src/squid_api_saveasdomain_widget.js",
+                                        "src/squid_api_saveonspark_widget.js",
                                         "src/squid_api_filters_controller.js",
                                         "src/squid_api_kpi_widget.js",
                                         "src/squid_api_metric_total_widget.js",
@@ -145,6 +146,7 @@ module.exports = function (grunt) {
                                         "src/squid_api_materialize_widget.css",
                                         "src/squid_api_saveastable_widget.css",
                                         "src/squid_api_saveasdomain_widget.css",
+                                        "src/squid_api_saveonspark_widget.css",
                                     ]
                                 },
                                 squid_api_filters_widget: {
@@ -215,7 +217,6 @@ module.exports = function (grunt) {
                                         "src/squid_api_selector.js",
                                         "src/squid_api_status.js",
                                         "src/squid_api_switch.js",
-
                                         "src/squid_api_status.css",]
                                 },
                             },
