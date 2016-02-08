@@ -336,6 +336,7 @@ var compute = function(analysis) {
     api.model.status.set("error", null);
     // compute if the analysis is correct
     if ((analysis.get("facets") && analysis.get("facets").length>0) || (analysis.get("metricList") && analysis.get("metricList").length>0)) {
+        analysis.set("lazy", true);
         api.compute(analysis);
     } else {
         api.model.status.set({"error" : {"reason" : "Please select at least a dimension or a metric"}});
