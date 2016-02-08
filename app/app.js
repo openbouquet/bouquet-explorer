@@ -73,47 +73,6 @@ domainButton.$el.click(function() {
     domainModal.render();
 });
 
-
-    /* Dataframes */
-
-    //Depends on domains
-    //var dfCollection = new api.view.DomainCollectionManagementWidget({
-    //    onSelect: function() {
-    //        dfModal.close();
-    //    }
-    //});
-    //
-    //var dfModal = new api.view.ModalView({
-    //    view : dfCollection
-    //});
-    //
-    //var dfButton = new api.view.DomainSelectorButton({
-    //    el : '#destDomain'
-    //});
-    //
-    //dfButton.$el.click(function() {
-    //    dfModal.render();
-    //});
-
-    //var ddfCollection = new api.view.ProjectCollectionManagementWidget({
-    //    onSelect: function() {
-    //        ddfModal.close();
-    //    }
-    //});
-
-    //var ddfModal = new api.view.ModalView({
-    //    view : ddfCollection
-    //});
-    //
-    //var ddfButton = new api.view.ProjectSelectorButton({
-    //    el : '#destProject'
-    //});
-    //
-    //ddfButton.$el.click(function() {
-    //    ddfModal.render();
-    //});
-
-
 /* Bookmark Management */
 var bookmarkCollection = new api.view.BookmarkCollectionManagementWidget({
     onSelect: function() {
@@ -376,13 +335,6 @@ var exportView = new api.view.DataExport({
         model : exportAnalysis,
         displayInPopup : true,
         materializeDatasetsView: true,
-        //mdomainCollection: dfCollection,
-        //mprojectCollection: ddfCollection,
-        //mdomainModal: dfModal,
-        //mdomainButton: dfButton,
-        //mprojectModal: ddfModal,
-        //mprojectButton: ddfButton,
-
     });
 
 // Controllers
