@@ -62,7 +62,7 @@
                         <div class='popover-navigation'>\
                         </div>",
                         placement: "bottom",
-                        content: "“That’s one small step for man, one giant leap for mankind,” - just choose a domain then you're in! ",
+                        content: "“That’s one small step for man, one giant leap for mankind,” - just choose a domain or a pre-configured bookmark and then you're in! ",
                         onShow: function(tour) {
                             $('body').click({tour: tour}, function (e) {
                                 if ($(e.target).closest('.popover').length === 0 && ($(e.target).parents().hasClass("domain") || $(e.target).parents().hasClass("bookmark"))) {

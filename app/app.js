@@ -9,7 +9,8 @@ api.setup({
     "config" : {
         "limit" : 1000,
         "startIndex" : 0,
-        "maxResults" : 10
+        "maxResults" : 10,
+        "currentAnalysis" : "tableAnalysis"
     }
 });
 
