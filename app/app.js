@@ -208,6 +208,7 @@ timeAnalysis.on("change:status", function() {
 $("button.refresh-analysis").click(function(event) {
     event.preventDefault();
     var a = mainModel.get("currentAnalysis");
+    a.removeParameter("lazy");
     compute(a);
 });
 
@@ -506,7 +507,9 @@ config.on("change:currentAnalysis", function(config, forceRefresh) {
         }
         if (mainModel.get("currentAnalysis")) {
             if (mainModel.get("currentAnalysis").get("status") !== "RUNNING" && canCompute === true) {
-                compute(mainModel.get("currentAnalysis"));
+                var a = mainModel.get("currentAnalysis");
+                a.setParameter("lazy", true);
+                compute(a);
             }
         }
     }
