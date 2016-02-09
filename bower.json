@@ -1,11 +1,11 @@
 {
-  "name": "squid_api_export_app",
-  "version": "1.0.0",
-  "authors": [
-    "obalbous <oba@squid>"
-  ],
+  "name": "bouquet-explorer",
   "main": "dist/main.js",
-  "license": "MIT",
+  "license": "AGPL-3.0",
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/openbouquet/bouquet-explorer.git"
+  },
   "private": true,
   "ignore": [
     "**/.*",
