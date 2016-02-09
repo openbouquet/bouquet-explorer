@@ -101,10 +101,6 @@ new api.view.ShortcutsAdminView({
     }
 });
 
-// new api.view.BookmarksManagementWidget({
-//     el : '#bookmark-crud'
-// });
-
 /*
  * Controllers
  */
@@ -542,20 +538,10 @@ config.on('change:domain', function(model) {
     var projectId = model.get("project");
     if (projectId && domainId) {
         $('#main').removeClass("hidden");
-        setTimeout(function() {
-        if ($(".noDataInTable").length > 0) {
-            $(".noDataInTable").typed({
-                strings: ["<span style='font-size: 22px'>Welcome to the export app </span> ^1500. <br> A recommended workflow is: ^1000 <br> <br>1. Configure preview in the panel above^1000 <br>2. Click the refresh preview button^1000 <br> 3. Click the export button to export"],
-                typeSpeed: 5
-            });
-        }
-        }, 2000);
-
         // Fade in main
         setTimeout(function() {
             $('#main').fadeIn();
         }, 1000);
-
     }
 });
 
