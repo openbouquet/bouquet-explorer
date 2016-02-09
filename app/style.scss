@@ -688,7 +688,6 @@ $navBarAndButtonColour: #e7e7e7;
 		  position: relative;
 		  text-align: center;
 		  z-index: 1;
-		  min-width: 200px;
 		  padding: 0;
 		  margin-bottom: 15px;
 		  width: 100%;
@@ -716,6 +715,7 @@ $navBarAndButtonColour: #e7e7e7;
 		  border-bottom: 2px solid #27ae60;
 		  -webkit-box-shadow: inset 0 -2px #27ae60;
 		  box-shadow: inset 0 -2px #27ae60;
+		  min-width: 200px;g
 
 		  i {
 			top: 1px;
