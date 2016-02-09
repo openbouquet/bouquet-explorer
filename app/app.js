@@ -151,20 +151,8 @@ var mainModel = new Backbone.Model({
     "exportAnalysis" : exportAnalysis
 });
 
-timeAnalysis.addParameter("lazy", true);
-tableAnalysis.addParameter("lazy", true);
-exportAnalysis.addParameter("lazy", true);
-
 config.on("change", function() {
     api.saveState();
-    if (! this.hasChanged("configDisplay")) {
-    	refreshCurrentAnalysis();
-        refreshExportAnalysis();
-    }
-    if (! config.get("currentAnalysis")) {
-        mainModel.set("currentAnalysis", tableAnalysis);
-    }
-
     if (config.get("project") && config.get("domain")) {
         $("#selectProject").addClass("hidden");
         $("#selectDomain").addClass("hidden");
@@ -208,8 +196,8 @@ timeAnalysis.on("change:status", function() {
 $("button.refresh-analysis").click(function(event) {
     event.preventDefault();
     var a = mainModel.get("currentAnalysis");
-    a.removeParameter("lazy");
     compute(a);
+    config.set("automaticTrigger", true);
 });
 
 // Views
@@ -334,13 +322,13 @@ var exportView = new api.view.DataExport({
     materializeDatasetsView: true
 });
 
-    var materializeView = new api.view.Materialize({
-        el : '#materialize',
-        renderTo : '#materialize-content',
-        model : exportAnalysis,
-        displayInPopup : true,
-        materializeDatasetsView: true,
-    });
+var materializeView = new api.view.Materialize({
+    el : '#materialize',
+    renderTo : '#materialize-content',
+    model : exportAnalysis,
+    displayInPopup : true,
+    materializeDatasetsView: true,
+});
 
 // Controllers
 
@@ -470,6 +458,14 @@ var refreshCurrentAnalysis = function() {
                 }
             }
         }
+        // trigger automatic analysis
+        if (config.get("automaticTrigger")) {
+            if (a !== exportAnalysis) {
+                a.setParameter("lazy", true);
+                compute(a);
+                a.removeParameter("lazy");
+            }
+        }
     }
 };
 
@@ -488,32 +484,13 @@ config.on("change:startIndex", function(config) {
 });
 
 config.on("change:bookmark", function(config) {
-    config.trigger("change:currentAnalysis", config, true);
+    config.set("automaticTrigger", true);
 });
 
 config.on("change:currentAnalysis", function(config, forceRefresh) {
     mainModel.set("currentAnalysis", mainModel.get(config.get("currentAnalysis")));
-    if (! config._previousAttributes.currentAnalysis || forceRefresh === true) {
-        var canCompute = false;
-        if (config.get("chosenDimensions")) {
-            if (config.get("chosenDimensions").length > 0) {
-                canCompute = true;
-            }
-        }
-        if (config.get("chosenMetrics")) {
-            if (config.get("chosenMetrics").length > 0) {
-                canCompute = true;
-            }
-        }
-        if (mainModel.get("currentAnalysis")) {
-            if (canCompute === true) {
-                var a = mainModel.get("currentAnalysis");
-                a.setParameter("lazy", true);
-                compute(a);
-            }
-        }
-    }
 });
+
 
 var getOrderByIndex = function() {
     var index;
