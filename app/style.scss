@@ -737,6 +737,11 @@ $navBarAndButtonColour: #e7e7e7;
 			}
 		  }
 		}
+		#export {
+		  button {
+			right: -36px;
+		  }
+		}
 		.squid-api-data-widgets-orderby-widget button.multiselect {
 		  font-size: 14px;
 		  font-weight: bold;
