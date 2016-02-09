@@ -506,7 +506,7 @@ config.on("change:currentAnalysis", function(config, forceRefresh) {
             }
         }
         if (mainModel.get("currentAnalysis")) {
-            if (mainModel.get("currentAnalysis").get("status") !== "RUNNING" && canCompute === true) {
+            if (canCompute === true) {
                 var a = mainModel.get("currentAnalysis");
                 a.setParameter("lazy", true);
                 compute(a);
