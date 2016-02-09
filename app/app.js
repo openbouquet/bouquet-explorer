@@ -380,7 +380,7 @@ var refreshAnalysis = function(a, silent) {
         changed = changed || a.hasChanged();
         a.setMetrics(config.get("chosenMetrics"), silent);
         changed = changed || a.hasChanged();
-        a.setSelection(api.model.filters.get("selection"), silent);
+        a.setSelection(config.get("selection"), silent);
         changed = changed || a.hasChanged();
         if (a == tableAnalysis) {
         	a.setParameter("startIndex", config.get("startIndex"));
@@ -494,9 +494,7 @@ config.on("change:currentAnalysis", function(config, forceRefresh) {
         }
         if (mainModel.get("currentAnalysis")) {
             if (mainModel.get("currentAnalysis").get("status") !== "RUNNING" && canCompute === true) {
-                setTimeout(function() {
-                    compute(mainModel.get("currentAnalysis"));
-                }, 1000);
+                compute(mainModel.get("currentAnalysis"));
             }
         }
     }
