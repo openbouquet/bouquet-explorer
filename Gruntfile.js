@@ -240,8 +240,21 @@ module.exports = function(grunt) {
                             src : [ 'dist/index.html' ]
                         } ]
                     }
+                },
+                
+                'http-server': {
+                    'dev': {
+                        port: 8081,
+                        host: "0.0.0.0",
+                        showDir : true,
+                        autoIndex: true,
+                        ext: "html",
+                        runInBackground: false,
+                        openBrowser : false
+                    }
                 }
             });
+   
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-concat');
@@ -252,6 +265,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-wiredep-copy');
     grunt.loadNpmTasks('grunt-cache-bust');
+    grunt.loadNpmTasks('grunt-http-server');
 
     grunt.registerTask('build', [ 'jshint', 'clean', 'handlebars', 'concat',
             'copy', 'sass', 'wiredep' ]);
@@ -261,4 +275,6 @@ module.exports = function(grunt) {
     grunt.registerTask('dist', [ 'build', 'wiredepCopy:dist', 'cacheBust' ]);
 
     grunt.registerTask('default', [ 'dist' ]);
+    
+    grunt.registerTask('run', [ 'dist', 'http-server:dev' ]);
 };
