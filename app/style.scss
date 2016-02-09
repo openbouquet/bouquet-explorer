@@ -688,6 +688,7 @@ $navBarAndButtonColour: #e7e7e7;
 		  position: relative;
 		  text-align: center;
 		  z-index: 1;
+		  min-width: 200px;
 		  padding: 0;
 		  margin-bottom: 15px;
 		  width: 100%;
@@ -740,6 +741,11 @@ $navBarAndButtonColour: #e7e7e7;
 		#export {
 		  button {
 			right: -36px;
+		  }
+		}
+		#materialize {
+		  button {
+			border-left: 2px solid #4d4d4d;
 		  }
 		}
 		.squid-api-data-widgets-orderby-widget button.multiselect {
