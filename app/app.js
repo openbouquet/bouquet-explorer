@@ -261,7 +261,6 @@ var displayTypeView = new api.view.DisplayTypeSelectorView({
 
 mainModel.on("change:currentAnalysis", function() {
     var a = mainModel.get("currentAnalysis");
-    refreshCurrentAnalysis(a);
     if (a) {
         if (a == tableAnalysis) {
             tableView.$el.show();
@@ -465,6 +464,7 @@ var refreshCurrentAnalysis = function() {
                 compute(a);
                 a.removeParameter("lazy");
             }
+            config.unset("automaticTrigger", {silent : true});
         }
     }
 };
