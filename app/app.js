@@ -502,7 +502,9 @@ config.on("change:currentAnalysis", function(config, forceRefresh) {
         }
         if (mainModel.get("currentAnalysis")) {
             if (mainModel.get("currentAnalysis").get("status") !== "RUNNING" && canCompute === true) {
-                compute(mainModel.get("currentAnalysis"));
+                setTimeout(function() {
+                    compute(mainModel.get("currentAnalysis"));
+                }, 1000);
             }
         }
     }
