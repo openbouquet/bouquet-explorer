@@ -35,8 +35,8 @@ var projectModal = new api.view.ModalView({
 });
 
 var projectButton = new api.view.ProjectSelectorButton({
-    el : '#project'
-});
+        el : '#project'
+    });
 
 projectButton.$el.click(function() {
     projectModal.render();
@@ -322,8 +322,16 @@ var exportView = new api.view.DataExport({
     model : exportAnalysis,
     displayInPopup : true,
     sqlView : true,
-    materializeDatasetsView: false
+    materializeDatasetsView: true
 });
+
+    //var materializeView = new api.view.Materialize({
+    //    el : '#materialize',
+    //    renderTo : '#materialize-content',
+    //    model : exportAnalysis,
+    //    displayInPopup : true,
+    //    materializeDatasetsView: true,
+    //});
 
 // Controllers
 
