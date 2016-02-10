@@ -329,13 +329,13 @@ var exportView = new api.view.DataExport({
     materializeDatasetsView: true
 });
 
-    var materializeView = new api.view.Materialize({
-        el : '#materialize',
-        renderTo : '#materialize-content',
-        model : exportAnalysis,
-        displayInPopup : true,
-        materializeDatasetsView: true,
-    });
+    //var materializeView = new api.view.Materialize({
+    //    el : '#materialize',
+    //    renderTo : '#materialize-content',
+    //    model : exportAnalysis,
+    //    displayInPopup : true,
+    //    materializeDatasetsView: true,
+    //});
 
 // Controllers
 
