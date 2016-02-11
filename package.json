@@ -1,6 +1,7 @@
 {
-  "name": "app-dashboard",
+  "name": "bouquet-explorer",
   "version": "1.0.0",
+  "license": "AGPL-3.0",
   "engines": {
     "node": "0.10.x"
   },

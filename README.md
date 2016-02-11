@@ -1,33 +1,22 @@
-app-dashboard
-==============
+Bouquet Explorer
+================
 
-Dashboard application, upstreamed from GitHub's base app.
-
-Dashboard App Specs contained in Google Docs.
+Explorer application to use with Bouquet server.  
 
 ## running
 
-Install the dependencies
+Install the dependencies  
 
-ruby
+ruby  
 sass - via ruby gems 'gem install sass'
 
 ```
 npm install
 bower install 
 
+Build and run the app in an embedded http server  
 ```
-Trigger builds when code changes
+grunt run
 ```
-grunt watch
-```
-
-View the build results
-```
-open dist/index.html
-```
-Or by specifying a project (and domain) :
-
-```
-https://api.squidsolutions.com/apps/release/app-dashboard/dist/index.html?projectId=musicbrainz&domainId=artist
-```
+Then open the index.html file making sure the apiUrl you set matches your Bouquet Server  
+http://localhost:8081/dist/index.html?apiUrl=http://localhost:9000&api=dev

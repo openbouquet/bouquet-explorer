@@ -4,7 +4,7 @@ module.exports = function (grunt) {
             connect: {
                 server: {
                     options: {
-                        port: 9000,
+                        port: 8081,
                         hostname: 'localhost',
                     }
                 }
@@ -240,21 +240,22 @@ module.exports = function (grunt) {
                     tasks: ['dev']
                 }
             },
-            cacheBust: {
-                options: {
-                    encoding: 'utf8',
-                    algorithm: 'md5',
-                    length: 8,
-                    deleteOriginals: true,
-                    ignorePatterns: ["main.js"]
+            cacheBust : {
+                options : {
+                    encoding : 'utf8',
+                    algorithm : 'md5',
+                    length : 8,
+                    deleteOriginals : true,
+                    ignorePatterns : [ "main.js" ]
                 },
-                assets: {
-                    files: [{
-                        src: ['dist/index.html']
-                    }]
+                assets : {
+                    files : [ {
+                        src : [ 'dist/index.html' ]
+                    } ]
                 }
             }
         });
+   
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-concat');
@@ -274,5 +275,8 @@ module.exports = function (grunt) {
 
     grunt.registerTask('dist', ['build', 'wiredepCopy:dist', 'cacheBust']);
 
-    grunt.registerTask('default', ['dist']);
+    grunt.registerTask('default', [ 'dist' ]);
+    
+    grunt.registerTask('run', [ 'dist', 'connect:server:keepalive' ]);
+
 };
