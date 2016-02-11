@@ -73,7 +73,7 @@
             this.domainTour.init();
 
             // Start the tour
-            this.domainTour.start(true);
+            this.domainTour.start();
         },
 
         mainGuide: function(forceStart) {
@@ -81,68 +81,67 @@
             var tourSeen = this.config.get("tourSeen");
 
             // Instance the tour
-            if (! this.mainTour) {
-                this.mainTour = new Tour({
-                    storage: false,
-                    onEnd: function() {
-                        me.config.set("tourSeen", true);
-                    },
-                    steps: [
-                        {
-                            element: "#date-picker",
-                            title: "Select date range",
-                            onShow: function (tour) {
-                                var selection = me.config.get("selection");
-                                var dateFound = false;
-                                if (selection) {
-                                    if (selection.facets) {
-                                        var facets = selection.facets;
-                                        for (i=0; i<facets.length; i++) {
-                                            if (facets[i].dimension.type == "CONTINUOUS" && facets[i].dimension.valueType == "DATE") {
-                                                dateFound = true;
-                                                this.content = "This is where you define the date range of your data. If multiple data measures are available, pick one first.";
-                                            }
+            this.mainTour = new Tour({
+                storage: false,
+                onEnd: function() {
+                    me.config.set("tourSeen", true);
+                },
+                steps: [
+                    {
+                        element: "#date-picker",
+                        title: "Select date range",
+                        onShow: function (tour) {
+                            var selection = me.config.get("selection");
+                            var dateFound = false;
+                            if (selection) {
+                                if (selection.facets) {
+                                    var facets = selection.facets;
+                                    for (i=0; i<facets.length; i++) {
+                                        if (facets[i].dimension.type == "CONTINUOUS" && facets[i].dimension.valueType == "DATE") {
+                                            dateFound = true;
+                                            this.content = "This is where you define the date range of your data. If multiple data measures are available, pick one first.";
                                         }
-                                        if (! dateFound) {
-                                            this.content = "This is where you define the date range of your data. Looks like we can't find a date column within your dataset to use. One will have to be defined, but we'll look into this later.";
-                                        }
+                                    }
+                                    if (! dateFound) {
+                                        this.content = "This is where you define the date range of your data. Looks like we can't find a date column within your dataset to use. One will have to be defined, but we'll look into this later.";
                                     }
                                 }
                             }
-                        },
-                        {
-                            element: "#selection",
-                            title: "Filter your data",
-                            content: "This is where you can filter your data. First pick a filter, then search the values you want to filter on. Remember to index the dimension first."
-                        },
-                        {
-                            element: "#metric",
-                            placement: "bottom",
-                            title: "Add columns to your data set",
-                            content: "Pick from the available dimensions and metrics to add columns to your data. You can reorder the dimensions with a simple drag & drop.",
-                            onNext: function() {
-                                setTimeout(function() {
-                                    $("#origin button").click();
-                                }, 100);
-                            }
-                        },
-                        {
-                            element: "#origin",
-                            placement: "bottom",
-                            title: "Edit the datamodel",
-                            content: "By clicking the Configure icon after clicking on one of the buttons, you can choose to index dimensions, create new metrics and manage relations between domains."
-                        },
-                        {
-                            element: ".zEWidget-launcher",
-                            title: "How to get help",
-                            placement: "left",
-                            content: "This Help button is available at all times. Use it to browse the documentation and find answers."
                         }
-                    ]
-                });
-                // Initialize the tour
-                this.mainTour.init();
-            }
+                    },
+                    {
+                        element: "#selection",
+                        title: "Filter your data",
+                        content: "This is where you can filter your data. First pick a filter, then search the values you want to filter on. Remember to index the dimension first."
+                    },
+                    {
+                        element: "#metric",
+                        placement: "bottom",
+                        title: "Add columns to your data set",
+                        content: "Pick from the available dimensions and metrics to add columns to your data. You can reorder the dimensions with a simple drag & drop.",
+                        onNext: function() {
+                            setTimeout(function() {
+                                $("#origin button").click();
+                            }, 100);
+                        }
+                    },
+                    {
+                        element: "#origin",
+                        placement: "bottom",
+                        title: "Edit the datamodel",
+                        content: "By clicking the Configure icon after clicking on one of the buttons, you can choose to index dimensions, create new metrics and manage relations between domains."
+                    },
+                    {
+                        element: ".zEWidget-launcher",
+                        title: "How to get help",
+                        placement: "left",
+                        content: "This Help button is available at all times. Use it to browse the documentation and find answers."
+                    }
+                ]
+            });
+            // Initialize the tour
+            this.mainTour.init();
+            
             // Start the tour
             if (! this.config.get("tourSeen")) {
                 squid_api.getSelectedDomain().then(function(domain) {
@@ -152,7 +151,7 @@
                     }
                 });
             }
-            if (forceStart === true && this.config.get("domain")) {
+            if (forceStart === true) {
                 this.mainTour.start(true);
             }
         }
