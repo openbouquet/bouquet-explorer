@@ -35,8 +35,13 @@ var projectModal = new api.view.ModalView({
 });
 
 var projectButton = new api.view.ProjectSelectorButton({
-        el : '#project'
-    });
+    el : '#project',
+    afterRender: function() {
+        if (! this.config.get("project")) {
+            tour.projectGuide();
+        }
+    }
+});
 
 projectButton.$el.click(function() {
     projectModal.render();
@@ -66,7 +71,12 @@ var domainModal = new api.view.ModalView({
 });
 
 var domainButton = new api.view.DomainSelectorButton({
-    el : '#domain'
+    el : '#domain',
+    afterRender: function() {
+        if (! this.config.get("domain")) {
+            tour.domainGuide();
+        }
+    }
 });
 
 domainButton.$el.click(function() {
@@ -608,7 +618,7 @@ var tour = new api.view.TourGuide();
 
 // trigger tour on button click
 $("#tour").click(function() {
-    tour.triggerMainTour();
+    tour.mainGuide(true);
 });
 
 /*
