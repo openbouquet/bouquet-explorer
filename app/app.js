@@ -554,6 +554,11 @@ api.model.filters.on('change:selection', function(filters) {
 
 config.on('change:domain', function(model) {
     // manage the workflow guide display
+    if (model.get("domain")) {
+        $("#tour").show();
+    } else {
+        $("#tour").hide();
+    }
     var domainId = model.get("domain");
     var projectId = model.get("project");
     if (projectId && domainId) {
