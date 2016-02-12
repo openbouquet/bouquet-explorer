@@ -144,12 +144,7 @@
             
             // Start the tour
             if (! this.config.get("tourSeen")) {
-                squid_api.getSelectedDomain().then(function(domain) {
-                    if (domain.get("_role") !== "OWNER") {
-                        // by default only start the tour if user isn't an admin
-                        me.mainTour.start(true);
-                    }
-                });
+                this.mainTour.start();
             }
             if (forceStart === true) {
                 this.mainTour.start(true);
