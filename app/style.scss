@@ -1123,3 +1123,6 @@ $navBarAndButtonColour: #e7e7e7;
 .tour-backdrop {
   opacity: 0.4;
 }
+.popover[class*="tour-"] {
+  z-index: 1049;
+}
