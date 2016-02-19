@@ -261,6 +261,7 @@ var displayTypeView = new api.view.DisplayTypeSelectorView({
 
 mainModel.on("change:currentAnalysis", function() {
     var a = mainModel.get("currentAnalysis");
+    refreshCurrentAnalysis(a);
     if (a) {
         if (a == tableAnalysis) {
             tableView.$el.show();
@@ -321,13 +322,13 @@ var exportView = new api.view.DataExport({
     materializeDatasetsView: true
 });
 
-var materializeView = new api.view.Materialize({
-    el : '#materialize',
-    renderTo : '#materialize-content',
-    model : exportAnalysis,
-    displayInPopup : true,
-    materializeDatasetsView: true,
-});
+//var materializeView = new api.view.Materialize({
+//    el : '#materialize',
+//    renderTo : '#materialize-content',
+//    model : exportAnalysis,
+//    displayInPopup : true,
+//    materializeDatasetsView: true,
+//});
 
 // Controllers
 
@@ -459,12 +460,12 @@ var refreshCurrentAnalysis = function() {
         }
         // trigger automatic analysis
         if (config.get("automaticTrigger")) {
-            if (a !== exportAnalysis) {
+            if (a !== exportAnalysis && (a.get("facets") && a.get("facets").length>0) || (a.get("metricList") && a.get("metricList").length>0)) {
                 a.setParameter("lazy", true);
                 compute(a);
                 a.removeParameter("lazy");
+                config.unset("automaticTrigger", {silent : true});
             }
-            config.unset("automaticTrigger", {silent : true});
         }
     }
 };
