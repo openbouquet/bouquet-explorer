@@ -1,0 +1,32 @@
+{
+  "name": "bouquet-explorer",
+  "main": "dist/main.js",
+  "license": "AGPL-3.0",
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/openbouquet/bouquet-explorer.git"
+  },
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "squid_api": "https://github.com/openbouquet/bouquet-javascript-sdk.git#3.4.2",
+    "squid_api_core_widgets": "https://github.com/openbouquet/bouquet-javascript-sdk-core-widgets.git#2.9.3",
+    "bootstrap": "3.3.4",
+    "font-awesome": "https://github.com/components/font-awesome.git",
+    "typed": "https://github.com/mattboldt/typed.js.git",
+    "squid_api_data_widgets": "https://github.com/openbouquet/bouquet-javascript-sdk-data-widgets.git#4.1.0",
+    "squid_api_filters_widget": "https://github.com/openbouquet/bouquet-javascript-sdk-filtering-widgets.git#3.4.1",
+    "squid_api_admin_widgets": "https://github.com/openbouquet/bouquet-javascript-sdk-admin-widgets.git#2.9.1",
+    "bootstrap-tour": "~0.10.2"
+  },
+  "resolutions": {
+    "squid_api": "develop",
+    "jquery": "~2.0.3"
+  }
+}

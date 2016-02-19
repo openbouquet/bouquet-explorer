@@ -1,0 +1,8 @@
+/.project
+/.settings
+/node_modules
+/dist
+/bower_components
+.sass-cache/
+.idea/
+app-export.iml

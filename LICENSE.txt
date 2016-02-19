@@ -1,0 +1,26 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Open Bouquet’S LICENCE
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+URI: http://openbouquet.io
+
+Squid is free software, licensed under the terms of the GNU Affero General Public License as published by the Free 
+Software Foundation, version 3 of the License.  
+
+You can redistribute it and/or modify since you respect the terms of this License.
+
+There is a special FOSS exception to the terms and conditions of the licenses as they are applied to this program. 
+This FOSS exception allows developers of FOSS applications to include "this program" (also referred to as
+« Open Bouquet ») with their FOSS applications. See FOSS_LICENSE_EXCEPTION.txt in the
+directory of this program distribution. Squid Solutions software is typically licensed pursuant to version 3 of the 
+General Affero Public License version 3 ("AGPL"), but this exception permits distribution of the program with a 
+developer’s FOSS applications licensed under the terms of another FOSS license listed below, even though such other
+FOSS license may be incompatible with the AGPL.
+
+You should have received a copy of the GNU Affero General Public License along with Squid. If not,
+see : <http://www.gnu.org/licenses/>.
+
+Finally, Squid is made using those external components and libraries. They are listed at the end of this file.
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+External components, libraries and icons:

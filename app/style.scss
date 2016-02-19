@@ -1,0 +1,1125 @@
+@font-face {
+  font-family:"Candara Bold";
+  src: url("fonts/Candara_Bold.ttf") /* TTF file for CSS3 browsers */
+}
+
+// Variables
+$primary-font-stack: 'Candara Bold';
+$primary-font-color: #5f5d5f;
+$primary-background-color: #ffc008;
+$navBarAndButtonColour: #e7e7e7;
+
+/* Application */
+#app {
+  font-family: $primary-font-stack;
+  color: $primary-font-color;
+  -webkit-font-smoothing: antialiased;
+  background: #fff;
+
+  #admin {
+	position: relative;
+	.back-to-app {
+	  float: right;
+	}
+	#adminDisplay {
+	  margin-top: 20px;
+	}
+  }
+  #project, #domain, #bookmark {
+	float: left;
+	margin-right: 20px;
+	.open>.multiselect-container {
+	  left: auto;
+	  top: 33px;
+	}
+	button {
+	  border-radius: 4px;
+	  min-width: 130px;
+	}
+  }
+  #relation {
+	button {
+	  background: none;
+	  border: none;
+	  box-shadow: none;
+	  font-size: 30px;
+	  &:before {
+		content: "\f0c1";
+		font-family: FontAwesome;
+	  }
+	}
+  }
+  #domain-bookmark {
+	height: 53px;
+	width: 230px;
+	ul {
+	  padding-left: 0px;
+	}
+  }
+  .bookmark {
+	position: relative;
+	top: 10px;
+	list-style-type: none;
+	float: left;
+	button {
+	  min-width: auto !important;
+	  width: 35px;
+	  text-indent: 100%;
+	  color: #465966;
+	  white-space: nowrap;
+	  overflow: hidden;
+	  background: #fff;
+	  border: none;
+	  text-align: left;
+	  &:before {
+		content: "\f02e";
+		color: $primary-font-color;
+		font-family: FontAwesome;
+		left: -10px;
+		position: relative;
+		top: 1px;
+	  }
+	}
+	.squid-api-button-view {
+	  min-width: 35px !important;
+	}
+	button.match {
+	  background: #ffe084;
+	}
+  }
+  #project-edit {
+	float: left;
+	margin-left: -4px;
+
+	button {
+	  border-left: 0px;
+	}
+  }
+  #project-create, #domain-create {
+	button {
+	  min-width: 135px;
+	  width: auto;
+	  height: 40px;
+	  text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+	  background: #3498db;
+	  border-bottom: 2px solid #2980b9;
+	  color: #fff;
+	  margin: 0 auto;
+	  font-size: 18px;
+	  -webkit-box-shadow: inset 0 -2px #2980b9;
+	  box-shadow: inset 0 -2px #2980b9;
+	}
+  }
+  #create-project .squid-api-admin-widgets-Project, #create-domain .squid-api-admin-widgets-Domain {
+	float: left;
+	button {
+	  position: relative;
+	  vertical-align: top;
+	  height: 60px;
+	  width: 100%;
+	  font-size: 17px;
+	  color: #777;
+	  text-align: center;
+	  background: #ecf0f1;
+	  border: 0;
+	  border-bottom: 2px solid #bdc3c7;
+	  cursor: pointer;
+	  -webkit-box-shadow: inset 0 -2px #bdc3c7;
+	  box-shadow: inset 0 -2px #bdc3c7;
+	}
+  }
+  #squid-api-admin-widgets-user-table {
+	margin-top: 15px;
+	height: 600px;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	input {
+	  margin-right: 15px;
+	}
+	table {
+	  table-layout: fixed;
+	  tr {
+		background: #fafafa;
+	  }
+	  th {
+		background: #fff;
+		border-right: 1px solid #e0e0e0;
+		border-top: 1px solid #e0e0e0;
+	  }
+	}
+  }
+  .navbar {
+	margin-bottom: 0px;
+	position: relative;
+	background: $primary-background-color;
+	height: 55px;
+	.bouquet-logo {
+	  position: absolute;
+	  left: 50%;
+	}
+	a.navbar-brand {
+	  font-size: 14px;
+	  position: relative;
+	  background: #ffc008;
+	}
+	.menu-link {
+	  padding-left: 0px;
+	  font-size: 17px;
+	  top: 2px;
+	  color: #465966;
+	  span {
+		font-size: 14px;
+		padding-left: 5px;
+		top: -1px;
+		position: relative;
+	  }
+	}
+	.admin-switcher {
+	  cursor: pointer;
+	  font-size: 20px;
+	  position: relative;
+	  right: 10px;
+	  top: 13px;
+	  .dashboard {
+		display: none;
+	  }
+	}
+	.navbar-nav {
+	  .project, .domain {
+		margin-top: 10px;
+		min-width: 150px;
+		float: left;
+		list-style-type: none;
+	  }
+	}
+	#status {
+	  margin-top: 12px;
+	}
+	.navbar-right {
+
+	  li {
+		margin-left: 20px;
+
+		#tour, #medium, #zendesk, #users {
+		  margin-top: 16px;
+		  a {
+			color: #fff;
+			cursor: pointer;
+
+			:hover {
+			  color: $primary-font-color;
+			}
+		  }
+		}
+		#medium {
+		  margin-right: 30px;
+		}
+		#users {
+		  .back-to-app {
+			top: -7px;
+			color: #555;
+			background: #ffe084;
+			border: none;
+			position: relative;
+		  }
+		}
+	  }
+	  #login {
+		margin-top: 16px;
+		a {
+		  color: $primary-font-color;
+		  text-decoration: underline;
+		}
+	  }
+	}
+  }
+  #menu {
+	background: #5f5d5f;
+	margin-top: 57px;
+	border-radius: 0px;
+	a {
+	  color: #fff;
+	}
+	&.panel {
+	  li {
+		list-style-type: none;
+	  }
+	  ul {
+		margin: 0px;
+		padding: 0px;
+		a {
+		  display: block;
+		  position: relative;
+		  border-bottom: 2px solid #2c3e50;
+		  padding: 30px 0px 30px 12px;
+		  font-size: 16px;
+		  font-weight: 100;
+		  cursor: pointer;
+		  &.selected {
+			background: #2c3e50;
+		  }
+		  .nav-item {
+			font-size: 18px;
+			position: absolute;
+			display: inline-block;
+			text-align: center;
+			left: 50px;
+			top: 40px;
+			width: 150px;
+		  }
+		}
+		i {
+		  padding-right: 20px;
+		  font-size: 40px;
+		}
+	  }
+	  position: fixed;
+	  left: -15.625em; /*left or right and the width of your navigation panel*/
+	  width: 15.625em; /*should match the above value*/
+	}
+	margin-top: 52px;
+  }
+  #selected {
+	.noData {
+	  padding-top: 10px;
+	  font-weight: normal;
+	  font-size: 14px;
+	  color: #b9b9b9;
+	  margin-bottom: 21px;
+	  color: #b9b9b9;
+	}
+  }
+  #selectProject, #selectDomain, #loading, #no-connection {
+	position: relative;
+	.splash-container {
+	  text-align: center;
+	  margin-top: 20%;
+	  font-size: 50px;
+	}
+	.splash-container {
+	  padding-bottom: 20px;
+	}
+	.glyphicon-refresh {
+	  position: relative;
+	  top: 8px;
+	  right: 28px;
+	  -moz-animation: spin .7s infinite linear;
+	  -webkit-animation: spin .7s infinite linear;
+	}
+  }
+  .squid-api-model-widget-popup {
+	&:before {
+	  border-bottom-color: #eaebec;
+	  top: -8px;
+	}
+	table {
+	  tr {
+		&.selected {
+		  background-color: #eaebec;
+		}
+	  }
+	}
+  }
+  #app-export {
+	#main {
+	  position: relative;
+	  .configuration-hider {
+		font-family: FontAwesome;
+		width: 45px;
+		position: absolute;
+		right: 50px;
+		padding-left: 10px;
+		font-size: 24px;
+		top: -30px;
+		height: 36px;
+		border-radius: 4px;
+		box-shadow: 2px 3px 4px -3px;
+		background: #f3f3f3;
+		cursor: pointer;
+		&:before {
+		  content: "\f077";
+		}
+		&.closed {
+		  &:before {
+			content: "\f078";
+		  }
+		}
+	  }
+	  .configuration {
+		margin: 20px;
+		&.closed {
+		  overflow: hidden;
+		}
+		#filters {
+		  dt {
+			margin-top: 8px;
+		  }
+		}
+		.squid_api_filters_categorical_filter_panel  {
+		  #filter-selection {
+			.btn-group {
+			  button {
+				text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+				background: #3498db;
+				border-bottom: 2px solid #2980b9;
+				cursor: pointer;
+				-webkit-box-shadow: inset 0 -2px #2980b9;
+				box-shadow: inset 0 -2px #2980b9;
+			  }
+			}
+		  }
+		  #filter-display-results {
+			ul {
+			  li {
+				min-height: 25px;
+			  }
+			}
+		  }
+		  .no-items {
+			color: #b9b9b9;
+		  }
+		}
+		.export-container {
+		  padding: 0px;
+		  .squid-api-data-widgets-export-widget {
+			padding: 0px;
+			.filter-panel {
+			  border-radius: 0px;
+
+			  .panel-heading {
+				display: none;
+			  }
+			  .panel-body {
+				padding: 15px;
+				background: #f3f3f3;
+				border: none;
+				hr {
+				  border-color: #d9d9d9;
+				  margin-top: 15px;
+				}
+				pre {
+				  background-color: #fff;
+				}
+				.btn-default {
+				  cursor: pointer;
+				  color: #777;
+				  border-radius: 4px;
+				  border: 1px solid #e7e7e7;
+				  position: relative;
+				  padding-top: 8px;
+				  vertical-align: top;
+				  height: 41px;
+				  font-size: 14px;
+				  text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+				  color: #fff;
+				  text-align: center;
+				  background: #3498db;
+				  border-bottom: 2px solid #2980b9;
+				  cursor: pointer;
+				  -webkit-box-shadow: inset 0 -2px #2980b9;
+				  box-shadow: inset 0 -2px #2980b9;
+				}
+				.download-formats {
+				  label {
+					margin-right: 5px;
+					margin-left: 15px;
+				  }
+				  background: #fff;
+				  border-radius: 10px;
+				  display: inline-block;
+				  padding: 5px 16px 5px 0px;
+				  padding-top: 10px;
+				}
+			  }
+			}
+		  }
+		}
+		  .materialize-container {
+			  padding: 0px;
+			  .squid-api-data-widgets-materialize-widget {
+				  padding: 0px;
+				  .filter-panel {
+					  border-radius: 0px;
+
+					  .panel-heading {
+						  display: none;
+					  }
+					  .panel-body {
+						  padding: 15px;
+						  background: #f3f3f3;
+						  border: none;
+						  hr {
+							  border-color: #d9d9d9;
+							  margin-top: 15px;
+						  }
+						  pre {
+							  background-color: #fff;
+						  }
+						  .btn-default {
+							  cursor: pointer;
+							  color: #777;
+							  border-radius: 4px;
+							  border: 1px solid #e7e7e7;
+							  position: relative;
+							  padding-top: 8px;
+							  vertical-align: top;
+							  height: 41px;
+							  font-size: 14px;
+							  text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+							  color: #fff;
+							  text-align: center;
+							  background: #db0015;
+							  border-bottom: 2px solid #2980b9;
+							  cursor: pointer;
+							  -webkit-box-shadow: inset 0 -2px #2980b9;
+							  box-shadow: inset 0 -2px #2980b9;
+						  }
+						  .download-formats {
+							  label {
+								  margin-right: 5px;
+								  margin-left: 15px;
+							  }
+							  background: #fff;
+							  border-radius: 10px;
+							  display: inline-block;
+							  padding: 5px 16px 5px 0px;
+							  padding-top: 10px;
+						  }
+					  }
+				  }
+			  }
+		  }
+		.caret {
+		  position: absolute;
+		  right: 10px;
+		  top: 15px;
+		}
+		.squid-api-data-widgets-dimension-widget, .squid-api-data-widgets-metric-widget {
+		  margin-top: 3px;
+		}
+		.squid-api-data-widgets-dimension-widget li, .squid-api-data-widgets-metric-widget li {
+		  border: 1px solid #ccc;
+		  font-size: 12px;
+		  box-shadow: 3px 3px 3px -4px;
+		  padding: 8px;
+		  min-height: 30px;
+		}
+		#squid_api_filters_categorical_selected_view, #squid_api_filters-categorical-panel-view {
+		  li {
+			box-shadow: 3px 3px 3px -4px;
+			padding: 3px 3px 3px 8px !important;
+			font-size: 12px;
+		  }
+		  .facet-remove {
+			top: 5px;
+			font-size: 8px;
+		  }
+		}
+		.squid-api-data-widgets-dimension-widget li .fa {
+		  color: #bdc3c7;
+		  top: 9px;
+		}
+		.squid-api-data-widgets-dimension-widget li {
+		  margin: 0px 20px 10px 0px;
+		  min-height: 30px;
+		  padding: 8px;
+		}
+		background: #fff;
+		#date-selector, #selection, #origin, #metric {
+		  .btn-group {
+			width: 100%;
+		  }
+		  button, .multiselect {
+			position: relative;
+			vertical-align: top;
+			height: 40px;
+			width: 100%;
+			margin-bottom: 13px;
+			font-size: 14px;
+			background-color: #fff;
+			color: #777;
+			text-align: center;
+			cursor: pointer;
+			border-color: #ccc;
+		  }
+		}
+		.squid-api-date-selection-widget {
+		  margin-top: 11px;
+		}
+		#selection {
+		  .col-md-9 {
+			display: inline-block;
+		  }
+		  .information {
+			padding-top: 9px;
+			font-size: 14px;
+			margin-bottom: 23px;
+			color: #b9b9b9;
+			font-family: $primary-font-stack;
+		  }
+		  .item {
+			background: #fff;
+			min-width: 150px;
+			border-radius: 4px;
+			border: 1px solid #95a5a6;
+			margin: 0px 20px 10px 0px;
+			padding: 5px !important;
+		  }
+		  table {
+			border: none !important;
+			width: 100%;
+			.name {
+			  font-family: $primary-font-stack;
+			  font-size: 1.1em;
+			}
+			.value, a {
+			  color: $primary-font-color !important;
+			}
+		  }
+		}
+		#origin .multiselect:active, #metric .multiselect:active, #selection button:active, #date-picker button:first-of-type:active {
+		  top: 1px;
+		  outline: none;
+		  -webkit-box-shadow: none;
+		  border-bottom: 1px solid;
+		  box-shadow: none;
+		}
+		#date-picker {
+		  .squid-api-date-selection-widget {
+			button.refresh-facet {
+			  box-shadow: none;
+			  border: none;
+			  text-align: left;
+			  width: 110px;
+			  top: 0px;
+			  font-size: 11px;
+			  padding: 2px 0px 0px 15px;
+			  border-radius: 8px;
+			  color: #fff;
+			  height: 18px;
+			  background: #4d4d4d;
+
+			  i {
+				top: 1px;
+				left: 5px;
+			  }
+			}
+		  }
+		}
+		.squid-api-data-widgets-dimension-widget, .squid-api-data-widgets-metric-widget {
+		  .information {
+			padding-top: 10px;
+			font-size: 14px;
+			color: #b9b9b9;
+			margin-bottom: 21px;
+			font-family: $primary-font-stack;
+		  }
+		}
+		#metric {
+		  margin-bottom: 10px;
+		}
+		#filters {
+		  .caret {
+			position: absolute;
+			top: 0px;
+			right: 0px;
+		  }
+		}
+	  }
+	  .main-container {
+		padding: 0px 20px;
+		width: 100%;
+		display: inline-block;
+		.orderby-col {
+		  padding-left: 0px;
+		  display: inline-block;
+		}
+		#tableView {
+		  float: left;
+		  position: relative;
+		  top: 10px;
+		  z-index: 0;
+		  width: 100%;
+
+		  #squid-api-data-widgets-data-table table tr:nth-child(even) {
+			background: -webkit-gradient(linear, left top, left bottom, from(#f8f8f8), to(#f6f6f6));
+		  }
+		  #squid-api-data-widgets-data-table table thead th {
+			cursor: pointer;
+		  }
+		  #squid-api-data-widgets-data-table table.many-columns {
+			display: table;
+		  }
+		}
+		.squid-api-data-widgets-displaytype-selector {
+		  float: right;
+		  top: 5px;
+		  position: relative;
+		}
+		#timeView {
+		  position: relative;
+		  clear: both;
+		  z-index: 0;
+		  #chart {
+			top: -35px;
+		  }
+		  .squid-api-data-widgets-data-table {
+			width: 100%;
+			background: #f8f8f8;
+			padding: 50px 0px;
+			border: 1px solid #d1d1d1;
+			font-size: 18px;
+			text-align: center;
+			-moz-border-radius: 3px;
+			-webkit-border-radius: 3px;
+			border-radius: 3px;
+			-moz-box-shadow: 0 1px 2px #d1d1d1;
+			-webkit-box-shadow: 0 1px 2px #d1d1d1;
+			box-shadow: 0 1px 2px #d1d1d1;
+		  }
+		}
+		#export button, button.refresh-analysis {
+		  color: white;
+		  font-size: 18px;
+		  vertical-align: top;
+		  cursor: pointer;
+		  border: 0;
+		  position: relative;
+		  text-align: center;
+		  z-index: 1;
+		  padding: 0;
+		  margin-bottom: 15px;
+		  width: 100%;
+		  height: 40px;
+		}
+
+		  #materialize button, button.refresh-analysis {
+			  color: white;
+			  font-size: 18px;
+			  vertical-align: top;
+			  cursor: pointer;
+			  border: 0;
+			  position: relative;
+			  text-align: center;
+			  z-index: 1;
+			  padding: 0;
+			  margin-bottom: 15px;
+			  width: 100%;
+			  height: 40px;
+		  }
+
+		button.refresh-analysis {
+		  text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+		  background: #2ecc71;
+		  border-bottom: 2px solid #27ae60;
+		  -webkit-box-shadow: inset 0 -2px #27ae60;
+		  box-shadow: inset 0 -2px #27ae60;
+		  min-width: 200px;
+		}
+		#export, #materialize {
+		  button {
+			text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+			background: #3498db;
+			border-bottom: 2px solid #2980b9;
+			-webkit-box-shadow: inset 0 -2px #2980b9;
+			box-shadow: inset 0 -2px #2980b9;
+		  }
+		}
+		button.refresh-analysis, #export, #materialize {
+		  i {
+			top: 1px;
+			right: -7px;
+			position: relative;
+		  }
+		}
+		#export {
+		  button {
+			//right: -36px;
+		  }
+		}
+		#materialize {
+		  button {
+			border-left: 2px solid #4d4d4d;
+		  }
+		}
+		.squid-api-data-widgets-orderby-widget button.multiselect {
+		  font-size: 14px;
+		  font-weight: bold;
+		  top: 4px;
+		  max-width: 235px;
+		}
+		.squid-api-data-widgets-orderby-widget {
+		  position: relative;
+		  top: -2px;
+		}
+		// container when data table analysis has not yet been run
+		.noDataInTable {
+		  border: 1px solid #ecf0f1;
+		  display: inline-block;
+		  padding: 20px;
+		  width: 325px;
+		  height: 200px;
+		  border-radius: 10px;
+		  position: relative;
+		  line-height: 25px;
+		  i {
+			font-size: 60px;
+			margin-top: 60px;
+		  }
+		}
+		.sq-loading {
+		  position:absolute;
+		  width:100%;
+		  top: 25% !important;
+		  left: 0px;
+		  top:0% !important;
+		}
+		.spinner {
+		  margin: 100px auto;
+		  width: 400px;
+		  height: 100px;
+		  text-align: center;
+		  font-size: 10px;
+		}
+		.spinner > div {
+		  margin-left:10px;
+		  background-color: rgba(102, 102, 102, .5);
+		  height: 100%;
+		  width: 10px;
+		  display: inline-block;
+		  -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
+		  animation: stretchdelay 1.2s infinite ease-in-out;
+		}
+		.spinner .rect2 {
+		  -webkit-animation-delay: -1.1s;
+		  animation-delay: -1.1s;
+		}
+		.spinner .rect3 {
+		  -webkit-animation-delay: -1.0s;
+		  animation-delay: -1.0s;
+		}
+		.spinner .rect4 {
+		  -webkit-animation-delay: -0.9s;
+		  animation-delay: -0.9s;
+		}
+		.spinner .rect5 {
+		  -webkit-animation-delay: -0.8s;
+		  animation-delay: -0.8s;
+		}
+		@-webkit-keyframes stretchdelay {
+		  0%, 40%, 100% {
+			-webkit-transform: scaleY(0.0)
+		  }
+		  20% {
+			-webkit-transform: scaleY(1.0)
+		  }
+		}
+		@keyframes stretchdelay {
+		  0%, 40%, 100% {
+			transform: scaleY(0.0);
+			-webkit-transform: scaleY(0.0);
+		  }
+		  20% {
+			transform: scaleY(1.0);
+			-webkit-transform: scaleY(1.0);
+		  }
+		}
+		@-moz-keyframes spin {
+		  0% {
+			-moz-transform: rotate(0deg);
+		  }
+		  100% {
+			-moz-transform: rotate(360deg);
+		  };
+	  }
+	  @-moz-keyframes spinoff {
+	  0% {
+	  -moz-transform: rotate(0deg);
+	  }
+	  100% {
+	  -moz-transform: rotate(-360deg);
+	  };
+	  }
+
+	  @-webkit-keyframes spin {
+	  0% {
+	  -webkit-transform: rotate(0deg);
+	  }
+	  100% {
+	  -webkit-transform: rotate(360deg);
+	  };
+	  }
+	  }
+	}
+  }
+  // DropDown Menu to the right of the dropdowns
+  #origin, #metric {
+	.open > {
+	  .multiselect-container {
+		display: block;
+		left: 173px;
+		top: 0px;
+		min-width: 600px;
+		z-index: 3;
+
+		label {
+		  max-width: 295px;
+		  text-overflow: ellipsis;
+		  overflow: hidden;
+		}
+
+		li {
+		  min-width: 50%;
+		  display: inline-block;
+		}
+
+		input[type="checkbox"], input[type="radio"] {
+		  display: none;
+		}
+	  }
+	}
+  }
+  // Reduce spacing between each Horizontal Rule
+  hr {
+	margin: 0px 0px 15px 0px;
+	// HR class to expand to edges
+	&.flat {
+	  margin: 0px;
+	  padding: 0px;
+	}
+  }
+  .typed-cursor{
+	display: none;
+  }
+  .modal-header {
+	color: #fff;
+	min-width: 135px;
+	text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+	background: $primary-background-color;
+	border-bottom: 0px;
+  }
+  .squid-api-export-panel-popup {
+	&:before {
+	  left: 250px;
+	}
+	.btn-default, #curl-view {
+	  float: left;
+	  margin-left: 10px;
+	  max-width: 250px;
+	}
+  }
+	.squid-api-materialize-panel-popup {
+		&:before {
+			left: 250px;
+		}
+		.btn-default {
+			float: left;
+			margin-left: 10px;
+			max-width: 250px;
+		}
+	}
+  #no-connection {
+	.message {
+	  color: #4d4d4d;
+	  position: absolute;
+	  background: #f9f9f9;
+	  padding: 12px;
+	  left: 40%;
+	  top: 30px;
+	  font-size: 30px;
+	}
+	.pot {
+	  background: #d0631e;
+	  position: relative;
+	  div {
+		position: absolute;
+	  }
+	  width: 65px;
+	  height: 70px;
+	  margin-left: 30%;
+	  top: 25px;
+	  &:before {
+		top: 0;
+		left: -15px;
+		border-left: 15px solid transparent;
+		border-right: 0px solid transparent;
+		border-top: 100px solid #ee7d15;
+	  }
+	  &:after {
+		top: 0;
+		right: -15px;
+		border-left: 0px solid transparent;
+		border-right: 15px solid transparent;
+		border-top: 100px solid #ee7d15;
+	  }
+	  .pot-top {
+		width: 140px;
+		height: 25px;
+		top: -25px;
+		left: 50%;
+		margin-left: -70px;
+		&:before {
+		  left: -5px;
+		  top: 0;
+		  border-left: 5px solid transparent;
+		  border-right: 0px solid transparent;
+		  border-top: 25px solid #ee7d15;
+		}
+		&:after {
+		  right: -5px;
+		  top: 0;
+		  border-right: 5px solid transparent;
+		  border-left: 0px solid transparent;
+		  border-top: 25px solid #ee7d15;
+		}
+	  }
+	  .pot-shadow {
+		z-index: 3;
+		width: 125px;
+		height: 10px;
+		background: rgba(220,84,0,0.2);
+		left: 50%;
+		top: 0;
+		margin-left: -62.5px;
+	  }
+	  .shadow {
+		background: rgba(220, 84,0,0.1);
+		z-index: -1;
+		bottom: -5px;
+		left: 50%;
+		margin-left: -60px;
+		width: 120px;
+		height: 10px;
+		border-radius: 120px / 10px;
+	  }
+	  .plant {
+		animation: grow 4s ease-out forwards;
+		height: 150px;
+		background: #74bb41;
+		width: 16px;
+		z-index: -1;
+		bottom: 0;
+		left: 50%;
+		margin-left: -8px;
+		border-radius: 16px 16px 0 0;
+		div {
+		  position: absolute;
+		}
+		&:before {
+		  height: 275px;
+		  animation: grow 4s ease-out forwards;
+		  width: 4px;
+		  right: 0;
+		  bottom: 0;
+		  background: rgba(60,188,131,0.5);
+		  border-radius: 0 30px 0 0;
+		}
+		&:after {
+		  left: 10px;
+		  top: 110px;
+		  width: 0px;
+		  height: 0px;
+		  border-radius: 100px 0px 100px 0px;
+		  background:#3cbc83;
+		  transform: rotate(-20deg);
+		  animation: leaf 5s ease-out forwards;
+		  animation-delay: 4s;
+		}
+		.head {
+		  width: 50px;
+		  height: 50px;
+		  left: 50%;
+		  top: -15px;
+		  margin-left: -25px;
+		  border-radius: 50px;
+		  background:  #ed692a;
+		  transform: scale(0.4);
+		  animation-name: flower, rota;
+		  animation-duration: 3s, 15s;
+		  animation-timing-function: ease-out, ease-out;
+		  animation-fill-mode: forwards;
+		  animation-delay: 1s, 4s;
+		}
+		.face {
+		  background: #a3430c;
+		  width: 20px;
+		  height: 20px;
+		  border-radius: 25px;
+		  position: absolute;
+		  margin-top: -10px;
+		  margin-left: -10px;
+		  top: 50%;
+		  left: 50%;
+		}
+		li {
+		  list-style: none;
+		  width:44px;
+		  height:25px;
+		  position: absolute;
+		  float:left;
+		  border-radius: 100px 0px 100px 0px;
+		  background:#ffc008;
+		  &:nth-child(1) {
+			top:10px;
+			left:60px;
+			transform: rotate(30deg);
+		  }
+		  &:nth-child(2) {
+			top:15px;
+			right:60px;
+			transform: rotate(20deg);
+		  }
+		  &:nth-child(3) {
+			top:55px;
+			right:45px;
+			transform: rotate(-20deg);
+		  }
+		  &:nth-child(4) {
+			top:55px;
+			left:45px;
+			transform: rotate(-110deg);
+		  }
+		  &:nth-child(5) {
+			top:75px;
+			left:00px;
+			transform: rotate(-60deg);
+		  }
+		  &:nth-child(6) {
+			bottom: 55px;
+			left:45px;
+			transform: rotate(-20deg);
+		  }
+		  &:nth-child(7) {
+			bottom:55px;
+			right:45px;
+			transform: rotate(-110deg);
+		  }
+		  &:nth-child(8) {
+			bottom:75px;
+			left:00px;
+			transform: rotate(-60deg);
+		  }
+		  @keyframes grow {
+			from { height : 50px; }
+			to { height : 200px ; }
+		  }
+		  @keyframes flower {
+			from { transform: scale(0.4); }
+			to { transform: scale(1); }
+		  }
+		  @keyframes rota {
+			from { transform : rotate(0); }
+			to { transform : rotate(360deg); }
+		  }
+		  @keyframes leaf {
+			from { width : 0px; height: 0; }
+			to {   width: 40px; height: 20px; }
+		  }
+		}
+	  }
+	}
+  }
+}
+.tour-backdrop {
+  opacity: 0.4;
+}
