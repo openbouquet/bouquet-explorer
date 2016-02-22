@@ -26,5 +26,3 @@ Then open the index.html file making sure the apiUrl you set matches your Bouque
 http://localhost:8081/dist/index.html?apiUrl=http://localhost:9000&api=dev
 ```
 
-![google analytics](https://www.google-analytics.com/collect?v=1&tid=UA-74133014-1&t=pageview&cid=35009a79-1a05-49d7-b876-2b884d0f825b)
-
