@@ -382,7 +382,7 @@ var refreshAnalysis = function(a, silent) {
             if (selection) {
                 for (i=0; i<selection.facets.length; i++) {
             		if (selection.facets[i].dimension.type == "CONTINUOUS" && selection.facets[i].dimension.valueType == "DATE") {
-            			a.setFacets([selection.facets[i].id], silent);
+                        a.set("facets", [{value: selection.facets[i].id, expression: {value: "TO_DATE('" + selection.facets[i].id + "')"}}], {silent : true});
             			break;
             		}
             	}
