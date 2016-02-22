@@ -559,6 +559,7 @@ config.on('change:domain', function(model) {
             $('#main').fadeIn();
         }, 1000);
     }
+    tour.mainGuide();
 });
 
 // Configuration accordion
