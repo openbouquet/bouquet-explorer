@@ -159,6 +159,12 @@ var mainModel = new Backbone.Model({
 
 config.on("change", function() {
     api.saveState();
+
+    if (! this.hasChanged("configDisplay")) {
+        refreshCurrentAnalysis();
+        refreshExportAnalysis();
+    }
+
     if (config.get("project") && config.get("domain")) {
         $("#selectProject").addClass("hidden");
         $("#selectDomain").addClass("hidden");
