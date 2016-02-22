@@ -460,12 +460,20 @@ var refreshCurrentAnalysis = function() {
         }
         // trigger automatic analysis
         if (config.get("automaticTrigger")) {
-            if (a !== exportAnalysis && (a.get("facets") && a.get("facets").length>0) || (a.get("metricList") && a.get("metricList").length>0)) {
-                a.setParameter("lazy", true);
-                compute(a);
-                a.removeParameter("lazy");
-                config.unset("automaticTrigger", {silent : true});
-            }
+            squid_api.utils.checkAPIVersion(">=4.2.1").done(function(v){
+                if (a !== exportAnalysis && (a.get("facets") && a.get("facets").length>0) || (a.get("metricList") && a.get("metricList").length>0)) {
+                    a.setParameter("lazy", true);
+                    compute(a);
+                    a.removeParameter("lazy");
+                    config.unset("automaticTrigger", {silent : true});
+                }
+            }).fail(function(v){
+                if (v) {
+                    console.log("API version NOT OK : "+v);
+                } else {
+                    console.error("WARN unable to get Bouquet Server version");
+                }
+            });
         }
     }
 };
