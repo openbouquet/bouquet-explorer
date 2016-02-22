@@ -380,9 +380,17 @@ var refreshAnalysis = function(a, silent) {
         if (a == timeAnalysis) {
         	var selection = config.get("selection");
             if (selection) {
+                var toDate = false;
+                squid_api.utils.checkAPIVersion(">=4.2.1").done(function(v){
+                    toDate = true;
+                });
                 for (i=0; i<selection.facets.length; i++) {
             		if (selection.facets[i].dimension.type == "CONTINUOUS" && selection.facets[i].dimension.valueType == "DATE") {
-                        a.set("facets", [{value: selection.facets[i].id, expression: {value: "TO_DATE('" + selection.facets[i].id + "')"}}], {silent : true});
+                        if (toDate) {
+                            a.set("facets", [{value: selection.facets[i].id, expression: {value: "TO_DATE('" + selection.facets[i].id + "')"}}], {silent : true});
+                        } else {
+                            a.setFacets([selection.facets[i].id], silent);
+                        }
             			break;
             		}
             	}
