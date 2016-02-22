@@ -209,7 +209,7 @@ $("button.refresh-analysis").click(function(event) {
     event.preventDefault();
     var a = mainModel.get("currentAnalysis");
     compute(a);
-    config.set("automaticTrigger", true);
+    config.set({"automaticTrigger" : true}, {"silent" : true});
 });
 
 // Views
@@ -407,6 +407,23 @@ var refreshAnalysis = function(a, silent) {
         	a.setParameter("startIndex", config.get("startIndex"));
         	a.setParameter("maxResults", config.get("maxResults"));
         }
+        // trigger automatic analysis
+        if (config.get("automaticTrigger")) {
+            squid_api.utils.checkAPIVersion(">=4.2.1").done(function(v){
+                if (a !== exportAnalysis && (a.get("facets") && a.get("facets").length>0) || (a.get("metricList") && a.get("metricList").length>0)) {
+                    a.setParameter("lazy", true);
+                    compute(a);
+                    a.removeParameter("lazy");
+                    config.unset("automaticTrigger", {silent : true});
+                }
+            }).fail(function(v){
+                if (v) {
+                    console.log("API version NOT OK : "+v);
+                } else {
+                    console.error("WARN unable to get Bouquet Server version");
+                }
+            });
+        }
         if (a == exportAnalysis) {
             if (config.get("chosenDimensions") && config.get("chosenMetrics")) {
                 if (config.get("chosenDimensions").length > 0 || config.get("chosenMetrics").length > 0) {
@@ -477,23 +494,6 @@ var refreshCurrentAnalysis = function() {
                     a.set("status", "PENDING");
                 }
             }
-        }
-        // trigger automatic analysis
-        if (config.get("automaticTrigger")) {
-            squid_api.utils.checkAPIVersion(">=4.2.1").done(function(v){
-                if (a !== exportAnalysis && (a.get("facets") && a.get("facets").length>0) || (a.get("metricList") && a.get("metricList").length>0)) {
-                    a.setParameter("lazy", true);
-                    compute(a);
-                    a.removeParameter("lazy");
-                    config.unset("automaticTrigger", {silent : true});
-                }
-            }).fail(function(v){
-                if (v) {
-                    console.log("API version NOT OK : "+v);
-                } else {
-                    console.error("WARN unable to get Bouquet Server version");
-                }
-            });
         }
     }
 };
