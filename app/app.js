@@ -209,7 +209,6 @@ $("button.refresh-analysis").click(function(event) {
     event.preventDefault();
     var a = mainModel.get("currentAnalysis");
     compute(a);
-    config.set({"automaticTrigger" : true}, {"silent" : true});
 });
 
 // Views
