@@ -387,7 +387,8 @@ var refreshAnalysis = function(a, silent) {
                 for (i=0; i<selection.facets.length; i++) {
             		if (selection.facets[i].dimension.type == "CONTINUOUS" && selection.facets[i].dimension.valueType == "DATE") {
                         if (toDate) {
-                            a.set("facets", [{value: selection.facets[i].id, expression: {value: "TO_DATE('" + selection.facets[i].id + "')"}}], {silent : true});
+                            a.setFacets([selection.facets[i].id], silent);
+                            //a.set("facets", [{value: selection.facets[i].id, expression: {value: "TO_DATE('" + selection.facets[i].id + "')"}}], {silent : true});
                         } else {
                             a.setFacets([selection.facets[i].id], silent);
                         }
@@ -402,6 +403,22 @@ var refreshAnalysis = function(a, silent) {
         a.setMetrics(config.get("chosenMetrics"), silent);
         changed = changed || a.hasChanged();
         a.setSelection(config.get("selection"), silent);
+        if (a == timeAnalysis) {
+            if (a.get("selection")) {
+                var facets = a.get("selection").facets;
+                if (facets) {
+                    for (i=0; i<facets.length; i++) {
+                        if (facets[i].dimension.type == "CONTINUOUS" && facets[i].dimension.valueType == "DATE") {
+                            if (facets[i].selectedItems.length > 0) {
+                                facets[i].selectedItems[0].lowerBound = "=DATE_SUB($'MAX',14,\"DAY\")";
+                                facets[i].selectedItems[0].upperBound = "=$'MAX'";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        //DATE_SUB($'MAX',14,"DAY")
         changed = changed || a.hasChanged();
         if (a == tableAnalysis) {
         	a.setParameter("startIndex", config.get("startIndex"));
