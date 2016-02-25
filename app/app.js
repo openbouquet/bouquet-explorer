@@ -512,7 +512,9 @@ config.on("change:startIndex", function(config) {
 });
 
 config.on("change:bookmark", function(config) {
-    config.set("automaticTrigger", true);
+    if (config.get("bookmark")) {
+        config.set("automaticTrigger", true);
+    }
 });
 
 config.on("change:currentAnalysis", function(config, forceRefresh) {
