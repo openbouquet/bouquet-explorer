@@ -410,9 +410,9 @@ var refreshAnalysis = function(a, silent) {
         if (config.get("automaticTrigger")) {
             squid_api.utils.checkAPIVersion(">=4.2.1").done(function(v){
                 if (a !== exportAnalysis && (a.get("facets") && a.get("facets").length>0) || (a.get("metricList") && a.get("metricList").length>0)) {
-                    a.setParameter("lazy", true);
+                    //a.setParameter("lazy", true);
                     compute(a);
-                    a.removeParameter("lazy");
+                    //a.removeParameter("lazy");
                     config.unset("automaticTrigger", {silent : true});
                 }
             }).fail(function(v){
