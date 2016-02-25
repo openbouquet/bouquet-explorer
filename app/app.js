@@ -159,12 +159,10 @@ var mainModel = new Backbone.Model({
 
 config.on("change", function() {
     api.saveState();
+
     if (! this.hasChanged("configDisplay")) {
-    	refreshCurrentAnalysis();
+        refreshCurrentAnalysis();
         refreshExportAnalysis();
-    }
-    if (! config.get("currentAnalysis")) {
-        mainModel.set("currentAnalysis", tableAnalysis);
     }
 
     if (config.get("project") && config.get("domain")) {
@@ -334,14 +332,14 @@ var exportView = new api.view.DataExport({
     sqlView : true,
     materializeDatasetsView: true
 });
-
-    //var materializeView = new api.view.Materialize({
-    //    el : '#materialize',
-    //    renderTo : '#materialize-content',
-    //    model : exportAnalysis,
-    //    displayInPopup : true,
-    //    materializeDatasetsView: true,
-    //});
+    
+//var materializeView = new api.view.Materialize({
+//    el : '#materialize',
+//    renderTo : '#materialize-content',
+//    model : exportAnalysis,
+//    displayInPopup : true,
+//    materializeDatasetsView: true,
+//});
 
 // Controllers
 
@@ -381,9 +379,17 @@ var refreshAnalysis = function(a, silent) {
         if (a == timeAnalysis) {
         	var selection = config.get("selection");
             if (selection) {
+                var toDate = false;
+                squid_api.utils.checkAPIVersion(">=4.2.1").done(function(v){
+                    toDate = true;
+                });
                 for (i=0; i<selection.facets.length; i++) {
             		if (selection.facets[i].dimension.type == "CONTINUOUS" && selection.facets[i].dimension.valueType == "DATE") {
-            			a.setFacets([selection.facets[i].id], silent);
+                        if (toDate) {
+                            a.set("facets", [{value: selection.facets[i].id, expression: {value: "TO_DATE('" + selection.facets[i].id + "')"}}], {silent : true});
+                        } else {
+                            a.setFacets([selection.facets[i].id], silent);
+                        }
             			break;
             		}
             	}
@@ -399,6 +405,23 @@ var refreshAnalysis = function(a, silent) {
         if (a == tableAnalysis) {
         	a.setParameter("startIndex", config.get("startIndex"));
         	a.setParameter("maxResults", config.get("maxResults"));
+        }
+        // trigger automatic analysis
+        if (config.get("automaticTrigger")) {
+            squid_api.utils.checkAPIVersion(">=4.2.1").done(function(v){
+                if (a !== exportAnalysis && (a.get("facets") && a.get("facets").length>0) || (a.get("metricList") && a.get("metricList").length>0)) {
+                    //a.setParameter("lazy", true);
+                    compute(a);
+                    //a.removeParameter("lazy");
+                    config.unset("automaticTrigger", {silent : true});
+                }
+            }).fail(function(v){
+                if (v) {
+                    console.log("API version NOT OK : "+v);
+                } else {
+                    console.error("WARN unable to get Bouquet Server version");
+                }
+            });
         }
         if (a == exportAnalysis) {
             if (config.get("chosenDimensions") && config.get("chosenMetrics")) {
@@ -489,32 +512,15 @@ config.on("change:startIndex", function(config) {
 });
 
 config.on("change:bookmark", function(config) {
-    config.trigger("change:currentAnalysis", config, true);
+    if (config.get("bookmark")) {
+        config.set("automaticTrigger", true);
+    }
 });
 
 config.on("change:currentAnalysis", function(config, forceRefresh) {
     mainModel.set("currentAnalysis", mainModel.get(config.get("currentAnalysis")));
-    if (! config._previousAttributes.currentAnalysis || forceRefresh === true) {
-        var canCompute = false;
-        if (config.get("chosenDimensions")) {
-            if (config.get("chosenDimensions").length > 0) {
-                canCompute = true;
-            }
-        }
-        if (config.get("chosenMetrics")) {
-            if (config.get("chosenMetrics").length > 0) {
-                canCompute = true;
-            }
-        }
-        if (mainModel.get("currentAnalysis")) {
-            if (mainModel.get("currentAnalysis").get("status") !== "RUNNING" && canCompute === true) {
-                setTimeout(function() {
-                    compute(mainModel.get("currentAnalysis"));
-                }, 3000);
-            }
-        }
-    }
 });
+
 
 var getOrderByIndex = function() {
     var index;
@@ -568,6 +574,7 @@ config.on('change:domain', function(model) {
             $('#main').fadeIn();
         }, 1000);
     }
+    tour.mainGuide();
 });
 
 // Configuration accordion
