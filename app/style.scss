@@ -347,6 +347,9 @@ $navBarAndButtonColour: #e7e7e7;
 	  }
 	  .configuration {
 		margin: 20px;
+		.date-group {
+		  margin-top: 10px;
+		}
 		&.closed {
 		  overflow: hidden;
 		}
@@ -542,9 +545,6 @@ $navBarAndButtonColour: #e7e7e7;
 			cursor: pointer;
 			border-color: #ccc;
 		  }
-		}
-		.squid-api-date-selection-widget {
-		  margin-top: 11px;
 		}
 		#selection {
 		  .col-md-9 {
