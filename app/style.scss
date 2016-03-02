@@ -608,6 +608,12 @@ $navBarAndButtonColour: #e7e7e7;
 		}
 		#date-range-picker {
 		  margin-top: 5px;
+		  select {
+			height: 24px;
+			position: relative;
+			top: 5px;
+			left: -20px;
+		  }
 		}
 		.squid-api-data-widgets-dimension-widget, .squid-api-data-widgets-metric-widget {
 		  .information {
