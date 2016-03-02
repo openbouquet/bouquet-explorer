@@ -347,9 +347,6 @@ $navBarAndButtonColour: #e7e7e7;
 	  }
 	  .configuration {
 		margin: 20px;
-		.date-group {
-		  margin-top: 10px;
-		}
 		&.closed {
 		  overflow: hidden;
 		}
@@ -605,6 +602,12 @@ $navBarAndButtonColour: #e7e7e7;
 			  }
 			}
 		  }
+		}
+		#date-picker {
+		  margin-top: 10px;
+		}
+		#date-range-picker {
+		  margin-top: 5px;
 		}
 		.squid-api-data-widgets-dimension-widget, .squid-api-data-widgets-metric-widget {
 		  .information {

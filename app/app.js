@@ -299,8 +299,7 @@ new api.view.CategoricalView({
 });
 
 var dateSelectionView = new api.view.DateSelectionWidget({
-    el : '#date-picker',
-    datePickerPosition : "right"
+    el : '#date-picker'
 });
 
 var rangeSelectionView = new api.view.DateRangeSelectionWidget({
