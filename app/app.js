@@ -300,16 +300,11 @@ new api.view.CategoricalView({
 
 var dateSelectionView = new api.view.DateSelectionWidget({
     el : '#date-picker',
-    datePickerPosition : "right",
-    ranges : {
-        "First Available Month" : "first-month",
-        'Last Available Month': function(min, max) { return [moment(max).startOf('month'), moment(max).endOf('month')]; }
-    }
+    datePickerPosition : "right"
 });
 
 var rangeSelectionView = new api.view.DateRangeSelectionWidget({
     el : '#date-range-picker'
-
 });
 
 new squid_api.view.DateFilterSelectionWidget({
@@ -393,7 +388,7 @@ var refreshAnalysis = function(a, silent) {
             		if (selection.facets[i].dimension.type == "CONTINUOUS" && selection.facets[i].dimension.valueType == "DATE") {
                         if (toDate) {
                             a.setFacets([selection.facets[i].id], silent);
-                            //a.set("facets", [{value: selection.facets[i].id, expression: {value: "TO_DATE('" + selection.facets[i].id + "')"}}], {silent : true});
+                            a.set("facets", [{value: selection.facets[i].id, expression: {value: "TO_DATE('" + selection.facets[i].id + "')"}}], {silent : true});
                         } else {
                             a.setFacets([selection.facets[i].id], silent);
                         }
@@ -408,22 +403,6 @@ var refreshAnalysis = function(a, silent) {
         a.setMetrics(config.get("chosenMetrics"), silent);
         changed = changed || a.hasChanged();
         a.setSelection(config.get("selection"), silent);
-        if (a == timeAnalysis) {
-            if (a.get("selection")) {
-                var facets = a.get("selection").facets;
-                if (facets) {
-                    for (i=0; i<facets.length; i++) {
-                        if (facets[i].dimension.type == "CONTINUOUS" && facets[i].dimension.valueType == "DATE") {
-                            if (facets[i].selectedItems.length > 0) {
-                                facets[i].selectedItems[0].lowerBound = "=DATE_SUB($'MAX',14,\"DAY\")";
-                                facets[i].selectedItems[0].upperBound = "=$'MAX'";
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        //DATE_SUB($'MAX',14,"DAY")
         changed = changed || a.hasChanged();
         if (a == tableAnalysis) {
         	a.setParameter("startIndex", config.get("startIndex"));
@@ -433,9 +412,9 @@ var refreshAnalysis = function(a, silent) {
         if (config.get("automaticTrigger")) {
             squid_api.utils.checkAPIVersion(">=4.2.1").done(function(v){
                 if (a !== exportAnalysis && (a.get("facets") && a.get("facets").length>0) || (a.get("metricList") && a.get("metricList").length>0)) {
-                    a.setParameter("lazy", true);
+                    //a.setParameter("lazy", true);
                     compute(a);
-                    a.removeParameter("lazy");
+                    //a.removeParameter("lazy");
                     config.unset("automaticTrigger", {silent : true});
                 }
             }).fail(function(v){
