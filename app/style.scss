@@ -608,22 +608,27 @@ $navBarAndButtonColour: #e7e7e7;
 		  position: relative;
 		  top: 10px;
 		}
-		#date-range-picker {
-		  select {
-			height: 24px;
-			position: absolute;
-			background-size: 16px 16px;
-			-moz-appearance: none;
-			top: 8px;
-			padding: 0px;
-			box-shadow: none;
-			-webkit-appearance: none;
-			border: 0;
-			text-decoration: underline;
-			outline: 0;
-			-moz-transition: 0.3s ease all;
-			-ms-transition: 0.3s ease all;
-			-o-transition: 0.3s ease all;
+		.range-picker {
+		  display: inline-block;
+		  float: left;
+		  position: relative;
+		  margin-left: 15px;
+		  top: 8px;
+		  #date-range-picker {
+			select {
+			  height: 24px;
+			  background-size: 16px 16px;
+			  -moz-appearance: none;
+			  padding: 0px;
+			  box-shadow: none;
+			  -webkit-appearance: none;
+			  border: 0;
+			  text-decoration: underline;
+			  outline: 0;
+			  -moz-transition: 0.3s ease all;
+			  -ms-transition: 0.3s ease all;
+			  -o-transition: 0.3s ease all;
+			}
 		  }
 		}
 		.squid-api-data-widgets-dimension-widget, .squid-api-data-widgets-metric-widget {
