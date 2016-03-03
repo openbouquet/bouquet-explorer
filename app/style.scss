@@ -604,7 +604,8 @@ $navBarAndButtonColour: #e7e7e7;
 		  }
 		}
 		#date-picker {
-		  margin-top: 10px;
+		  position: relative;
+		  top: 10px;
 		}
 		#date-range-picker {
 		  select {
@@ -612,7 +613,8 @@ $navBarAndButtonColour: #e7e7e7;
 			position: absolute;
 			background: #5f5d5f url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='50p…'50px'><polyline points='46.139,15.518 25.166,36.49 4.193,15.519'/></svg>") no-repeat right 6px top 5px;
 			background-size: 16px 16px;
-			width: auto;
+			width: 90px;
+			-moz-appearance: none;
 			top: 9px;
 			font-weight: bold;
 			padding: 0px 8px;
