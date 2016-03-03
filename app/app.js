@@ -298,12 +298,11 @@ new api.view.CategoricalView({
 });
 
 var dateSelectionView = new api.view.DateSelectionWidget({
-    el : '#date-picker',
-    datePickerPosition : "right",
-    ranges : {
-        "First Available Month" : "first-month",
-        'Last Available Month': function(min, max) { return [moment(max).startOf('month'), moment(max).endOf('month')]; }
-    }
+    el : '#date-picker'
+});
+
+var rangeSelectionView = new api.view.DateRangeSelectionWidget({
+    el : '#date-range-picker'
 });
 
 new squid_api.view.DateFilterSelectionWidget({
@@ -386,6 +385,7 @@ var refreshAnalysis = function(a, silent) {
                 for (i=0; i<selection.facets.length; i++) {
             		if (selection.facets[i].dimension.type == "CONTINUOUS" && selection.facets[i].dimension.valueType == "DATE") {
                         if (toDate) {
+                            a.setFacets([selection.facets[i].id], silent);
                             a.set("facets", [{value: selection.facets[i].id, expression: {value: "TO_DATE('" + selection.facets[i].id + "')"}}], {silent : true});
                         } else {
                             a.setFacets([selection.facets[i].id], silent);
@@ -410,9 +410,9 @@ var refreshAnalysis = function(a, silent) {
         if (config.get("automaticTrigger")) {
             squid_api.utils.checkAPIVersion(">=4.2.1").done(function(v){
                 if (a !== exportAnalysis && (a.get("facets") && a.get("facets").length>0) || (a.get("metricList") && a.get("metricList").length>0)) {
-                    a.setParameter("lazy", true);
+                    //a.setParameter("lazy", true);
                     compute(a);
-                    a.removeParameter("lazy");
+                    //a.removeParameter("lazy");
                     config.unset("automaticTrigger", {silent : true});
                 }
             }).fail(function(v){
