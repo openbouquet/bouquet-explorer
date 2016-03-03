@@ -51,7 +51,7 @@ $navBarAndButtonColour: #e7e7e7;
   }
   #domain-bookmark {
 	height: 53px;
-	width: 230px;
+	min-width: 230px;
 	ul {
 	  padding-left: 0px;
 	}
