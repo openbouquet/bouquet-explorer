@@ -233,7 +233,8 @@ $(".users-icon").click(function() {
 new api.view.DimensionSelector({
     el : '#origin',
     model : config,
-    dimensionIndex: null
+    dimensionIndex: null,
+    configurationEnabled : true
 });
 
 new api.view.OrderByView({
