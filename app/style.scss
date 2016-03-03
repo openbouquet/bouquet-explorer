@@ -611,26 +611,18 @@ $navBarAndButtonColour: #e7e7e7;
 		  select {
 			height: 24px;
 			position: absolute;
-			background: #5f5d5f url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='50p…'50px'><polyline points='46.139,15.518 25.166,36.49 4.193,15.519'/></svg>") no-repeat right 6px top 5px;
 			background-size: 16px 16px;
-			width: 90px;
 			-moz-appearance: none;
-			top: 9px;
-			font-weight: bold;
-			padding: 0px 8px;
-			color: #fff;
-			text-align: center;
-			text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-			border-radius: 3px;
-			-webkit-border-radius: 3px;
+			top: 8px;
+			padding: 0px;
+			box-shadow: none;
 			-webkit-appearance: none;
 			border: 0;
+			text-decoration: underline;
 			outline: 0;
-			-webkit-transition: 0.3s ease all;
 			-moz-transition: 0.3s ease all;
 			-ms-transition: 0.3s ease all;
 			-o-transition: 0.3s ease all;
-			transition: 0.3s ease all;
 		  }
 		}
 		.squid-api-data-widgets-dimension-widget, .squid-api-data-widgets-metric-widget {
