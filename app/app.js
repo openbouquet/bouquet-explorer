@@ -313,7 +313,8 @@ new squid_api.view.DateFilterSelectionWidget({
 new api.view.MetricSelectorView({
     el : '#metric',
     model : config,
-    metricIndex: null
+    metricIndex: null,
+    configurationEnabled : true
 });
 
 new api.view.MetricView({
