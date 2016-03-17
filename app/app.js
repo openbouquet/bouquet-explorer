@@ -388,7 +388,7 @@ var refreshAnalysis = function(a, silent) {
             		if (selection.facets[i].dimension.type == "CONTINUOUS" && selection.facets[i].dimension.valueType == "DATE") {
                         if (toDate) {
                             a.setFacets([selection.facets[i].id], silent);
-                            a.set("facets", [{value: selection.facets[i].id, expression: {value: "TO_DATE('" + selection.facets[i].id + "')"}}], {silent : true});
+                            a.set("facets", [{value: selection.facets[i].id, expression: {value: "TO_DATE(" + selection.facets[i].id + ")"}}], {silent : true});
                         } else {
                             a.setFacets([selection.facets[i].id], silent);
                         }
