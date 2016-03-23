@@ -302,8 +302,10 @@ var dateSelectionView = new api.view.DateSelectionWidget({
     el : '#date-picker'
 });
 
-var rangeSelectionView = new api.view.DateRangeSelectionWidget({
-    el : '#date-range-picker'
+squid_api.utils.checkAPIVersion(">=4.2.1").done(function(v){
+    var rangeSelectionView = new api.view.DateRangeSelectionWidget({
+        el : '#date-range-picker'
+    });
 });
 
 new squid_api.view.DateFilterSelectionWidget({
