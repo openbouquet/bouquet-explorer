@@ -335,7 +335,7 @@ var exportView = new api.view.DataExport({
     sqlView : true,
     materializeDatasetsView: true
 });
-    
+
 //var materializeView = new api.view.Materialize({
 //    el : '#materialize',
 //    renderTo : '#materialize-content',
@@ -575,13 +575,13 @@ config.on('change:domain', function(model) {
     var domainId = model.get("domain");
     var projectId = model.get("project");
     if (projectId && domainId) {
-        $('#main').removeClass("hidden");
         // Fade in main
         setTimeout(function() {
-            $('#main').fadeIn();
+            $('#main').fadeIn(function() {
+                tour.mainGuide();
+            });
         }, 1000);
     }
-    tour.mainGuide();
 });
 
 // Configuration accordion
