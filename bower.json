@@ -15,7 +15,7 @@
     "tests"
   ],
   "dependencies": {
-      "squid_api": "https://github.com/openbouquet/bouquet-javascript-sdk.git#3.5.1",
+      "squid_api": "https://github.com/openbouquet/bouquet-javascript-sdk.git#3.5.2",
       "squid_api_core_widgets": "https://github.com/openbouquet/bouquet-javascript-sdk-core-widgets.git#2.9.8",
       "bootstrap": "3.3.4",
       "font-awesome": "https://github.com/components/font-awesome.git",
