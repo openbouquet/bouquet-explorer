@@ -128,19 +128,19 @@ api.model.login.on('change:login', function(model) {
 });
 
 api.model.status.on('change', function(model) {
-	var error = model.get("error");
-	if (error) {
-		if (error.canStart) {
-			$("#no-connection").addClass("hidden");
-			$("#loading").show();
-		} else if (error === true) {
-			$("#no-connection").removeClass("hidden");
-			$("#selectProject").addClass("hidden");
-			$("#loading").hide();
-		}
-	} else {
-		$("#no-connection").addClass("hidden");
-	}
+    var error = model.get("error");
+    if (error) {
+        if (error.canStart) {
+            $("#no-connection").addClass("hidden");
+            $("#loading").show();
+        } else if (error === true) {
+            $("#no-connection").removeClass("hidden");
+            $("#selectProject").addClass("hidden");
+            $("#loading").hide();
+        }
+    } else {
+        $("#no-connection").addClass("hidden");
+    }
 });
 
 var tableAnalysis = new api.model.AnalysisJob();
@@ -233,7 +233,6 @@ $(".users-icon").click(function() {
 new api.view.DimensionSelector({
     el : '#origin',
     model : config,
-    dimensionIndex: null,
     configurationEnabled : true
 });
 
@@ -380,26 +379,26 @@ var refreshAnalysis = function(a, silent) {
 
         // if timeAnalysis, use the date as the default dimension if non already set
         if (a == timeAnalysis) {
-        	var selection = config.get("selection");
+            var selection = config.get("selection");
             if (selection) {
                 var toDate = false;
                 squid_api.utils.checkAPIVersion(">=4.2.1").done(function(v){
                     toDate = true;
                 });
                 for (i=0; i<selection.facets.length; i++) {
-            		if (selection.facets[i].dimension.type == "CONTINUOUS" && selection.facets[i].dimension.valueType == "DATE") {
+                    if (selection.facets[i].dimension.type == "CONTINUOUS" && selection.facets[i].dimension.valueType == "DATE") {
                         if (toDate) {
                             a.setFacets([selection.facets[i].id], silent);
                             a.set("facets", [{value: "TO_DATE(" + selection.facets[i].id + ")"}], {silent : true});
                         } else {
                             a.setFacets([selection.facets[i].id], silent);
                         }
-            			break;
-            		}
-            	}
+                        break;
+                    }
+                }
             }
         } else {
-        	a.setFacets(config.get("chosenDimensions"), silent);
+            a.setFacets(config.get("chosenDimensions"), silent);
         }
         changed = changed || a.hasChanged();
         a.setMetrics(config.get("chosenMetrics"), silent);
@@ -407,8 +406,8 @@ var refreshAnalysis = function(a, silent) {
         a.setSelection(config.get("selection"), silent);
         changed = changed || a.hasChanged();
         if (a == tableAnalysis) {
-        	a.setParameter("startIndex", config.get("startIndex"));
-        	a.setParameter("maxResults", config.get("maxResults"));
+            a.setParameter("startIndex", config.get("startIndex"));
+            a.setParameter("maxResults", config.get("maxResults"));
         }
         if (a == exportAnalysis) {
             if (config.get("chosenDimensions") && config.get("chosenMetrics")) {
@@ -587,35 +586,35 @@ config.on('change:domain', function(model) {
 // Configuration accordion
 
 $(".configuration-hider").click(function() {
-	var configDisplay = api.model.config.get("configDisplay");
-	var obj = {};
-	if (configDisplay) {
-		obj.originalHeight = configDisplay.originalHeight;
-		if (configDisplay.visible) {
-			obj.visible = false;
-		} else {
-			obj.visible = true;
-		}
-	} else {
-		obj.visible = false;
-		obj.originalHeight = $(".configuration").height();
-	}
-	api.model.config.set("configDisplay", obj);
+    var configDisplay = api.model.config.get("configDisplay");
+    var obj = {};
+    if (configDisplay) {
+        obj.originalHeight = configDisplay.originalHeight;
+        if (configDisplay.visible) {
+            obj.visible = false;
+        } else {
+            obj.visible = true;
+        }
+    } else {
+        obj.visible = false;
+        obj.originalHeight = $(".configuration").height();
+    }
+    api.model.config.set("configDisplay", obj);
 });
 
 config.on("change:configDisplay", function(model, attribute) {
-	if (attribute.visible) {
-		$(".configuration-hider").removeClass("closed");
-		$(".configuration").animate({opacity: 1});
-		$(".configuration").animate({height:attribute.originalHeight + "px"}, 200, function() {
-			$(".configuration").removeClass("closed");
-		});
-	} else {
-		$(".configuration-hider").addClass("closed");
-		$(".configuration").addClass("closed");
-		$(".configuration").animate({opacity: 0});
-		$(".configuration").animate({height:"10px"}, 200);
-	}
+    if (attribute.visible) {
+        $(".configuration-hider").removeClass("closed");
+        $(".configuration").animate({opacity: 1});
+        $(".configuration").animate({height:attribute.originalHeight + "px"}, 200, function() {
+            $(".configuration").removeClass("closed");
+        });
+    } else {
+        $(".configuration-hider").addClass("closed");
+        $(".configuration").addClass("closed");
+        $(".configuration").animate({opacity: 0});
+        $(".configuration").animate({height:"10px"}, 200);
+    }
 });
 
 // initiate tour

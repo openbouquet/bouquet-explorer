@@ -785,6 +785,16 @@ $navBarAndButtonColour: #e7e7e7;
           #chart {
             top: -35px;
           }
+          .squid-api-data-widgets-timeseries-widget #legend {
+              font-size: 18px;
+              margin-top: 20px;
+              position: relative;
+              .date {
+                 font-size: 22px;
+                 position: absolute;
+                 top: 80px;
+              }
+          }
           .squid-api-data-widgets-data-table {
             width: 100%;
             background: #f8f8f8;
