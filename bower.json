@@ -20,7 +20,7 @@
       "bootstrap": "3.3.4",
       "font-awesome": "https://github.com/components/font-awesome.git",
       "typed": "https://github.com/mattboldt/typed.js.git",
-      "squid_api_data_widgets": "https://github.com/openbouquet/bouquet-javascript-sdk-data-widgets.git#4.8.9",
+      "squid_api_data_widgets": "https://github.com/openbouquet/bouquet-javascript-sdk-data-widgets.git#4.9.0",
       "squid_api_filters_widget": "https://github.com/openbouquet/bouquet-javascript-sdk-filtering-widgets.git#3.5.8",
       "squid_api_admin_widgets": "https://github.com/openbouquet/bouquet-javascript-sdk-admin-widgets.git#3.4.0",
       "bootstrap-tour": "~0.10.2"
