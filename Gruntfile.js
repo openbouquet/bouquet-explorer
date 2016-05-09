@@ -271,9 +271,9 @@ module.exports = function (grunt) {
     grunt.registerTask('build', ['jshint', 'clean', 'handlebars', 'concat',
         'copy', 'sass', 'wiredep']);
 
-    grunt.registerTask('dev', ['build', 'wiredepCopy:dev']);
+    grunt.registerTask('dev', ['build', 'wiredepCopy:dev', 'cacheBust']);
 
-    grunt.registerTask('dist', ['build', 'wiredepCopy:dist']);
+    grunt.registerTask('dist', ['build', 'wiredepCopy:dist', 'cacheBust']);
 
     grunt.registerTask('default', [ 'dist' ]);
     

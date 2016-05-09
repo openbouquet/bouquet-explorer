@@ -128,19 +128,19 @@ api.model.login.on('change:login', function(model) {
 });
 
 api.model.status.on('change', function(model) {
-	var error = model.get("error");
-	if (error) {
-		if (error.canStart) {
-			$("#no-connection").addClass("hidden");
-			$("#loading").show();
-		} else if (error === true) {
-			$("#no-connection").removeClass("hidden");
-			$("#selectProject").addClass("hidden");
-			$("#loading").hide();
-		}
-	} else {
-		$("#no-connection").addClass("hidden");
-	}
+    var error = model.get("error");
+    if (error) {
+        if (error.canStart) {
+            $("#no-connection").addClass("hidden");
+            $("#loading").show();
+        } else if (error === true) {
+            $("#no-connection").removeClass("hidden");
+            $("#selectProject").addClass("hidden");
+            $("#loading").hide();
+        }
+    } else {
+        $("#no-connection").addClass("hidden");
+    }
 });
 
 var tableAnalysis = new api.model.AnalysisJob();
@@ -233,7 +233,7 @@ $(".users-icon").click(function() {
 new api.view.DimensionSelector({
     el : '#origin',
     model : config,
-    dimensionIndex: null
+    configurationEnabled : true
 });
 
 new api.view.OrderByView({
@@ -298,12 +298,13 @@ new api.view.CategoricalView({
 });
 
 var dateSelectionView = new api.view.DateSelectionWidget({
-    el : '#date-picker',
-    datePickerPosition : "right",
-    ranges : {
-        "First Available Month" : "first-month",
-        'Last Available Month': function(min, max) { return [moment(max).startOf('month'), moment(max).endOf('month')]; }
-    }
+    el : '#date-picker'
+});
+
+squid_api.utils.checkAPIVersion(">=4.2.1").done(function(v){
+    var rangeSelectionView = new api.view.DateRangeSelectionWidget({
+        el : '#date-range-picker'
+    });
 });
 
 new squid_api.view.DateFilterSelectionWidget({
@@ -313,7 +314,8 @@ new squid_api.view.DateFilterSelectionWidget({
 new api.view.MetricSelectorView({
     el : '#metric',
     model : config,
-    metricIndex: null
+    metricIndex: null,
+    configurationEnabled : true
 });
 
 new api.view.MetricView({
@@ -332,7 +334,7 @@ var exportView = new api.view.DataExport({
     sqlView : true,
     materializeDatasetsView: true
 });
-    
+
 //var materializeView = new api.view.Materialize({
 //    el : '#materialize',
 //    renderTo : '#materialize-content',
@@ -377,25 +379,26 @@ var refreshAnalysis = function(a, silent) {
 
         // if timeAnalysis, use the date as the default dimension if non already set
         if (a == timeAnalysis) {
-        	var selection = config.get("selection");
+            var selection = config.get("selection");
             if (selection) {
                 var toDate = false;
                 squid_api.utils.checkAPIVersion(">=4.2.1").done(function(v){
                     toDate = true;
                 });
                 for (i=0; i<selection.facets.length; i++) {
-            		if (selection.facets[i].dimension.type == "CONTINUOUS" && selection.facets[i].dimension.valueType == "DATE") {
+                    if (selection.facets[i].dimension.type == "CONTINUOUS" && selection.facets[i].dimension.valueType == "DATE") {
                         if (toDate) {
-                            a.set("facets", [{value: selection.facets[i].id, expression: {value: "TO_DATE('" + selection.facets[i].id + "')"}}], {silent : true});
+                            a.setFacets([selection.facets[i].id], silent);
+                            a.set("facets", [{value: "TO_DATE(" + selection.facets[i].id + ")"}], {silent : true});
                         } else {
                             a.setFacets([selection.facets[i].id], silent);
                         }
-            			break;
-            		}
-            	}
+                        break;
+                    }
+                }
             }
         } else {
-        	a.setFacets(config.get("chosenDimensions"), silent);
+            a.setFacets(config.get("chosenDimensions"), silent);
         }
         changed = changed || a.hasChanged();
         a.setMetrics(config.get("chosenMetrics"), silent);
@@ -403,25 +406,8 @@ var refreshAnalysis = function(a, silent) {
         a.setSelection(config.get("selection"), silent);
         changed = changed || a.hasChanged();
         if (a == tableAnalysis) {
-        	a.setParameter("startIndex", config.get("startIndex"));
-        	a.setParameter("maxResults", config.get("maxResults"));
-        }
-        // trigger automatic analysis
-        if (config.get("automaticTrigger")) {
-            squid_api.utils.checkAPIVersion(">=4.2.1").done(function(v){
-                if (a !== exportAnalysis && (a.get("facets") && a.get("facets").length>0) || (a.get("metricList") && a.get("metricList").length>0)) {
-                    //a.setParameter("lazy", true);
-                    compute(a);
-                    //a.removeParameter("lazy");
-                    config.unset("automaticTrigger", {silent : true});
-                }
-            }).fail(function(v){
-                if (v) {
-                    console.log("API version NOT OK : "+v);
-                } else {
-                    console.error("WARN unable to get Bouquet Server version");
-                }
-            });
+            a.setParameter("startIndex", config.get("startIndex"));
+            a.setParameter("maxResults", config.get("maxResults"));
         }
         if (a == exportAnalysis) {
             if (config.get("chosenDimensions") && config.get("chosenMetrics")) {
@@ -554,8 +540,28 @@ config.on('change:project', function(model) {
 });
 
 api.model.filters.on('change:selection', function(filters) {
+    var a = mainModel.get("currentAnalysis");
+
     refreshCurrentAnalysis();
     refreshExportAnalysis();
+
+    // trigger automatic analysis
+    if (config.get("automaticTrigger")) {
+        squid_api.utils.checkAPIVersion(">=4.2.1").done(function(v){
+            if (a !== exportAnalysis && (a.get("facets") && a.get("facets").length>0) || (a.get("metricList") && a.get("metricList").length>0)) {
+                a.setParameter("lazy", true);
+                compute(a);
+                a.removeParameter("lazy");
+                config.unset("automaticTrigger", {silent : true});
+            }
+        }).fail(function(v){
+            if (v) {
+                console.log("API version NOT OK : "+v);
+            } else {
+                console.error("WARN unable to get Bouquet Server version");
+            }
+        });
+    }
 });
 
 config.on('change:domain', function(model) {
@@ -568,47 +574,47 @@ config.on('change:domain', function(model) {
     var domainId = model.get("domain");
     var projectId = model.get("project");
     if (projectId && domainId) {
-        $('#main').removeClass("hidden");
         // Fade in main
         setTimeout(function() {
-            $('#main').fadeIn();
+            $('#main').fadeIn(function() {
+                tour.mainGuide();
+            });
         }, 1000);
     }
-    tour.mainGuide();
 });
 
 // Configuration accordion
 
 $(".configuration-hider").click(function() {
-	var configDisplay = api.model.config.get("configDisplay");
-	var obj = {};
-	if (configDisplay) {
-		obj.originalHeight = configDisplay.originalHeight;
-		if (configDisplay.visible) {
-			obj.visible = false;
-		} else {
-			obj.visible = true;
-		}
-	} else {
-		obj.visible = false;
-		obj.originalHeight = $(".configuration").height();
-	}
-	api.model.config.set("configDisplay", obj);
+    var configDisplay = api.model.config.get("configDisplay");
+    var obj = {};
+    if (configDisplay) {
+        obj.originalHeight = configDisplay.originalHeight;
+        if (configDisplay.visible) {
+            obj.visible = false;
+        } else {
+            obj.visible = true;
+        }
+    } else {
+        obj.visible = false;
+        obj.originalHeight = $(".configuration").height();
+    }
+    api.model.config.set("configDisplay", obj);
 });
 
 config.on("change:configDisplay", function(model, attribute) {
-	if (attribute.visible) {
-		$(".configuration-hider").removeClass("closed");
-		$(".configuration").animate({opacity: 1});
-		$(".configuration").animate({height:attribute.originalHeight + "px"}, 200, function() {
-			$(".configuration").removeClass("closed");
-		});
-	} else {
-		$(".configuration-hider").addClass("closed");
-		$(".configuration").addClass("closed");
-		$(".configuration").animate({opacity: 0});
-		$(".configuration").animate({height:"10px"}, 200);
-	}
+    if (attribute.visible) {
+        $(".configuration-hider").removeClass("closed");
+        $(".configuration").animate({opacity: 1});
+        $(".configuration").animate({height:attribute.originalHeight + "px"}, 200, function() {
+            $(".configuration").removeClass("closed");
+        });
+    } else {
+        $(".configuration-hider").addClass("closed");
+        $(".configuration").addClass("closed");
+        $(".configuration").animate({opacity: 0});
+        $(".configuration").animate({height:"10px"}, 200);
+    }
 });
 
 // initiate tour
