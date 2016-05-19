@@ -28,5 +28,16 @@
   "resolutions": {
     "squid_api": "develop",
     "jquery": "~2.0.3"
+  },
+  "overrides": {
+    "ace-builds": {
+      "main": [
+        "src/ace.js",
+        "src/mode-javascript.js",
+        "src/worker-javascript.js",
+        "src/ext-language_tools.js",
+	"src/snippets/text.js"
+      ]
+    }
   }
 }
