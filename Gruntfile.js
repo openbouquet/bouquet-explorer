@@ -58,7 +58,14 @@ module.exports = function (grunt) {
             },
             copy: {
                 main: {
-                    files: [{
+                    files: [
+			{
+                                expand: true,
+				flatten: true,
+                                src: ['bower_components/squid_api_admin_widgets/mode/mode-bouquet.js'],
+                                dest: 'bower_components/ace-builds/src/'
+                        },
+			{
                         expand: true,
                         src: [
                             "app/app.js",
@@ -76,8 +83,9 @@ module.exports = function (grunt) {
                             return dest
                                 + src.replace(/\.template.html$/,
                                     ".html");
-                        }
-                    }]
+                        	}
+                    	}
+		]
                 }
             },
             wiredep: {
