@@ -12,7 +12,9 @@ module.exports = function (grunt) {
             jshint: {
                 all: ['app/**/*.js'],
                 options: {
-                    force: true
+                    force: true,
+                    //"" for stdout
+                    reporterOutput: ""
                 }
             },
             sass: {
@@ -59,33 +61,39 @@ module.exports = function (grunt) {
             copy: {
                 main: {
                     files: [
-			{
-                                expand: true,
-				flatten: true,
-                                src: ['bower_components/squid_api_admin_widgets/mode/mode-bouquet.js'],
-                                dest: 'bower_components/ace-builds/src/'
+                        {
+                            expand: true,
+                            flatten: true,
+                            src: ['bower_components/ace-builds/src-noconflict/worker-bouquet.js'],
+                            dest: 'dist/'
                         },
-			{
-                        expand: true,
-                        src: [
-                            "app/app.js",
-                            "*.html",
-                            "app/conf/*.js",
-                            "app/fonts/**",
-                            "app/img/**",
-                            "bower_components/font-awesome/fonts/*",
-                            "bower_components/data_tables/media/images/*",
-                            "bower_components/bootstrap/dist/fonts/*",
-                            "bower_components/backbone-forms/distribution/**",
-                            "bower_components/backbone.bootstrap-modal/**"],
-                        dest: 'dist/',
-                        rename: function (dest, src) {
-                            return dest
-                                + src.replace(/\.template.html$/,
-                                    ".html");
-                        	}
-                    	}
-		]
+                        {
+                            expand: true,
+                            flatten: true,
+                            src: ['bower_components/ace-builds/src-noconflict/snippets/bouquet.js'],
+                            dest: 'dist/snippets'
+                        },
+                        {
+                            expand: true,
+                            src: [
+                                "app/app.js",
+                                "*.html",
+                                "app/conf/*.js",
+                                "app/fonts/**",
+                                "app/img/**",
+                                "bower_components/font-awesome/fonts/*",
+                                "bower_components/data_tables/media/images/*",
+                                "bower_components/bootstrap/dist/fonts/*",
+                                "bower_components/backbone-forms/distribution/**",
+                                "bower_components/backbone.bootstrap-modal/**"],
+                            dest: 'dist/',
+                            rename: function (dest, src) {
+                                return dest
+                                    + src.replace(/\.template.html$/,
+                                        ".html");
+                            }
+                        }
+                    ]
                 }
             },
             wiredep: {
@@ -248,22 +256,22 @@ module.exports = function (grunt) {
                     tasks: ['dev']
                 }
             },
-            cacheBust : {
-                options : {
-                    encoding : 'utf8',
-                    algorithm : 'md5',
-                    length : 8,
-                    deleteOriginals : true,
-                    ignorePatterns : [ "main.js" ]
+            cacheBust: {
+                options: {
+                    encoding: 'utf8',
+                    algorithm: 'md5',
+                    length: 8,
+                    deleteOriginals: true,
+                    ignorePatterns: ["main.js", "mode-bouquet.js", "worker-bouquet.js", "ext-language_tools.js", "ace.js", "text.js", "bouquet.js", "jquery.js"]
                 },
-                assets : {
-                    files : [ {
-                        src : [ 'dist/index.html' ]
-                    } ]
+                assets: {
+                    files: [{
+                        src: ['dist/index.html']
+                    }]
                 }
             }
         });
-   
+
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-concat');
@@ -283,8 +291,8 @@ module.exports = function (grunt) {
 
     grunt.registerTask('dist', ['build', 'wiredepCopy:dist', 'cacheBust']);
 
-    grunt.registerTask('default', [ 'dist' ]);
-    
-    grunt.registerTask('run', [ 'dist', 'connect:server:keepalive' ]);
+    grunt.registerTask('default', ['dist']);
+
+    grunt.registerTask('run', ['dist', 'connect:server:keepalive']);
 
 };
