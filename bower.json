@@ -29,6 +29,7 @@
   },
   "resolutions": {
     "squid_api": "develop",
-    "jquery": "~2.0.3"
+    "jquery": "~2.0.3",
+    "ace-builds": "v1.2.3.6"
   }
 }
