@@ -1,6 +1,6 @@
 {
   "name": "bouquet-explorer",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "main": "dist/main.js",
   "license": "AGPL-3.0",
   "repository": {
