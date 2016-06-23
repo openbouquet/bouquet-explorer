@@ -630,4 +630,27 @@ $("#tour").click(function() {
 */
 api.init();
 
+squid_api.utils.checkAPIVersion(">=4.2.15").done(function(v){
+        Raven.config('https://bf8a4464c5da49d1b4e5046f8e45a7a5@sentry.squidsolutions.com/2', {
+            release: squid_api.apiVersion["bouquet-server"].version
+        }).install();
+
+        Raven.setUserContext({
+            email: squid_api.customerId,
+            id: squid_api.clientId
+        });
+
+        Raven.captureMessage('App started', {
+            level: 'info'
+        });
+});
+    
+    
+
+// Uncaught error
+window.onerror = function (msg, url, lineNo, columnNo, error) {
+        Raven.captureException(error);
+        return false;
+};
+
 })(squid_api);

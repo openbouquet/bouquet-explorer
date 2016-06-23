@@ -1279,3 +1279,6 @@ $navBarAndButtonColour: #e7e7e7;
 .popover[class*="tour-"] {
   z-index: 1049;
 }
+.sentry-error-embed-wrapper {
+  z-index: 2000 !important;
+}
