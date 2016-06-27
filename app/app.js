@@ -20,6 +20,9 @@ new api.view.LoginView();
 
 new api.view.StatusView();
 
+//initiate tour
+var tour = new api.view.TourGuide();
+
 
 /* Project */
 
@@ -616,9 +619,6 @@ config.on("change:configDisplay", function(model, attribute) {
         $(".configuration").animate({height:"10px"}, 200);
     }
 });
-
-// initiate tour
-var tour = new api.view.TourGuide();
 
 // trigger tour on button click
 $("#tour").click(function() {
