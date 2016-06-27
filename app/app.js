@@ -118,6 +118,65 @@ new api.view.ShortcutsAdminView({
  * Controllers
  */
 
+//listen for project/domain change
+squid_api.model.config.on("change", function (config, value) {
+    var project;
+    var hasChangedProject = config.hasChanged("project");
+    var hasChangedDomain = config.hasChanged("domain");
+    var hasChangedDimensions = config.hasChanged("chosenDimensions");
+    var hasChangedMetrics = config.hasChanged("chosenMetrics");
+    var hasChangedSelection = config.hasChanged("selection");
+    var hasChangedPeriod = config.hasChanged("period");
+    var forceRefresh = (value === true);
+    if (config.get("project") && (hasChangedProject || forceRefresh)) {
+        squid_api.getSelectedProject(forceRefresh).always( function(project) {
+            if ((hasChangedDomain && config.get("domain")) || forceRefresh) {
+                // load the domain
+                squid_api.getSelectedDomain(forceRefresh);
+            } else {
+                // project only changed
+                // reset the config
+                config.set({
+                    "bookmark" : null,
+                    "domain" : null,
+                    "period" : null,
+                    "chosenDimensions" : [],
+                    "chosenMetrics" : [],
+                    "rollups" : [],
+                    "orderBy" : null,
+                    "selection" : {
+                        "domain" : null,
+                        "facets": []
+                    }
+                });
+            }
+        });
+    } else if (hasChangedDomain || forceRefresh) {
+        // load the domain
+        squid_api.getSelectedDomain(forceRefresh).always( function(domain) {
+            // reset the config taking care of changing domain-dependant attributes
+            // as they shouldn't be reset in case of a bookmark selection
+            var newConfig = {};
+            if (!hasChangedPeriod) {
+                newConfig.period = null;
+            }
+            if (!hasChangedDimensions) {
+                newConfig.chosenDimensions = [];
+            }
+            if (!hasChangedMetrics) {
+                newConfig.chosenMetrics = [];
+            }
+            if (!hasChangedSelection) {
+                newConfig.selection = {
+                        "domain" : domain.get("oid"),
+                        "facets": []
+                };
+            }
+            config.set(newConfig);
+        });
+    }
+});
+
 // filters controller
 new api.controller.FiltersController();
 
