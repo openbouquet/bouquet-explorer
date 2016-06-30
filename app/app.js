@@ -20,6 +20,9 @@ new api.view.LoginView();
 
 new api.view.StatusView();
 
+//initiate tour
+var tour = new api.view.TourGuide();
+
 
 /* Project */
 
@@ -114,6 +117,65 @@ new api.view.ShortcutsAdminView({
 /*
  * Controllers
  */
+
+//listen for project/domain change
+squid_api.model.config.on("change", function (config, value) {
+    var project;
+    var hasChangedProject = config.hasChanged("project");
+    var hasChangedDomain = config.hasChanged("domain");
+    var hasChangedDimensions = config.hasChanged("chosenDimensions");
+    var hasChangedMetrics = config.hasChanged("chosenMetrics");
+    var hasChangedSelection = config.hasChanged("selection");
+    var hasChangedPeriod = config.hasChanged("period");
+    var forceRefresh = (value === true);
+    if (config.get("project") && (hasChangedProject || forceRefresh)) {
+        squid_api.getSelectedProject(forceRefresh).always( function(project) {
+            if ((hasChangedDomain && config.get("domain")) || forceRefresh) {
+                // load the domain
+                squid_api.getSelectedDomain(forceRefresh);
+            } else {
+                // project only changed
+                // reset the config
+                config.set({
+                    "bookmark" : null,
+                    "domain" : null,
+                    "period" : null,
+                    "chosenDimensions" : [],
+                    "chosenMetrics" : [],
+                    "rollups" : [],
+                    "orderBy" : null,
+                    "selection" : {
+                        "domain" : null,
+                        "facets": []
+                    }
+                });
+            }
+        });
+    } else if (hasChangedDomain || forceRefresh) {
+        // load the domain
+        squid_api.getSelectedDomain(forceRefresh).always( function(domain) {
+            // reset the config taking care of changing domain-dependant attributes
+            // as they shouldn't be reset in case of a bookmark selection
+            var newConfig = {};
+            if (!hasChangedPeriod) {
+                newConfig.period = null;
+            }
+            if (!hasChangedDimensions) {
+                newConfig.chosenDimensions = [];
+            }
+            if (!hasChangedMetrics) {
+                newConfig.chosenMetrics = [];
+            }
+            if (!hasChangedSelection) {
+                newConfig.selection = {
+                        "domain" : domain.get("oid"),
+                        "facets": []
+                };
+            }
+            config.set(newConfig);
+        });
+    }
+});
 
 // filters controller
 new api.controller.FiltersController();
@@ -617,9 +679,6 @@ config.on("change:configDisplay", function(model, attribute) {
     }
 });
 
-// initiate tour
-var tour = new api.view.TourGuide();
-
 // trigger tour on button click
 $("#tour").click(function() {
     tour.mainGuide(true);
@@ -629,5 +688,28 @@ $("#tour").click(function() {
 * Start the App
 */
 api.init();
+
+squid_api.utils.checkAPIVersion(">=4.2.15").done(function(v){
+        Raven.config('https://bf8a4464c5da49d1b4e5046f8e45a7a5@sentry.squidsolutions.com/2', {
+            release: squid_api.apiVersion["bouquet-server"].version
+        }).install();
+
+        Raven.setUserContext({
+            email: squid_api.customerId,
+            id: squid_api.clientId
+        });
+
+        Raven.captureMessage('App started', {
+            level: 'info'
+        });
+});
+    
+    
+
+// Uncaught error
+window.onerror = function (msg, url, lineNo, columnNo, error) {
+        Raven.captureException(error);
+        return false;
+};
 
 })(squid_api);
